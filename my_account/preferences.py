@@ -2,6 +2,7 @@ import webapp2
 import dao
 import ui
 
+
 class RequestHandler(webapp2.RequestHandler):
     def get(self):
         if not dao.test_current_user_registered():
