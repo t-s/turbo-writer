@@ -1,0 +1,52 @@
+<html>
+<head>
+    <title>TurboWriter</title>
+    <link type="text/css" rel="stylesheet" href="/ui/{{ ui }}/stylesheets/main.css"/>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+</head>
+<body>
+
+<table class="header">
+    <tr>
+        <td>
+            <span style="font-size: 24px; font-weight: bold">TurboWriter</span>
+            <br/>
+            <span style="font-size: 12px;">BY ZEPHYR MEDIA AND COMMUNICATIONS</span>
+        </td>
+        <td style="text-align: right; vertical-align: top">
+            {{ email | e }}
+            |
+            <a href="{{ url }}">Sign Out</a>
+        </td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <td style="height: 20px"></td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <td style="vertical-align: top">
+            {% include "project_menu.html" %}
+        </td>
+        <td style="width: 20px"></td>
+        <td style="vertical-align: top">
+            <span style="font-size: 10pt; font-style: italic; text-decoration: underline">Project</span>
+            <div style="font-size: 14pt; font-weight: bold; margin-left: 20px">{{ project.name | e}}</div>
+
+            {% block workspace %}{% endblock %}
+        </td>
+    </tr>
+</table>
+
+<hr/>
+
+<div style="text-align: center; font-size: 10pt; color: grey; margin-top: 16px">
+    <i>&copy; Copyright 2013 by Zephyr Media and Communications, Inc. All rights reserved.</i>
+</div>
+
+</body>
+</html>

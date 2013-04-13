@@ -1,0 +1,26 @@
+{% extends "site_base.html" %}
+
+{% block workspace %}
+
+<h3>Preferences</h3>
+
+<form method="post">
+    <table>
+        <tr>
+            <th>User interface:</th>
+            <td>
+                <input type="radio" name="ui" value="basic"{% if ui == "basic" %} checked{% endif %}>Basic
+                <br/>
+                <input type="radio" name="ui" value="cypress"{% if ui == "cypress" %} checked{% endif %} disabled>Cypress
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" name="save" value="Save">
+                <input type="button" value="Cancel" onclick="document.location='/'">
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}

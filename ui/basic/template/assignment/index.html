@@ -1,0 +1,42 @@
+{% extends "template_base.html" %}
+
+{% block workspace %}
+
+<h3>Define Assignments</h3>
+
+<table class="bordered_table">
+    <tr>
+        <th class="bordered_cell">Assignment Name</th>
+        <th class="bordered_cell">Type</th>
+        <th class="bordered_cell">Assignment Structure</th>
+    </tr>
+    {% for assignment in assignments %}
+    <tr>
+        <td class="bordered_cell">
+            <a href="/template/assignment/edit?template_id={{ template.key.id() }}&assignment_id={{ assignment.id }}"
+                    >{{ assignment.name | e }}</a>
+        </td>
+        <td class="bordered_cell">
+            {% if assignment.is_repeating %}
+            Repeating
+            {% else %}
+            Single
+            {% endif %}
+        </td>
+        <td class="bordered_cell" style="text-align: center">
+            <input type="button" value="Define"
+                   onclick="document.location=
+                   '/template/assignment/structure?template_id={{ template.key.id() }}&assignment_id={{ assignment.id }}'">
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td class="bordered_cell">
+            <a href="/template/assignment/add?template_id={{ template.key.id() }}">+</a>
+        </td>
+        <td class="bordered_cell"></td>
+        <td class="bordered_cell"></td>
+    </tr>
+</table>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "site_base.html" %}
+
+{% block workspace %}
+
+<h3>Template Gallery Administration</h3>
+
+<table class="bordered_table">
+    <tr>
+        <th class="bordered_cell">Template Name</th>
+        <th class="bordered_cell" style="width: 600px">Description</th>
+    </tr>
+    {% for template in templates %}
+    <tr>
+        <td class="bordered_cell">
+            <a href='/site_admin/template_edit?template_id={{ template.key.id() }}'>{{ template.name | e }}</a>
+        </td>
+        <td class="bordered_cell">
+            {{ template.description | e }}
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td class="bordered_cell">
+            <a href="/site_admin/template_add">+</a>
+        </td>
+        <td></td>
+    </tr>
+</table>
+
+{% endblock %}

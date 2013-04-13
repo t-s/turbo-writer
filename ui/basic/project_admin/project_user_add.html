@@ -1,0 +1,40 @@
+{% extends "project_base.html" %}
+
+{% block workspace %}
+
+<h3>Team Members: Add New Team Member</h3>
+
+{% if error_msg %}
+<p>
+    <span class="error">{{ error_msg | e }}</span>
+</p>
+{% endif %}
+
+<form method="post">
+    <input type="hidden" name="project_id" value="{{ project.key.id() }}">
+    <table>
+        <tr>
+            <th style="text-align: left; vertical-align: top" autofocus>Email:</th>
+            <td><input name="email" value="{{ email | e }}" size="100"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input type="submit" value="Add Team Member">
+            </td>
+            <td>
+                <input type="button" value="Cancel"
+                       onclick="document.location='/project_admin/project_user_admin?project_id={{ project.key.id() }}'">
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}
+

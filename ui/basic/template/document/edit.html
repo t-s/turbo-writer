@@ -1,0 +1,68 @@
+{% extends "template_base.html" %}
+
+{% block workspace %}
+
+<h3>Define Documents: Edit Document</h3>
+
+{% if error_msg %}
+<p>
+    <span class="error">{{ error_msg | e }}</span>
+</p>
+{% endif %}
+
+<form method="post">
+    <input type="hidden" name="template_id" value="{{ template.key.id() }}">
+    <input type="hidden" name="document_id" value="{{ document_id }}">
+    <table>
+        <tr>
+            <th>Document Name: {{ name | e }}</th>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>Description:</th>
+            <td>
+                <textarea name="description" autofocus>{{ description | e }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th>Document Style:</th>
+            <td>
+                <select name="doc_style">
+                    <option value=""
+                    {% if not doc_style %} selected{% endif %}>(none)</option>
+                    {% for doc_style_name in doc_style_names %}
+                    <option value="{{ doc_style_name
+                    | e }}"{% if doc_style_name == doc_style %} selected{% endif %}>{{ doc_style_name }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input type="submit" name="update" value="Update Document">
+            </td>
+            <td>
+                <input type="submit" name="delete" value="Delete Document from Template">
+            </td>
+            <td>
+                <input type="button" value="Cancel"
+                       onclick="document.location='/template/document?template_id={{ template.key.id() }}'">
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}

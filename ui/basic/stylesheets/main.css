@@ -1,0 +1,56 @@
+body {
+    font-family: Verdana, Helvetica, sans-serif;
+    background-color: white;
+    text-decoration: none;
+}
+
+a {
+    text-decoration: none;
+    color: darkcyan;
+    font-weight: bold;
+    font-style: italic;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+textarea {
+    height: 100px;
+    width: 600px;
+}
+
+th {
+    text-align: left;
+    vertical-align: top;
+}
+
+.bordered_cell {
+    border: 2px solid black;
+    padding: 5px;
+}
+
+.bordered_table {
+    border: 2px solid black;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.error {
+    color: red;
+}
+
+.gap {
+    height: 16px;
+}
+
+.header {
+    width: 100%;
+    background-color: #e0ffff;
+}
+
+.tw {
+    color: purple;
+    font-style: italic;
+    font-weight: bold;
+}

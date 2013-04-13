@@ -1,0 +1,33 @@
+{% extends "template_base.html" %}
+
+{% block workspace %}
+
+<h3>Define Documents</h3>
+
+<table class="bordered_table">
+    <tr>
+        <th class="bordered_cell">Document Name</th>
+        <th class="bordered_cell">Document Structure</th>
+    </tr>
+    {% for document in documents %}
+    <tr>
+        <td class="bordered_cell">
+            <a href="/template/document/edit?template_id={{ template.key.id() }}&document_id={{ document.id }}"
+                    >{{ document.name | e }}</a>
+        </td>
+        <td class="bordered_cell" style="text-align: center">
+            <input type="button" value="Define"
+                   onclick="document.location=
+                   '/template/document/structure?template_id={{ template.key.id() }}&document_id={{ document.id }}'">
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td class="bordered_cell">
+            <a href="/template/document/add?template_id={{ template.key.id() }}">+</a>
+        </td>
+        <td class="bordered_cell"></td>
+    </tr>
+</table>
+
+{% endblock %}

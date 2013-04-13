@@ -1,0 +1,19 @@
+application: turbo-writer
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /ui/basic/stylesheets
+  static_dir: ui/basic/stylesheets
+
+- url: /ui/cypress/stylesheets
+  static_dir: ui/cypress/stylesheets
+
+- url: /.*
+  script: turbo_writer.app
+
+libraries:
+- name: jinja2
+  version: latest

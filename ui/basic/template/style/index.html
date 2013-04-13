@@ -1,0 +1,31 @@
+{% extends "template_base.html" %}
+
+{% block workspace %}
+
+<h3>Define Styles</h3>
+
+<table class="bordered_table">
+    <tr>
+        <th class="bordered_cell">Style Name</th>
+        <th class="bordered_cell">Definition</th>
+    </tr>
+    {% for style in styles %}
+    <tr>
+        <td class="bordered_cell">
+            <a href="/template/style/edit?template_id={{ template.key.id() }}&style_id={{ style.id }}"
+                >{{ style.name | e }}</a>
+        </td>
+        <td class="bordered_cell">
+            {{ style.css }}
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td class="bordered_cell">
+            <a href="/template/style/add?template_id={{ template.key.id() }}">+</a>
+        </td>
+        <td class="bordered_cell"></td>
+    </tr>
+</table>
+
+{% endblock %}

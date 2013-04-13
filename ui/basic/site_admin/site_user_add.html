@@ -1,0 +1,56 @@
+{% extends "site_base.html" %}
+
+{% block workspace %}
+
+<h3>User Administration: Add New Site User</h3>
+
+{% if error_msg %}
+<p>
+    <span class="error">{{ error_msg | e }}</span>
+</p>
+{% endif %}
+
+<form method="post">
+    <table>
+        <tr>
+            <th>Email:</th>
+            <td><input name="email" value="{{ email | e }}" size="100" autofocus></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table class="bordered_table">
+        <tr>
+            <th class="bordered_cell">Site Roles</th>
+            {% for role in roles %}
+        </tr>
+        <tr>
+            <td class="bordered_cell">
+                <input type="checkbox" name="{{ role.name | e }}" {% if role.checked %} checked {% endif %}>
+                {{ role.name | e }}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input type="submit" value="Add Site User">
+            </td>
+            <td>
+                <input type="button" value="Cancel" onclick="document.location='/site_admin/site_user_admin'">
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}
+
