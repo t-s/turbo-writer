@@ -1,3 +1,4 @@
+import dashboard_service
 import document_service
 import dropbox_service
 import html_generator_service
