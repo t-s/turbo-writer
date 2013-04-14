@@ -2,6 +2,7 @@ import webapp2
 import dao
 import ui
 
+
 class RequestHandler(webapp2.RequestHandler):
     def get(self):
         template = dao.get_template_by_id(self.request.get("template_id"))

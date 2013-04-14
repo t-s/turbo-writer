@@ -7,6 +7,7 @@
 <table class="bordered_table">
     <tr>
         <th class="bordered_cell">Style Name</th>
+        <th class="bordered_cell">Description</th>
         <th class="bordered_cell">Definition</th>
     </tr>
     {% for style in styles %}
@@ -14,6 +15,9 @@
         <td class="bordered_cell">
             <a href="/template/style/edit?template_id={{ template.key.id() }}&style_id={{ style.id }}"
                 >{{ style.name | e }}</a>
+        </td>
+        <td class="bordered_cell">
+            {{ style.description | e }}
         </td>
         <td class="bordered_cell">
             {{ style.css }}
@@ -24,6 +28,7 @@
         <td class="bordered_cell">
             <a href="/template/style/add?template_id={{ template.key.id() }}">+</a>
         </td>
+        <td class="bordered_cell"></td>
         <td class="bordered_cell"></td>
     </tr>
 </table>

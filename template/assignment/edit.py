@@ -27,9 +27,8 @@ class RequestHandler(webapp2.RequestHandler):
         if assignment_entity and self.request.get("delete"):
             try:
                 assignment_entity.key.delete()
-                # Delete associated generated interview
-                interview_entity = dao.get_interview_by_name(template, assignment_entity.name)
-                if interview_entity:
+                # Delete associated generated interviews
+                for interview_entity in dao.get_interviews_by_assignment_name(template, assignment_entity.name):
                     interview_entity.key.delete()
                 self.redirect("/template/assignment?template_id={}".format(template.key.id()))
                 return

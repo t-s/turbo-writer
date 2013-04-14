@@ -30,6 +30,11 @@ indexes:
   properties:
   - name: p
 
+- kind: Interview
+  ancestor: yes
+  properties:
+  - name: n
+
 - kind: Project
   properties:
   - name: ipt
@@ -39,6 +44,11 @@ indexes:
   properties:
   - name: t
   - name: n
+
+- kind: ProjectUser
+  ancestor: yes
+  properties:
+  - name: e
 
 - kind: Style
   ancestor: yes

@@ -15,6 +15,7 @@ class RequestHandler(webapp2.RequestHandler):
             variable = dict()
             variable["id"] = variable_entity.key.id()
             variable["name"] = variable_entity.name
+            variable["description"] = variable_entity.description
             variable["is_repeating"] = variable_entity.is_repeating
             variable["input_field"] = variable_entity.input_field
             variable_list.append(variable)

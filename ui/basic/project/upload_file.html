@@ -14,7 +14,8 @@
     <input type="file" name="upload_file"/>
     <br/><br/>
     <input type="submit" name="upload" value="Upload"/>
-    <input type="button" value="Cancel" onclick="document.location='/project/conduct_interview?_project_id={{ project.key.id() }}&_interview_name={{ interview.name }}'">
+    <input type="button" value="Cancel"
+           onclick="document.location='/project/conduct_interview?_project_id={{ project.key.id() }}&_interview_name={{ interview.name }}{% if show_index %}&_index={{ index }}{% endif %}'">
 </form>
 
 {% endblock %}
