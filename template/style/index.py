@@ -15,6 +15,7 @@ class RequestHandler(webapp2.RequestHandler):
             style = dict()
             style["id"] = style_entity.key.id()
             style["name"] = style_entity.name
+            style["description"] = style_entity.description
             style["css"] = style_entity.css
             style_list.append(style)
 

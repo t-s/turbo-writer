@@ -48,7 +48,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         interview_name = self.request.get("_interview_name")
         interview = interview_service.get_interview_by_name(interview_name)
 
-        index = self.request.get("index")
+        index = self.request.get("_index")
 
         blobs_info = self.get_uploads("upload_file")
         if blobs_info:

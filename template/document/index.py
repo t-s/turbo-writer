@@ -15,6 +15,8 @@ class RequestHandler(webapp2.RequestHandler):
             document = dict()
             document["id"] = document_entity.key.id()
             document["name"] = document_entity.name
+            document["description"] = document_entity.description
+            document["style"] = document_entity.style_name
             document_list.append(document)
 
         # Create template and template values, render the page

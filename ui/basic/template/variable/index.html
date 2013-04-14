@@ -7,6 +7,7 @@
 <table class="bordered_table">
     <tr>
         <th class="bordered_cell">Variable Name</th>
+        <th class="bordered_cell">Description</th>
         <th class="bordered_cell" style="text-align: center">Type</th>
         <th class="bordered_cell">Input Field</th>
     </tr>
@@ -15,6 +16,9 @@
         <td class="bordered_cell">
             <a href="/template/variable/edit?template_id={{ template.key.id() }}&variable_id={{ variable.id }}"
                 >{{ variable.name | e }}</a>
+        </td>
+        <td class="bordered_cell">
+            {{ variable.description | e }}
         </td>
         <td class="bordered_cell">
             {% if variable.is_repeating %}
@@ -28,8 +32,12 @@
                 Short Field
             {% elif variable.input_field == "M" %}
                 Full Line
-            {% else %}
+            {% elif variable.input_field == "L" %}
                 Edit Box
+            {% elif variable.input_field == "X" %}
+                File
+            {% else %}
+                (unknown)
             {% endif %}
         </td>
     </tr>
@@ -38,6 +46,7 @@
         <td class="bordered_cell">
             <a href="/template/variable/add?template_id={{ template.key.id() }}">+</a>
         </td>
+        <td class="bordered_cell"></td>
         <td class="bordered_cell"></td>
         <td class="bordered_cell"></td>
     </tr>

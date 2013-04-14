@@ -24,7 +24,7 @@ class RequestHandler(webapp2.RequestHandler):
                 raise Exception("You must provide a description for the template")
             if dao.get_public_templates_by_name(name):
                 raise Exception("That template name is already taken")
-            dao.Project(name=name, type=dao.PUBLIC_TEMPLATE, description=description).put()
+            dao.Project(name=name, project_type=dao.PUBLIC_TEMPLATE, description=description).put()
             self.redirect("/site_admin/template_admin")
             return
         except Exception as e:

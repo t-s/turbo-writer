@@ -15,6 +15,7 @@ class RequestHandler(webapp2.RequestHandler):
             assignment = dict()
             assignment["id"] = assignment_entity.key.id()
             assignment["name"] = assignment_entity.name
+            assignment["description"] = assignment_entity.description
             assignment["is_repeating"] = assignment_entity.is_repeating
             assignment_list.append(assignment)
 

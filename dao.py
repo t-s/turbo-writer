@@ -48,13 +48,13 @@ class Assignment(ndb.Model):
         Parent must contain a Project key.
     """
     name = ndb.StringProperty("n", required=True)
-    description = ndb.StringProperty("d")
+    description = ndb.TextProperty("d")
     prereq_assignment_names = ndb.StringProperty("pan", repeated=True)
     is_repeating = ndb.BooleanProperty("ir")
-    instructions_to_manager = ndb.StringProperty("itm")
-    instructions_to_writer = ndb.StringProperty("itw")
+    instructions_to_manager = ndb.TextProperty("itm")
+    instructions_to_writer = ndb.TextProperty("itw")
     variable_names = ndb.StringProperty("vn", repeated=True)
-    checklist_items = ndb.StringProperty("ci", repeated=True)
+    checklist_items = ndb.TextProperty("ci", repeated=True)
 
 
 def clone(self, project):
@@ -73,9 +73,9 @@ class Document(ndb.Model):
     """
     name = ndb.StringProperty("n", required=True)
     internal_name = ndb.StringProperty("in", required=True)
-    description = ndb.StringProperty("d")
+    description = ndb.TextProperty("d")
     style_name = ndb.StringProperty("sn")
-    content = ndb.BlobProperty("c", compressed=True)
+    content = ndb.TextProperty("c", compressed=True)
     blob_key = ndb.BlobKeyProperty("bk")
     filename = ndb.StringProperty("f")
 
@@ -92,7 +92,7 @@ class DocumentItem(ndb.Model):
     """
     item_type = ndb.StringProperty("it", required=True) # SINGLE_VARIABLE/REPEATING_VARIABLE/TEXT
     variable_name = ndb.StringProperty("vn")
-    text = ndb.StringProperty("t")
+    text = ndb.TextProperty("t")
     style_name = ndb.StringProperty("sn")
     flow_control = ndb.StringProperty("fc") # CONTINUE_FLOW/BEGIN_REPEATING_GROUP/END_REPEATING_GROUP
     position = ndb.IntegerProperty("p", required=True)
@@ -117,8 +117,8 @@ class Interview(ndb.Model):
         "cin") # Used for nodes with child nodes: pipe-separated interview names # TODO Convert to "repeated=True"
     is_writer_interview = ndb.BooleanProperty("iwi")
     menu_title = ndb.StringProperty("mt") # Used only in the root node; defaults to "Conduct Interview"
-    content = ndb.BlobProperty("content", compressed=True) # None if navigation is directly to first child
-    checklist_items = ndb.StringProperty("ci", repeated=True)
+    content = ndb.TextProperty("content", compressed=True) # None if navigation is directly to first child
+    checklist_items = ndb.TextProperty("ci", repeated=True)
     auto_assign = ndb.BooleanProperty(
         "aa") # Used only for root nodes; True if this interview to be automatically assigned to creator of a new project
     generate_after = ndb.StringProperty(
@@ -149,8 +149,8 @@ class Interview(ndb.Model):
         "bin") # Computed by engine; used only in the root node; defaults to first node with content
     child_count = ndb.IntegerProperty("cc")
     assignment_name = ndb.StringProperty("an")
-    manager_instructions_to_writer = ndb.StringProperty("mitw")
-    reviewer_comment = ndb.StringProperty("rc")
+    manager_instructions_to_writer = ndb.TextProperty("mitw")
+    reviewer_comment = ndb.TextProperty("rc")
 
     def clone(self, project, suffix=""):
         mask = "{}.{}" if suffix else "{}{}"
@@ -183,7 +183,7 @@ class Project(ndb.Model):
     """
     name = ndb.StringProperty("n", required=True)
     project_type = ndb.StringProperty("t", required=True) # PROJECT/PRIVATE_TEMPLATE/PUBLIC_TEMPLATE
-    description = ndb.StringProperty("d")
+    description = ndb.TextProperty("d")
     add_date = ndb.DateTimeProperty("ad", auto_now_add=True)
     update_date = ndb.DateTimeProperty("ud", auto_now=True)
 
@@ -209,7 +209,7 @@ class SitePermission(ndb.Model):
 
         Entity ID is the site permission ID, a short mnemonic string.
     """
-    description = ndb.StringProperty("d", required=True)
+    description = ndb.TextProperty("d", required=True)
 
 
 class SiteRole(ndb.Model):
@@ -219,7 +219,7 @@ class SiteRole(ndb.Model):
 
         Entity ID is the site role ID, a short mnemonic string.
     """
-    description = ndb.StringProperty("d")
+    description = ndb.TextProperty("d")
     site_permissions = ndb.StringProperty("sp", repeated=True) # A list of SitePermission IDs
 
 
@@ -243,8 +243,8 @@ class Style(ndb.Model):
         Parent must contain a Project key for a public or private template.
     """
     name = ndb.StringProperty("n", required=True)
-    description = ndb.StringProperty("d")
-    css = ndb.BlobProperty("c", compressed=True)
+    description = ndb.TextProperty("d")
+    css = ndb.TextProperty("c", compressed=True)
 
     def clone(self, project):
         return Style(name=self.name, description=self.description, css=self.css, parent=project.key)
@@ -259,9 +259,9 @@ class Variable(ndb.Model):
     name = ndb.StringProperty("n", required=True)
     internal_name = ndb.StringProperty("in", required=True)
     input_field = ndb.StringProperty("if") # SMALL/MEDIUM/LARGE/FILE
-    description = ndb.StringProperty("d")
+    description = ndb.TextProperty("d")
     is_repeating = ndb.BooleanProperty("ir")
-    content = ndb.BlobProperty("c", compressed=True)
+    content = ndb.TextProperty("c", compressed=True)
     blob_key = ndb.BlobKeyProperty("bk")
     filename = ndb.StringProperty("f")
 
@@ -383,7 +383,7 @@ def get_indexed_variable(project, variable_name, index):
         if variable.input_field == FILE and variable.blob_key and variable.filename:
             return "\n<!--B-KEY:{}-->\n[Insert \"{}\" here]\n".format(variable.blob_key, variable.filename)
         else:
-            return variable.content
+            return variable.content if variable.content else ""
     return ""
 
 
@@ -401,7 +401,11 @@ def get_interview_by_name(project, interview_name):
 
 
 def get_interviews(project):
-    return Interview.query(ancestor=project.key).fetch()
+    return Interview.query(ancestor=project.key).order(Interview.name).fetch()
+
+
+def get_interviews_by_assignment_name(template, assignment_name):
+    return Interview.query(Interview.assignment_name == assignment_name, ancestor=template.key).fetch()
 
 
 def get_private_template_users(template):
@@ -437,7 +441,7 @@ def get_project_user_by_id(project, project_user_id):
 
 
 def get_project_users(project):
-    return ProjectUser.query(ancestor=project.key).fetch()
+    return ProjectUser.query(ancestor=project.key).order(ProjectUser.email).fetch()
 
 
 def get_projects_by_name(project_name):
@@ -606,7 +610,7 @@ def get_template_user_by_email(template, email):
 
 
 def get_template_users(template):
-    return ProjectUser.query(ancestor=template.key).fetch()
+    return ProjectUser.query(ancestor=template.key).order(ProjectUser.email).fetch()
 
 
 def get_variable_by_id(template, variable_id):
@@ -764,8 +768,10 @@ if not SiteUser.query().count():
 
     # Add site users: site masters
     SiteUser(email="LDRidgeway@gmail.com".lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
+    SiteUser(email="ltlamberton@gmail.com".lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
     SiteUser(email="awieder@zephyrmediacommunications.com".lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
-    SiteUser(email="MHanderhan@meesha.net".lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
+    SiteUser(email="awieder@ztech-group.com".lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
+    # SiteUser(email="MHanderhan@meesha.net".lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
 
 # If datastore contains no templates in the Template Gallery, initialize it
 if not Project.query(Project.project_type == PUBLIC_TEMPLATE).count():

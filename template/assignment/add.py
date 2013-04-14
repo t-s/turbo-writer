@@ -26,7 +26,7 @@ class RequestHandler(webapp2.RequestHandler):
         if not name:
             error_msg = "You must specify a name for your assignment definition"
         elif not variable_type:
-            error_msg = "You must specify whether this is a single or repeating variable"
+            error_msg = "You must specify whether this is a single or repeating assignment"
         else:
             assignment_entity = dao.get_assignment_by_name(template, name)
             if assignment_entity:

@@ -84,7 +84,8 @@ class HtmlGeneratorService():
         interview = dao.Interview(name="assign_reviewer_{}".format(assignment.name),
                                   root_interview_name="assign_reviewer_{}".format(assignment.name),
                                   menu_title=assignment.name, assign_button="Assign Reviewer",
-                                  assign_interview_name="review_{}".format(assignment.name), parent=self.template.key)
+                                  assign_interview_name="review_{}".format(assignment.name),
+                                  assignment_name=assignment.name, parent=self.template.key)
         html = "<h3>Assign Reviewer for \"{}\"</h3>".format(
             "{{ assignment_name | e }}" if assignment.is_repeating else assignment.name)
         html += "{% if error_msg %}<p>"
@@ -109,7 +110,8 @@ class HtmlGeneratorService():
         interview = dao.Interview(name="assign_writer_{}".format(assignment.name),
                                   root_interview_name="assign_writer_parent_{}".format(assignment.name),
                                   menu_title=assignment.name, assign_button="Assign Writer",
-                                  assign_interview_name="write_{}".format(assignment.name), parent=self.template.key)
+                                  assign_interview_name="write_{}".format(assignment.name),
+                                  assignment_name=assignment.name, parent=self.template.key)
         html = "<h3>Assign Writer for \"{}\"</h3>".format(assignment.name)
         html += "{% if error_msg %}<p>"
         html += "<span class='error'>{{ error_msg | e }}</span>"
@@ -153,7 +155,8 @@ class HtmlGeneratorService():
                                   root_interview_name="assign_writer_parent_{}".format(assignment.name),
                                   completed_button="Done", child_button="Add Writing Assignment",
                                   child_interview_names="assign_writer_{}".format(assignment.name),
-                                  menu_title="{}".format(assignment.name), parent=self.template.key)
+                                  menu_title="{}".format(assignment.name), assignment_name=assignment.name,
+                                  parent=self.template.key)
 
         html = "<h3>Assign Writers for \"{}\"</h3>".format(assignment.name)
 
@@ -174,10 +177,9 @@ class HtmlGeneratorService():
         interview = dao.Interview(name="review_{}".format(assignment.name),
                                   root_interview_name="review_{}".format(assignment.name),
                                   prereq_interview_names=["write_{}".format(assignment.name)],
-                                  checklist_items=assignment.checklist_items,
-                                  menu_title=assignment.name, parent_button="Save Incomplete Review",
-                                  completed_button="Review Completed",
-                                  parent=self.template.key)
+                                  checklist_items=assignment.checklist_items, menu_title=assignment.name,
+                                  parent_button="Save Incomplete Review", completed_button="Review Completed",
+                                  assignment_name=assignment.name, parent=self.template.key)
         html = "<h3>Review \"{}\"</h3>".format(
             "{{ assignment_name | e }}" if assignment.is_repeating else assignment.name)
         html += """
@@ -218,7 +220,7 @@ class HtmlGeneratorService():
                                   checklist_items=assignment.checklist_items, is_writer_interview=True,
                                   prereq_interview_names=prereq_interview_names, menu_title=assignment.name,
                                   parent_button="Save Draft", completed_button="Writing Completed",
-                                  parent=self.template.key)
+                                  assignment_name=assignment.name, parent=self.template.key)
         html = "<h3>Write \"{}\"</h3>".format(
             "{{ assignment_name | e }}" if assignment.is_repeating else assignment.name)
         html += """
@@ -279,12 +281,10 @@ class HtmlGeneratorService():
 
                     html += "To upload into TurboWriter:<br/><br/>"
 
-                    html += "<input type='button'"
+                    html += "<input type='submit'"
                     html += " style='background-color: #f8f8f8; border-color: #eeeeee; border-radius: 3px; border-width: 1px; color: #777777; font-weight: bold; height: 25px; width: 152px;'"
-                    html += " value='Choose from Disk' onclick='"
-                    html += "document.location=\"/project/upload_file?_project_id={{ project.key.id() }}&"
-                    html += "_interview_name={{{{ interview.name }}}}&_variable_name={}".format(variable.internal_name)
-                    html += "{% if index %}&_index={{ index }}{% endif %}\""
+                    html += " value='Choose from Disk' name='"
+                    html += "_choose_{}".format(variable.internal_name)
                     html += "'><br/><br/>"
 
                     html += "<input type='dropbox-chooser' name='{}' style='visibility: hidden;' data-link-type='direct'/>".format(

@@ -7,6 +7,7 @@
 <table class="bordered_table">
     <tr>
         <th class="bordered_cell">Assignment Name</th>
+        <th class="bordered_cell">Description</th>
         <th class="bordered_cell">Type</th>
         <th class="bordered_cell">Assignment Structure</th>
     </tr>
@@ -15,6 +16,9 @@
         <td class="bordered_cell">
             <a href="/template/assignment/edit?template_id={{ template.key.id() }}&assignment_id={{ assignment.id }}"
                     >{{ assignment.name | e }}</a>
+        </td>
+        <td class="bordered_cell">
+            {{ assignment.description | e }}
         </td>
         <td class="bordered_cell">
             {% if assignment.is_repeating %}
@@ -34,6 +38,7 @@
         <td class="bordered_cell">
             <a href="/template/assignment/add?template_id={{ template.key.id() }}">+</a>
         </td>
+        <td class="bordered_cell"></td>
         <td class="bordered_cell"></td>
         <td class="bordered_cell"></td>
     </tr>

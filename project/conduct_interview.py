@@ -74,7 +74,7 @@ class RequestHandler(webapp2.RequestHandler):
             filename = "{}_filename".format(internal_name)
             inner_template_values[filename] = variable.filename
         else:
-            inner_template_values[internal_name] = variable.content
+            inner_template_values[internal_name] = variable.content if variable.content else ""
 
     def generate_variable_values(self, project, index, inner_template_values):
         indexed_variable_max_indices = dict()
@@ -87,8 +87,8 @@ class RequestHandler(webapp2.RequestHandler):
                     self.generate_variable_value(inner_template_values, variable)
                 old_max_index = indexed_variable_max_indices[
                     variable_name] if variable_name in indexed_variable_max_indices else None
-                if not old_max_index or variable_index > old_max_index:
-                    indexed_variable_max_indices[variable_name] = variable_index
+                if not old_max_index or int(variable_index) > old_max_index:
+                    indexed_variable_max_indices[variable_name] = int(variable_index)
             else:
                 self.generate_variable_value(inner_template_values, variable)
         for variable_name in iter(indexed_variable_max_indices):
@@ -192,6 +192,13 @@ class RequestHandler(webapp2.RequestHandler):
                     name = match.group(1)
                 self.render(project, name, interview_service, None)
                 return
+        else:
+            for param in self.request.POST:
+                if param.startswith("_choose_"):
+                    index_query_string = "&_index={}".format(index) if index else ""
+                    self.redirect("/project/upload_file?_project_id={}&_interview_name={}&_variable_name={}{}".format(
+                        project.key.id(), interview_name, param[8:], index_query_string))
+                    return
         self.redirect("/project?project_id={}".format(project.key.id()))
 
     def parse_checklist_item(self, checklist_item):
