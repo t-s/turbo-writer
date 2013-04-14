@@ -639,14 +639,7 @@ def set_bookmark(root_interview, current_interview):
 
 def set_variable(project, internal_name, value):
     for variable in Variable.query(Variable.internal_name == str(internal_name), ancestor=project.key):
-        if variable.input_field == FILE:
-            blob_key = DropboxService().store_file_as_blob(value)
-            if variable.blob_key:
-                blobstore.delete(variable.blob_key)
-            variable.blob_key = blob_key
-            variable.filename = urllib2.unquote(value.split("/")[-1])
-        else:
-            variable.content = str(value)
+        set_variable_content(variable, value)
         variable.put()
         return
     match = optionally_indexed_name_pattern.match(internal_name)
@@ -659,12 +652,7 @@ def set_variable(project, internal_name, value):
             raise Exception("Unexpected call to set_variable #2: internal_name={}".format(internal_name))
         variable = Variable(name=str(internal_name), internal_name=str(internal_name),
                             input_field=base_variable.input_field, parent=project.key)
-        if base_variable.input_field == FILE:
-            blob_key = DropboxService().store_file_as_blob(value)
-            variable.blob_key = blob_key
-            variable.filename = urllib2.unquote(value.split("/")[-1])
-        else:
-            variable.content = str(value)
+        set_variable_content(variable, value)
         variable.put()
     else:
         raise Exception("Unexpected call to set_variable #3: internal_name={}".format(internal_name))
@@ -693,6 +681,18 @@ def set_variable_blob_key(project, internal_name, blob_key):
         variable.put()
     else:
         raise Exception("Unexpected call to set_variable_blob_key #4: internal_name={}".format(internal_name))
+
+
+def set_variable_content(variable, value):
+    if variable.input_field == FILE:
+        # Must be a Dropbox file, since UploadHandler doesn't go thru this code
+        blob_key = DropboxService().store_file_as_blob(value)
+        if variable.blob_key:
+            blobstore.delete(variable.blob_key)
+        variable.blob_key = blob_key
+        variable.filename = urllib2.unquote(value.split("/")[-1])
+    else:
+        variable.content = str(value)
 
 
 def test_current_user_registered():
