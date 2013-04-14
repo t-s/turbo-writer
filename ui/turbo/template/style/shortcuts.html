@@ -1,0 +1,53 @@
+<script xmlns="http://www.w3.org/1999/html">
+
+function add_to_css(property, value) {
+    css = $("#css");
+    style = css.val();
+    i1 = style.indexOf(property);
+    if (i1 >= 0) {
+        i2 = style.indexOf("; ", i1);
+        style = style.substring(0, i1) + style.substring(i2 + 2);
+    }
+    style += property + ": " + value + "; ";
+    css.val(style);
+    $("#sample").css(property, value);
+}
+
+</script>
+
+<p>
+    Shortcuts:
+    <ul>
+        <li>Set font-family to:
+            <a onclick="add_to_css('font-family', 'Arial')" style="text-decoration: underline">Arial</a>
+            <a onclick="add_to_css('font-family', 'Courier New')" style="text-decoration: underline">Courier New</a>
+            <a onclick="add_to_css('font-family', 'Cursive')" style="text-decoration: underline">Cursive</a>
+            <a onclick="add_to_css('font-family', 'Fantasy')" style="text-decoration: underline">Fantasy</a>
+            <a onclick="add_to_css('font-family', 'Georgia')" style="text-decoration: underline">Georgia</a>
+            <a onclick="add_to_css('font-family', 'Monaco')" style="text-decoration: underline">Monaco</a>
+        <li>Set font-size to:
+            <a onclick="add_to_css('font-size', '12pt')" style="text-decoration: underline">12pt</a>
+            <a onclick="add_to_css('font-size', '14pt')" style="text-decoration: underline">14pt</a>
+            <a onclick="add_to_css('font-size', '18pt')" style="text-decoration: underline">18pt</a>
+            <a onclick="add_to_css('font-size', '24pt')" style="text-decoration: underline">24pt</a>
+            <a onclick="add_to_css('font-size', '36pt')" style="text-decoration: underline">36pt</a>
+        <li>Set font-weight to:
+            <a onclick="add_to_css('font-weight', 'normal')" style="text-decoration: underline">normal</a>
+            <a onclick="add_to_css('font-weight', 'bold')" style="text-decoration: underline">bold</a>
+        <li>Set font-style to:
+            <a onclick="add_to_css('font-style', 'normal')" style="text-decoration: underline">normal</a>
+            <a onclick="add_to_css('font-style', 'italic')" style="text-decoration: underline">italic</a>
+        <li>Set color to:
+            <a onclick="add_to_css('color', 'lightgray')" style="text-decoration: underline">lightgray</a>
+            <a onclick="add_to_css('color', 'gray')" style="text-decoration: underline">gray</a>
+            <a onclick="add_to_css('color', 'black')" style="text-decoration: underline">black</a>
+            <a onclick="add_to_css('color', 'blue')" style="text-decoration: underline">blue</a>
+            <a onclick="add_to_css('color', 'red')" style="text-decoration: underline">red</a>
+            <a onclick="add_to_css('color', 'lightgreen')" style="text-decoration: underline">lightgreen</a>
+        <li>Set margin to:
+            <a onclick="add_to_css('margin', '0')" style="text-decoration: underline">0</a>
+            <a onclick="add_to_css('margin', '0 50')" style="text-decoration: underline">0 50</a>
+            <a onclick="add_to_css('margin', '0 75')" style="text-decoration: underline">0 75</a>
+            <a onclick="add_to_css('margin', '0 100 0 100')" style="text-decoration: underline">0 100</a>
+    </ul>
+</p>

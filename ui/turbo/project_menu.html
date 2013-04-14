@@ -1,0 +1,120 @@
+<table style="width: 300px; background-color: #eeeeee">
+    <tr>
+        <td>
+            <b><a href="/">Home</a></b>
+        </td>
+    </tr>
+    <tr>
+        <td class="gap"></td>
+    </tr>
+    <tr>
+        <td>
+            <b>Project "{{ project.name | e }}"</b>
+            <blockquote>
+                <table>
+                    <tr>
+                        <td>
+                            <b><i>General</i></b>
+                            <ul>
+                                <li><a href="/project?project_id={{ project.key.id() }}">Project Home</a></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    {% if documents %}
+                    <tr>
+                        <td>
+                            <b><i>View</i></b>
+                            <ul>
+                                {% for document in documents %}
+                                <li>
+                                    <a href="/project/produce_document?project_id={{ project.key.id() }}&document_id={{ document.key.id() }}"
+                                            >{{ document.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% if assign_writer_interviews %}
+                    <tr>
+                        <td>
+                            <b><i>Assign Writers</i></b>
+                            <ul>
+                                {% for interview in assign_writer_interviews %}
+                                <li><a href="/project/conduct_interview?_project_id={{
+                                    project.key.id() }}&_interview_name={{
+                                    interview.name }}{% if interview.show_index %}&_index={{
+                                    interview.index }}{% endif %}">{{
+                                    interview.menu_title }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% if assign_reviewer_interviews %}
+                    <tr>
+                        <td>
+                            <b><i>Assign Reviewers</i></b>
+                            <ul>
+                                {% for interview in assign_reviewer_interviews %}
+                                <li><a href="/project/conduct_interview?_project_id={{
+                                    project.key.id() }}&_interview_name={{
+                                    interview.name }}{% if interview.show_index %}&_index={{
+                                    interview.index }}{% endif %}">{{
+                                    interview.menu_title }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% if writer_interviews %}
+                    <tr>
+                        <td>
+                            <b><i>Write</i></b>
+                            <ul>
+                                {% for interview in writer_interviews %}
+                                <li><a href="/project/conduct_interview?_project_id={{
+                                    project.key.id() }}&_interview_name={{
+                                    interview.name }}{% if interview.show_index %}&_index={{
+                                    interview.index }}{% endif %}">{{
+                                    interview.menu_title }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% if reviewer_interviews %}
+                    <tr>
+                        <td>
+                            <b><i>Review</i></b>
+                            <ul>
+                                {% for interview in reviewer_interviews %}
+                                <li><a href="/project/conduct_interview?_project_id={{
+                                    project.key.id() }}&_interview_name={{
+                                    interview.name }}{% if interview.show_index %}&_index={{
+                                    interview.index }}{% endif %}">{{
+                                    interview.menu_title }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% if is_owner %}
+                    <tr>
+                        <td>
+                            <b><i>Administration</i></b>
+                            <ul>
+                                <li>
+                                    <a href="/project_admin/project_settings?project_id={{ project.key.id() }}">Settings</a>
+                                </li>
+                                <li><a href="/project_admin/project_user_admin?project_id={{ project.key.id() }}"
+                                        >Team Members</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </blockquote>
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,26 @@
+{% extends "project_base.html" %}
+
+{% block workspace %}
+
+<h3>Team Members</h3>
+
+<table class="bordered_table">
+    <tr>
+        <th class="bordered_cell">Email</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+        <td class="bordered_cell">
+            <a href="/project_admin/project_user_edit?project_id={{ project.key.id() }}&project_user_id={{ user.project_user_id }}"
+                >{{ user.email | e }}</a>
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td class="bordered_cell">
+            <a href="/project_admin/project_user_add?project_id={{ project.key.id() }}">+</a>
+        </td>
+    </tr>
+</table>
+
+{% endblock %}

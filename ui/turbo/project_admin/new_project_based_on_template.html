@@ -1,0 +1,44 @@
+{% extends "site_base.html" %}
+
+{% block workspace %}
+
+<h3>Create a New Project</h3>
+
+{% if error_msg %}
+<p>
+    <span class="error">{{ error_msg | e }}</span>
+</p>
+{% endif %}
+
+<form method="post">
+    <input type="hidden" name="template_id" value="{{ template_id }}">
+    <table>
+        <tr>
+            <th>Project Name:</th>
+            <td><input name="name" value="{{ name | e }}" style="width: 600px" autofocus></td>
+        </tr>
+        <tr>
+            <th>Description:</th>
+            <td>
+                <textarea name="description">{{ description | e }}</textarea>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input type="submit" value="Create Project">
+            </td>
+            <td>
+                <input type="button" value="Cancel" onclick="document.location='/'">
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}

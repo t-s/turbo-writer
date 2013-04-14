@@ -1,0 +1,45 @@
+{% extends "project_base.html" %}
+
+{% block workspace %}
+
+<form method="post">
+    <input type="hidden" name="_project_id" value="{{ project.key.id() }}">
+    <input type="hidden" name="_post_interview_name" value="{{ post_interview_name | e }}">
+    {% if show_index %}
+    <input type="hidden" name="_index" value="{{ index }}">
+    {% endif %}
+
+    {{ html_document }}
+
+    <p>
+
+        {% if previous_button %}
+        <input type="submit" name="_previous" value="{{ previous_button | e }}">
+        {% endif %}
+
+        {% if child_button %}
+        <input type="submit" name="_child" value="{{ child_button | e}}">
+        {% endif %}
+
+        {% if next_button %}
+        <input type="submit" name="_next" value="{{ next_button | e}}">
+        {% endif %}
+
+        {% if parent_button %}
+        <input type="submit" name="_parent" value="{{ parent_button | e}}">
+        {% endif %}
+
+        {% if assign_button %}
+        <input type="submit" name="_assign" value="{{ assign_button | e}}">
+        {% endif %}
+
+        {% if completed_button %}
+        <input type="submit" name="_completed" value="{{ completed_button | e}}">
+        {% endif %}
+
+        <input type="button" value="Cancel" onclick="document.location='/project?project_id={{ project.key.id() }}'">
+
+    </p>
+</form>
+
+{% endblock %}

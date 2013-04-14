@@ -1,0 +1,26 @@
+{% extends "template_base.html" %}
+
+{% block workspace %}
+
+<h3>Sharing</h3>
+
+<table class="bordered_table">
+    <tr>
+        <th class="bordered_cell">Email</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+        <td class="bordered_cell">
+            <a href="/template_admin/template_user_edit?template_id={{ template.key.id() }}&template_user_id={{ user.template_user_id }}"
+                    >{{ user.email | e }}</a>
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td class="bordered_cell">
+            <a href="/template_admin/template_user_add?template_id={{ template.key.id() }}">+</a>
+        </td>
+    </tr>
+</table>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "project_base.html" %}
+
+{% block workspace %}
+
+<h3>View "{{ document.name }}"</h3>
+
+<p>
+    <a href="/project/download_document/{{ document.blob_key }}?filename={{ document.filename }}">Click
+        here</a> to download "{{ document.filename }}"
+</p>
+
+<p>
+    Preview:
+</p>
+<p>
+<div style="border: 2px solid orange; ">
+    {{ html_document }}
+</div>
+</p>
+
+{% endblock %}

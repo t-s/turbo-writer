@@ -1,0 +1,73 @@
+{% extends "site_base.html" %}
+
+{% block workspace %}
+
+<h3>Create a New Project</h3>
+
+<p>
+    To begin, select a template to start your project with these project drivers:
+<ul>
+    <li><b>Documents</b> - for the documents the project will produce</li>
+    <li><b>Interviews</b> - for taking the project from start to finish</li>
+</ul>
+</p>
+
+{% if public_templates %}
+
+<h4 style="text-align: center; font-style: italic">Template Gallery</h4>
+
+<table class="bordered_table">
+    {% for template in public_templates %}
+    <tr>
+        <td class="bordered_cell">
+            <div style="text-align: center; color: blue">
+                <b>
+                    {{ template.name | e }}
+                </b>
+            </div>
+            {{ template.description | e }}
+            <hr/>
+            Documents: {{ template.document_count }}
+            <br/>
+            Interviews: {{ template.interview_count }}
+        </td>
+        <td class="bordered_cell" style="width: 70px; text-align: center">
+            <input type="button" value="Select"
+                   onclick="document.location='/project_admin/new_project_based_on_template?template_id={{ template.template_id }}'">
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endif %}
+
+{% if private_templates %}
+
+<h4 style="text-align: center; font-style: italic">Private Templates</h4>
+
+<table class="bordered_table">
+    {% for template in private_templates %}
+    <tr>
+        <td class="bordered_cell">
+            <div style="text-align: center; color: blue">
+                <b>
+                    {{ template.name | e }}
+                </b>
+            </div>
+            {{ template.description | e }}
+            <hr/>
+            Documents: {{ template.document_count }}
+            <br/>
+            Interviews: {{ template.interview_count }}
+        </td>
+        <td class="bordered_cell" style="width: 70px; text-align: center">
+            <input type="button" value="Select"
+                   onclick="document.location='/project_admin/new_project_based_on_template?template_id={{ template.template_id }}'">
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endif %}
+
+{% endblock %}

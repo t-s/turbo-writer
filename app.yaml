@@ -8,8 +8,8 @@ handlers:
 - url: /ui/basic/stylesheets
   static_dir: ui/basic/stylesheets
 
-- url: /ui/cypress/stylesheets
-  static_dir: ui/cypress/stylesheets
+- url: /ui/turbo/stylesheets
+  static_dir: ui/turbo/stylesheets
 
 - url: /.*
   script: turbowriter.app

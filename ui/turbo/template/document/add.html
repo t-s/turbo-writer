@@ -1,0 +1,63 @@
+{% extends "template_base.html" %}
+
+{% block workspace %}
+
+<h3>Define Documents: Add New Document</h3>
+
+<p>
+    Use this page to specify a document to be produced by this template.
+</p>
+
+{% if error_msg %}
+<p>
+    <span class="error">{{ error_msg | e }}</span>
+</p>
+{% endif %}
+
+<form method="post">
+    <input type="hidden" name="template_id" value="{{ template.key.id() }}">
+    <table>
+        <tr>
+            <th>Document Name:</th>
+            <td><input name="name" value="{{ name | e }}" size="30" autofocus></td>
+        </tr>
+        <tr>
+            <th>Description:</th>
+            <td>
+                <textarea name="description">{{ description | e }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th>Document Style:</th>
+            <td>
+                <select name="doc_style">
+                    <option value=""
+                    {% if not doc_style %} selected{% endif %}>(none)</option>
+                    {% for doc_style_name in doc_style_names %}
+                    <option value="{{ doc_style_name
+                    | e }}"{% if doc_style_name == doc_style %} selected{% endif %}>{{ doc_style_name }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input type="submit" value="Add Document">
+            </td>
+            <td>
+                <input type="button" value="Cancel"
+                       onclick="document.location='/template/document?template_id={{ template.key.id() }}'">
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}
+
