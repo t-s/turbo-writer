@@ -8,9 +8,7 @@ import ui
 from service.interview_service import InterviewService
 
 checklist_pattern = re.compile(r"(.*)\[([FT])\]\[([FT])\]")
-# dot_pattern = re.compile(r".*\.\d*")
 dot_pattern_with_one_group = re.compile(r"(.*)\.\d*")
-# dot_pattern_with_two_groups = re.compile(r"(.*)\.(\d*)")
 indexed_name_pattern = re.compile(r"(.*)\[(.*)\]")
 
 
@@ -22,14 +20,17 @@ class RequestHandler(webapp2.RequestHandler):
         else:
             assigned_interview = interview_service.get_interview_by_name(interview.assign_interview_name)
         assigned_interview.assigned_email = email
+
         assignment_name = self.request.get("_assignment_name")
         if not assignment_name:
             assignment_name = interview.assignment_name
         if assignment_name:
             assigned_interview.assignment_name = assigned_interview.menu_title = assignment_name
+
         manager_instructions_to_writer = self.request.get("_manager_instructions_to_writer")
         if manager_instructions_to_writer:
             assigned_interview.manager_instructions_to_writer = manager_instructions_to_writer
+
         assigned_interview.put()
         interview.assigned_interview_id = assigned_interview.key.id()
         interview.put()
@@ -51,6 +52,9 @@ class RequestHandler(webapp2.RequestHandler):
                         if assignment_name:
                             cloned_interview.assignment_name = cloned_interview.menu_title = assignment_name
                         cloned_interview.put()
+
+    def fill(self, s):
+        return s if s else ""
 
     def generate_email_assignment(self, project, interview, interview_service, inner_template_values):
         assignment_needed = False
@@ -74,7 +78,7 @@ class RequestHandler(webapp2.RequestHandler):
             filename = "{}_filename".format(internal_name)
             inner_template_values[filename] = variable.filename
         else:
-            inner_template_values[internal_name] = variable.content if variable.content else ""
+            inner_template_values[internal_name] = self.fill(variable.content)
 
     def generate_variable_values(self, project, index, inner_template_values):
         indexed_variable_max_indices = dict()
@@ -137,15 +141,19 @@ class RequestHandler(webapp2.RequestHandler):
         interview = interview_service.get_interview_by_name(interview_name)
 
         self.update_checklists(interview)
+
         assignment_name = self.request.get("_assignment_name")
         if assignment_name:
             interview.assignment_name = assignment_name
+
         manager_instructions_to_writer = self.request.get("_manager_instructions_to_writer")
         if manager_instructions_to_writer:
             interview.manager_instructions_to_writer = manager_instructions_to_writer
+
         reviewer_comment = self.request.get("_reviewer_comment")
         if reviewer_comment:
             interview.reviewer_comment = str(reviewer_comment)
+
         interview.put()
 
         if self.request.get("_previous"):
@@ -228,13 +236,12 @@ class RequestHandler(webapp2.RequestHandler):
         assignment_needed = self.generate_email_assignment(project, interview, interview_service,
                                                            inner_template_values)
 
-        inner_template_values["assignment_name"] = interview.assignment_name if interview.assignment_name else ""
+        inner_template_values["assignment_name"] = self.fill(interview.assignment_name)
         inner_template_values["writer"] = interview.is_writer_interview
         inner_template_values["reviewer"] = not interview.is_writer_interview
-        inner_template_values["reviewer_comment"] = interview.reviewer_comment if interview.reviewer_comment else ""
-
+        inner_template_values["reviewer_comment"] = self.fill(interview.reviewer_comment)
         inner_template_values[
-            "manager_instructions_to_writer"] = interview.manager_instructions_to_writer if interview.manager_instructions_to_writer else ""
+            "manager_instructions_to_writer"] = self.fill(interview.manager_instructions_to_writer)
 
         inner_template_values["has_been_reviewed"] = interview.has_been_reviewed
 
