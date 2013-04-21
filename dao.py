@@ -684,7 +684,7 @@ def set_variable_blob_key(project, internal_name, blob_key):
 
 
 def set_variable_content(variable, value):
-    if variable.input_field == FILE:
+    if variable.input_field == FILE and value:
         # Must be a Dropbox file, since UploadHandler doesn't go thru this code
         blob_key = DropboxService().store_file_as_blob(value)
         if variable.blob_key:
