@@ -292,10 +292,9 @@ class RequestHandler(webapp2.RequestHandler):
         # Note that posted parameters that are not variable names use an underscore prefix.
         for name in self.request.arguments():
             if name[0] != "_":
-                value = self.request.get(name)
-                if value:
-                    variable_name = "{}[{}]".format(name, index) if index else name
-                    dao.set_variable(project, variable_name, value)
+                value = self.fill(self.request.get(name))
+                variable_name = "{}[{}]".format(name, index) if index else name
+                dao.set_variable(project, variable_name, value)
 
     def update_checklists(self, interview):
         for index in range(len(interview.checklist_items)):
