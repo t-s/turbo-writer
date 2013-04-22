@@ -1,47 +1,24 @@
-<table style="width: 300px; background-color: #eeeeee">
-    <tr>
-        <td>
-            <b><a href="/">Home</a></b>
-        </td>
-    </tr>
-    <tr>
-        <td class="gap"></td>
-    </tr>
-    <tr>
-        <td>
-            <b>Template "{{ template.name | e }}"</b>
-            <blockquote>
-            <table>
-                <tr>
-                    <td>
-                        <b><i>General</i></b>
-                        <ul>
-                            <li><a href="/template?template_id={{ template.key.id() }}">Template Home</a></li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <b><i>Definition</i></b>
-                        <ul>
-                            <li><a href="/template/assignment?template_id={{ template.key.id() }}">Define Assignments</a></li>
-                            <li><a href="/template/document?template_id={{ template.key.id() }}">Define Documents</a></li>
-                            <li><a href="/template/style?template_id={{ template.key.id() }}">Define Styles</a></li>
-                            <li><a href="/template/variable?template_id={{ template.key.id() }}">Define Variables</a></li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <b><i>Administration</i></b>
-                        <ul>
-                            <li><a href="/template_admin/template_settings?template_id={{ template.key.id() }}">Settings</a></li>
-                            <li><a href="/template_admin/template_user_admin?template_id={{ template.key.id() }}">Sharing</a></li>
-                        </ul>
-                    </td>
-                </tr>
-            </table>
-            </blockquote>
-        </td>
-    </tr>
-</table>
+{% include "site_menu.html" %}
+<div class="menu-separator">{{ template.name }}:</div>
+<ul class="project-menu">
+    <li class="topboth"><a href="/template?template_id={{ template.key.id() }}" style="height:20px;line-height:20px;">Template
+        Home</a></li>
+</ul>
+<ul class="project-menu">
+    <li class="topboth"><a href="#" style="height:20px;line-height:20px;">Definition</a>
+        <ul>
+            <li><a href="/template/assignment?template_id={{ template.key.id() }}">Define Assignments</a></li>
+            <li><a href="/template/document?template_id={{ template.key.id() }}">Define Documents</a></li>
+            <li><a href="/template/style?template_id={{ template.key.id() }}">Define Styles</a></li>
+            <li><a href="/template/variable?template_id={{ template.key.id() }}">Define Variables</a></li>
+        </ul>
+    </li>
+</ul>
+<ul class="project-menu">
+    <li class="topboth"><a href="#" style="height:20px;line-height:20px;">Template Administration</a>
+        <ul>
+            <li><a href="/template_admin/template_settings?template_id={{ template.key.id() }}">Settings</a></li>
+            <li><a href="/template_admin/template_user_admin?template_id={{ template.key.id() }}">Sharing</a></li>
+        </ul>
+    </li>
+</ul>

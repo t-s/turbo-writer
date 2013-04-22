@@ -474,11 +474,14 @@ def get_site_users():
 
 
 def get_standard_project_values(project):
+    jinja_template_values = get_standard_site_values()
     current_user = users.get_current_user()
     current_email = current_user.email()
-    jinja_template_values = {"url": users.create_logout_url("/"), "email": current_email, "project": project}
+    jinja_template_values["project"] = project
+
     # Set documents
     jinja_template_values["documents"] = get_documents(project)
+
     # Set workflow
     workflow_interviews = list()
     interview_service = InterviewService(project)
@@ -503,10 +506,12 @@ def get_standard_project_values(project):
                     "menu_title"] = interview.menu_title if interview.menu_title else "Conduct Interview"
                 workflow_interview["add_date"] = content_interview_entity.add_date
                 workflow_interviews.append(workflow_interview)
+
     assign_writer_interviews = list()
     assign_reviewer_interviews = list()
     writer_interviews = list()
     reviewer_interviews = list()
+
     for interview in workflow_interviews:
         name = interview["name"]
         if name.startswith("assign_writer_"):
@@ -517,6 +522,7 @@ def get_standard_project_values(project):
             writer_interviews.append(interview)
         else:
             reviewer_interviews.append(interview)
+
     jinja_template_values["assign_writer_interviews"] = assign_writer_interviews
     jinja_template_values["assign_reviewer_interviews"] = assign_reviewer_interviews
     jinja_template_values["writer_interviews"] = writer_interviews
@@ -558,9 +564,10 @@ def get_standard_site_values():
 
 
 def get_standard_template_values(template):
+    jinja_template_values = get_standard_site_values()
     current_user = users.get_current_user()
     current_email = current_user.email()
-    jinja_template_values = {"url": users.create_logout_url("/"), "email": current_email, "template": template}
+    jinja_template_values["template"] = template
 
     template_user = get_template_user_by_email(template, current_email)
     if template_user:
