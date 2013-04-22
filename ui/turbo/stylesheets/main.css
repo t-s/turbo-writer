@@ -143,7 +143,7 @@ ul.menu li {
     float: left;
 }
 
-/* Horizontal positioning of menus */
+/* Positioning of menus */
 ul.menu {
     font-size: 0;
     z-index: 999;
@@ -222,7 +222,7 @@ ul.menu ul li:hover>a, ul.menu ul li a.pressed {
     text-decoration: underline;
 }
 
-/* No affect on Chrome */
+/* Stacking order */
 ul.menu li:hover {
     z-index: 1;
 }
@@ -292,10 +292,10 @@ ul.project-menu li {
     float: left;
 }
 
-/* Horizontal positioning of menus */
+/* Positioning of menus */
 ul.project-menu {
     font-size: 0;
-    z-index: 999;
+    z-index: 99;
     position: relative;
     display: inline-block;
     zoom: 1;
@@ -328,27 +328,19 @@ ul.project-menu ul li {
     margin: 10px 0 0;
 }
 
-/* Borders of rounded corners */
-ul.project-menu li.topboth>a {
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -webkit-border-bottom-right-radius: 5px;
-}
-
+/* Borders of rounded corners, first and last menu items */
 ul.project-menu li.topfirst>a {
-    border-radius: 5px;
-    -moz-border-radius: 5px;
+    border-radius: 5px 0 0 5px;
+    -moz-border-radius: 5px 0 0 5px;
     -webkit-border-radius: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -webkit-border-bottom-right-radius: 5px;
+    -webkit-border-top-right-radius: 0;
+    -webkit-border-bottom-right-radius: 0;
 }
 
 ul.project-menu li.toplast>a {
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
+    border-radius: 0 5px 5px 0;
+    -moz-border-radius: 0 5px 5px 0;
+    -webkit-border-radius: 0;
     -webkit-border-top-right-radius: 5px;
     -webkit-border-bottom-right-radius: 5px;
 }
@@ -387,7 +379,7 @@ ul.project-menu ul li:hover>a, ul.project-menu ul li a.pressed {
     text-decoration: underline;
 }
 
-/* No affect on Chrome */
+/* Stacking order */
 ul.project-menu li:hover {
     z-index: 1;
 }

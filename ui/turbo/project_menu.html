@@ -1,12 +1,10 @@
 {% include "site_menu.html" %}
 <div class="menu-separator">{{ project.name | e }}:</div>
 <ul class="project-menu">
-    <li class="topboth"><a href="/project?project_id={{ project.key.id() }}" style="height:20px;line-height:20px;">Project
+    <li class="topfirst"><a href="/project?project_id={{ project.key.id() }}" style="height:16px;line-height:16px;">Project
         Home</a></li>
-</ul>
-{% if documents %}
-<ul class="project-menu">
-    <li class="topboth"><a href="#" style="height:20px;line-height:20px;">View Documents</a>
+    {% if documents %}
+    <li><a href="#" style="height:16px;line-height:16px;">View Documents</a>
         <ul>
             {% for document in documents %}
             <li>
@@ -15,11 +13,9 @@
             {% endfor %}
         </ul>
     </li>
-</ul>
-{% endif %}
-{% if assign_writer_interviews %}
-<ul class="project-menu">
-    <li class="topboth"><a href="#" style="height:20px;line-height:20px;">Assign Writers</a>
+    {% endif %}
+    {% if assign_writer_interviews %}
+    <li><a href="#" style="height:16px;line-height:16px;">Assign Writers</a>
         <ul>
             {% for interview in assign_writer_interviews %}
             <li><a href="/project/conduct_interview?_project_id={{
@@ -30,11 +26,9 @@
             {% endfor %}
         </ul>
     </li>
-</ul>
-{% endif %}
-{% if assign_reviewer_interviews %}
-<ul class="project-menu">
-    <li class="topboth"><a href="#" style="height:20px;line-height:20px;">Assign Reviewers</a>
+    {% endif %}
+    {% if assign_reviewer_interviews %}
+    <li><a href="#" style="height:16px;line-height:16px;">Assign Reviewers</a>
         <ul>
             {% for interview in assign_reviewer_interviews %}
             <li><a href="/project/conduct_interview?_project_id={{
@@ -45,11 +39,9 @@
             {% endfor %}
         </ul>
     </li>
-</ul>
-{% endif %}
-{% if writer_interviews %}
-<ul class="project-menu">
-    <li class="topboth"><a href="#" style="height:20px;line-height:20px;">Write</a>
+    {% endif %}
+    {% if writer_interviews %}
+    <li><a href="#" style="height:16px;line-height:16px;">Write</a>
         <ul>
             {% for interview in writer_interviews %}
             <li><a href="/project/conduct_interview?_project_id={{
@@ -60,11 +52,9 @@
             {% endfor %}
         </ul>
     </li>
-</ul>
-{% endif %}
-{% if reviewer_interviews %}
-<ul class="project-menu">
-    <li class="topboth"><a href="#" style="height:20px;line-height:20px;">Review</a>
+    {% endif %}
+    {% if reviewer_interviews %}
+    <li><a href="#" style="height:16px;line-height:16px;">Review</a>
         <ul>
             {% for interview in reviewer_interviews %}
             <li><a href="/project/conduct_interview?_project_id={{
@@ -75,11 +65,9 @@
             {% endfor %}
         </ul>
     </li>
-</ul>
-{% endif %}
-{% if is_owner %}
-<ul class="project-menu">
-    <li class="topboth"><a href="#" style="height:20px;line-height:20px;">Project Administration</a>
+    {% endif %}
+    {% if is_owner %}
+    <li class="toplast"><a href="#" style="height:16px;line-height:16px;">Project Administration</a>
         <ul>
             <li>
                 <a href="/project_admin/project_settings?project_id={{ project.key.id() }}">Settings</a>
@@ -89,5 +77,8 @@
             </li>
         </ul>
     </li>
+    {% else %}
+    <li class="toplast"><a href="/project_admin/project_user_admin?project_id={{ project.key.id() }}" style="height:16px;line-height:16px;">Team Members</a>
+    </li>
+    {% endif %}
 </ul>
-{% endif %}

@@ -11,16 +11,22 @@
     {% for user in users %}
     <tr>
         <td class="bordered_cell">
+            {% if is_owner %}
             <a href="/project_admin/project_user_edit?project_id={{ project.key.id() }}&project_user_id={{ user.project_user_id }}"
                 >{{ user.email | e }}</a>
+            {% else %}
+            {{ user.email | e }}
+            {% endif %}
         </td>
     </tr>
     {% endfor %}
+    {% if is_owner %}
     <tr>
         <td class="bordered_cell">
             <a href="/project_admin/project_user_add?project_id={{ project.key.id() }}">+</a>
         </td>
     </tr>
+    {% endif %}
 </table>
 
 {% endblock %}
