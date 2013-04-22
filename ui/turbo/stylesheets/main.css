@@ -59,20 +59,12 @@ th {
     color: dimgrey;
     font-family: monospace;
     font-size: 12pt;
-    margin-left: 21px;
-    text-shadow: darkgrey 2px 2px 5px;
-}
-
-#header-band {
-    background-color: #eeeeee;
-    height: 60px;
-    margin-top: -54px;
+    /* text-shadow: darkgrey 2px 2px 5px; */
 }
 
 #header-logo {
-    height: 64;
+    height: 65;
     width: 625;
-    margin: 10px 0 0 10px;
 }
 
 #header-menu {
