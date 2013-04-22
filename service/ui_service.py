@@ -12,7 +12,7 @@ class UIService():
     def from_string(self, template):
         ui = self.request_handler.request.cookies.get("ui")
         if not ui:
-            ui = "basic"
+            ui = "turbo"
         jinja_environment = jinja2.Environment(
             loader=jinja2.FileSystemLoader(os.path.dirname(os.path.dirname(__file__)) + "/ui/{}".format(ui)))
         jinja_environment.globals["get_indexed_variable"] = get_indexed_variable
@@ -22,7 +22,7 @@ class UIService():
     def get_template(self, relative_name):
         ui = self.request_handler.request.cookies.get("ui")
         if not ui:
-            ui = "basic"
+            ui = "turbo"
         jinja_environment = jinja2.Environment(
             loader=jinja2.FileSystemLoader(os.path.dirname(os.path.dirname(__file__)) + "/ui/{}".format(ui)))
         jinja_environment.globals["get_indexed_variable"] = get_indexed_variable
