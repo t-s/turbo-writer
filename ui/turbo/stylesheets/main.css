@@ -1,14 +1,14 @@
 body {
-    font-family: Verdana, Helvetica, sans-serif;
     background-color: white;
+    font-family: Verdana, Helvetica, sans-serif;
     text-decoration: none;
 }
 
 a {
-    text-decoration: none;
-    color: darkcyan;
-    font-weight: bold;
+    color: #666666;
     font-style: italic;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 a:hover {
@@ -44,13 +44,199 @@ th {
     height: 16px;
 }
 
-.header {
-    width: 100%;
-    background-color: #e0ffff;
-}
-
 .tw {
-    color: purple;
     font-style: italic;
     font-weight: bold;
+}
+
+#header-byline {
+    color: grey;
+    font-family: monospace;
+    font-size: 12pt;
+    margin-left: 21px;
+}
+
+#header-band {
+    background-color: lightgrey;
+    height: 60px;
+    margin-top: -54px;
+}
+
+#header-logo {
+    height: 64;
+    width: 625;
+    margin: 10px 0 0 10px;
+}
+
+#header-menu {
+    float: right;
+    font-size: 10pt;
+    margin: 20px;
+}
+
+#header-top {
+    width: 100%;
+}
+
+#header-top a {
+    color: black;
+    font-style: normal;
+    font-weight: normal;
+}
+
+#footer-copyright {
+    color: grey;
+    font-style: italic;
+    font-size: 10pt;
+    margin-top: 16px;
+    text-align: center;
+}
+
+/* Borders around buttons */
+ul.menu, ul.menu ul {
+    margin: 0;
+    list-style: none;
+    padding: 0;
+    background-color: #dedede;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #5f5f5f;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+/* Horizontal alignment of buttons */
+ul.menu ul {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    -moz-box-shadow: 3.5px 3.5px 5px #666666;
+    -webkit-box-shadow: 3.5px 3.5px 5px #666666;
+    box-shadow: 3.5px 3.5px 5px #666666;
+    background-color: #FFFFFF;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-color: #d4d4d4;
+    padding: 0 10px 10px;
+}
+
+/* Dropdown list of buttons */
+ul.menu li:hover>* {
+    display: block;
+}
+
+/* Single-line display of dropdown buttons */
+ul.menu li {
+    position: relative;
+    display: block;
+    white-space: nowrap;
+    font-size: 0;
+    float: left;
+}
+
+/* Horizontal positioning of menus */
+ul.menu {
+    font-size: 0;
+    z-index: 999;
+    position: relative;
+    display: inline-block;
+    zoom: 1;
+    padding: 0;
+    *display: inline;
+}
+
+/* Menu display */
+ul.menu a {
+    display: block;
+    vertical-align: middle;
+    text-align: left;
+    text-decoration: none;
+    font: bold 14px Trebuchet MS;
+    color: #666666;
+    text-shadow: #FFF 0 0 1px;
+    cursor: pointer;
+    padding: 10px;
+    background-color: #c1c1c1;
+    background-repeat: repeat;
+    background-position: 0 0;
+    border-width: 0 0 0 1px;
+    border-style: solid;
+    border-color: #C0C0C0;
+}
+
+/* Text alignment on dropdown menus */
+ul.menu ul li {
+    float: none;
+    margin: 10px 0 0;
+}
+
+/* Borders of rounded corners */
+ul.menu li.topboth>a {
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+}
+
+/* Display of dropdown menu */
+ul.menu ul a {
+    text-align: left;
+    padding: 4px;
+    background-color: #FFFFFF;
+    background-image: none;
+    border-width: 0;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    font: 14px Tahoma;
+    color: #000000;
+    text-decoration: none;
+}
+
+/* Hover display of dropdown menu */
+ul.menu li:hover>a, ul.menu li a.pressed {
+    background-color: #999999;
+    border-color: #C0C0C0;
+    border-style: solid;
+    color: #000000;
+    text-shadow: #FFF 0 0 1px;
+    background-position: 0 100px;
+    text-decoration: none;
+}
+
+/* Hover display of dropdown menu */
+ul.menu ul li:hover>a, ul.menu ul li a.pressed {
+    background-color: #FFFFFF;
+    background-image: none;
+    color: #000000;
+    text-decoration: underline;
+}
+
+/* No affect on Chrome */
+ul.menu li:hover {
+    z-index: 1;
+}
+
+* html ul.menu li a {
+    display: inline-block;
+}
+
+ul.menu>li {
+    margin: 0;
+}
+
+ul.menu a:active, ul.menu a:focus {
+    outline-style: none;
+}
+
+ul.menu span {
+    display: block;
+    overflow: visible;
+    background-position: right center;
+    background-repeat: no-repeat;
+    padding-right: 0px;
 }

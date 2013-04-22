@@ -5,45 +5,34 @@
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 </head>
 <body>
-
-<table class="header">
-    <tr>
-        <td>
-            <span style="font-size: 24px; font-weight: bold">TurboWriter</span>
-            <br/>
-            <span style="font-size: 12px;">BY ZEPHYR MEDIA AND COMMUNICATIONS</span>
-        </td>
-        <td style="text-align: right; vertical-align: top">
-            {{ email | e }}
-            |
-            <a href="{{ url }}">Sign Out</a>
-        </td>
-    </tr>
-</table>
-
-<table>
-    <tr>
-        <td style="height: 20px"></td>
-    </tr>
-</table>
-
-<table>
-    <tr>
-        <td style="vertical-align: top">
-            {% include "site_menu.html" %}
-        </td>
-        <td style="width: 20px"></td>
-        <td style="vertical-align: top">
-            {% block workspace %}{% endblock %}
-        </td>
-    </tr>
-</table>
-
-<hr/>
-
-<div style="text-align: center; font-size: 10pt; color: grey; margin-top: 16px">
-    <i>&copy; Copyright 2013 by Zephyr Media and Communications, Inc. All rights reserved.</i>
+<div id="header-top">
+    <a href="/"><img id="header-logo" src="/ui/{{ ui }}/images/turbowriter_logo.png"/></a>
+  <span id="header-menu">
+    <a href="/my_account/preferences">{{ email | e }}</a>
+    &nbsp;&nbsp;
+    &nbsp;&nbsp;
+    <a href="/synopsis">Help</a>
+    &nbsp;&nbsp;
+    &nbsp;&nbsp;
+    <a href="{{ url }}">Sign out</a>
+  </span>
 </div>
-
+<div id="header-byline">
+    <span style="font-size: 16pt; font-style: italic;">workbench</span> for expert-guided collaborative authoring
+</div>
+<div id="header-band"></div>
+<div style="height: 10px;"></div>
+{% include "site_menu.html" %}
+<blockquote>
+    <blockquote>
+        <blockquote>
+            {% block workspace %}{% endblock %}
+            <hr style="margin: 30px 0 0 0;"/>
+            <div id="footer-copyright">&copy; Copyright 2013 by Zephyr Media & Telecommunications, Inc. All rights
+                reserved.
+            </div>
+        </blockquote>
+    </blockquote>
+</blockquote>
 </body>
 </html>
