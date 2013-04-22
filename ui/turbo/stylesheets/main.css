@@ -63,7 +63,7 @@ th {
 }
 
 #header-band {
-    background-color: lightgrey;
+    background-color: #eeeeee;
     height: 60px;
     margin-top: -54px;
 }
@@ -78,6 +78,10 @@ th {
     float: right;
     font-size: 10pt;
     margin: 20px;
+}
+
+#header-menu a:hover {
+    text-decoration: none;
 }
 
 #header-top {
