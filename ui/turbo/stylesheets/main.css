@@ -56,10 +56,11 @@ th {
 }
 
 #header-byline {
-    color: grey;
+    color: dimgrey;
     font-family: monospace;
     font-size: 12pt;
     margin-left: 21px;
+    text-shadow: darkgrey 2px 2px 5px;
 }
 
 #header-band {
