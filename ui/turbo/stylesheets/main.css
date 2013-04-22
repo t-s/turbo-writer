@@ -45,8 +45,9 @@ th {
 }
 
 .menu-separator {
-    color: grey;
+    color: dimgrey;
     margin: 20px 0 10px 0;
+    /* text-shadow: #999999 1px 1px 2px; */
     vertical-align: top;
 }
 
