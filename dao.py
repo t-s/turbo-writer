@@ -10,33 +10,33 @@ from service.dropbox_service import DropboxService
 # DATA ACCESS OBJECT
 
 # Regex patterns
-optionally_indexed_name_pattern = re.compile(r"(.*)\[(.*)\]")
+optionally_indexed_name_pattern = re.compile(r'(.*)\[(.*)\]')
 
 # Constants
-SINGLE_VARIABLE = "S"
-REPEATING_VARIABLE = "R"
-TEXT = "T"
+SINGLE_VARIABLE = u'S'
+REPEATING_VARIABLE = u'R'
+TEXT = u'T'
 
-CONTINUE_FLOW = "C"
-BEGIN_REPEATING_GROUP = "B"
-END_REPEATING_GROUP = "E"
+CONTINUE_FLOW = u'C'
+BEGIN_REPEATING_GROUP = u'B'
+END_REPEATING_GROUP = u'E'
 
-SMALL = "S"
-MEDIUM = "M"
-LARGE = "L"
-FILE = "X"
+SMALL = u'S'
+MEDIUM = u'M'
+LARGE = u'L'
+FILE = u'X'
 
-PROJECT = "J"
-PRIVATE_TEMPLATE = "V"
-PUBLIC_TEMPLATE = "U"
+PROJECT = u'J'
+PRIVATE_TEMPLATE = u'V'
+PUBLIC_TEMPLATE = u'U'
 
-SITE_MASTER = "SiteMaster"
-SITE_MASTER_ADMIN = "SiteTemplateAdmin"
+SITE_MASTER = u'SiteMaster'
+SITE_MASTER_ADMIN = u'SiteTemplateAdmin'
 
-SITEPERMISSION_ADMIN = "sp-a"
-SITEPERMISSION_ADMINSETTINGS = "sp-as"
-SITEPERMISSION_ADMINTEMPLATES = "sp-at"
-SITEPERMISSION_ADMINUSERS = "sp-au"
+SITEPERMISSION_ADMIN = u'sp-a'
+SITEPERMISSION_ADMINSETTINGS = u'sp-as'
+SITEPERMISSION_ADMINTEMPLATES = u'sp-at'
+SITEPERMISSION_ADMINUSERS = u'sp-au'
 
 
 # Entity classes
@@ -47,14 +47,14 @@ class Assignment(ndb.Model):
 
         Parent must contain a Project key.
     """
-    name = ndb.StringProperty("n", required=True)
-    description = ndb.TextProperty("d")
-    prereq_assignment_names = ndb.StringProperty("pan", repeated=True)
-    is_repeating = ndb.BooleanProperty("ir")
-    instructions_to_manager = ndb.TextProperty("itm")
-    instructions_to_writer = ndb.TextProperty("itw")
-    variable_names = ndb.StringProperty("vn", repeated=True)
-    checklist_items = ndb.TextProperty("ci", repeated=True)
+    name = ndb.StringProperty(u'n', required=True)
+    description = ndb.TextProperty(u'd')
+    prereq_assignment_names = ndb.StringProperty(u'pan', repeated=True)
+    is_repeating = ndb.BooleanProperty(u'ir')
+    instructions_to_manager = ndb.TextProperty(u'itm')
+    instructions_to_writer = ndb.TextProperty(u'itw')
+    variable_names = ndb.StringProperty(u'vn', repeated=True)
+    checklist_items = ndb.TextProperty(u'ci', repeated=True)
 
 
 def clone(self, project):
@@ -71,13 +71,13 @@ class Document(ndb.Model):
 
         Parent must contain a Project key.
     """
-    name = ndb.StringProperty("n", required=True)
-    internal_name = ndb.StringProperty("in", required=True)
-    description = ndb.TextProperty("d")
-    style_name = ndb.StringProperty("sn")
-    content = ndb.TextProperty("c", compressed=True)
-    blob_key = ndb.BlobKeyProperty("bk")
-    filename = ndb.StringProperty("f")
+    name = ndb.StringProperty(u'n', required=True)
+    internal_name = ndb.StringProperty(u'in', required=True)
+    description = ndb.TextProperty(u'd')
+    style_name = ndb.StringProperty(u'sn')
+    content = ndb.TextProperty(u'c', compressed=True)
+    blob_key = ndb.BlobKeyProperty(u'bk')
+    filename = ndb.StringProperty(u'f')
 
     def clone(self, project):
         return Document(name=self.name, internal_name=self.internal_name, description=self.description,
@@ -90,12 +90,12 @@ class DocumentItem(ndb.Model):
 
         Parent must contain a Document key.
     """
-    item_type = ndb.StringProperty("it", required=True) # SINGLE_VARIABLE/REPEATING_VARIABLE/TEXT
-    variable_name = ndb.StringProperty("vn")
-    text = ndb.TextProperty("t")
-    style_name = ndb.StringProperty("sn")
-    flow_control = ndb.StringProperty("fc") # CONTINUE_FLOW/BEGIN_REPEATING_GROUP/END_REPEATING_GROUP
-    position = ndb.IntegerProperty("p", required=True)
+    item_type = ndb.StringProperty(u'it', required=True)  # SINGLE_VARIABLE/REPEATING_VARIABLE/TEXT
+    variable_name = ndb.StringProperty(u'vn')
+    text = ndb.TextProperty(u't')
+    style_name = ndb.StringProperty(u'sn')
+    flow_control = ndb.StringProperty(u'fc')  # CONTINUE_FLOW/BEGIN_REPEATING_GROUP/END_REPEATING_GROUP
+    position = ndb.IntegerProperty(u'p', required=True)
 
     def clone(self, document):
         return DocumentItem(item_type=self.item_type, variable_name=self.variable_name, text=self.text,
@@ -110,50 +110,50 @@ class Interview(ndb.Model):
 
         Parent must contain a Project key.
     """
-    name = ndb.StringProperty("n", required=True)
-    root_interview_name = ndb.StringProperty("rin", required=True)
-    prereq_interview_names = ndb.StringProperty("pin", repeated=True) # Used only in the root node
+    name = ndb.StringProperty(u'n', required=True)
+    root_interview_name = ndb.StringProperty(u'rin', required=True)
+    prereq_interview_names = ndb.StringProperty(u'pin', repeated=True)  # Used only in the root node
     child_interview_names = ndb.StringProperty(
-        "cin") # Used for nodes with child nodes: pipe-separated interview names # TODO Convert to "repeated=True"
-    is_writer_interview = ndb.BooleanProperty("iwi")
-    menu_title = ndb.StringProperty("mt") # Used only in the root node; defaults to "Conduct Interview"
-    content = ndb.TextProperty("content", compressed=True) # None if navigation is directly to first child
-    checklist_items = ndb.TextProperty("ci", repeated=True)
+        u'cin')  # Used for nodes with child nodes: pipe-separated interview names  # TODO Convert to "repeated=True"
+    is_writer_interview = ndb.BooleanProperty(u'iwi')
+    menu_title = ndb.StringProperty(u'mt')  # Used only in the root node; defaults to u'Conduct Interview'
+    content = ndb.TextProperty(u'content', compressed=True)  # None if navigation is directly to first child
+    checklist_items = ndb.TextProperty(u'ci', repeated=True)
     auto_assign = ndb.BooleanProperty(
-        "aa") # Used only for root nodes; True if this interview to be automatically assigned to creator of a new project
+        u'aa')  # Used only for root nodes; True if this interview to be automatically assigned to creator of a new project
     generate_after = ndb.StringProperty(
-        "ga") # Used only for root nodes; True if this interview to be cloned and auto-assigned after specified interview completed
-    assign_interview_name = ndb.StringProperty("ain") # Required if assign_button not None
-    add_date = ndb.DateTimeProperty("ad", auto_now_add=True)
-    update_date = ndb.DateTimeProperty("ud", auto_now=True)
+        u'ga')  # Used only for root nodes; True if this interview to be cloned and auto-assigned after specified interview completed
+    assign_interview_name = ndb.StringProperty(u'ain')  # Required if assign_button not None
+    add_date = ndb.DateTimeProperty(u'ad', auto_now_add=True)
+    update_date = ndb.DateTimeProperty(u'ud', auto_now=True)
 
     # Buttons
-    assign_button = ndb.StringProperty("ab") # No default
-    child_button = ndb.StringProperty("chb") # Defaults to "Add"; not used if child_interview_names is None
-    completed_button = ndb.StringProperty("cob") # No default
+    assign_button = ndb.StringProperty(u'ab')  # No default
+    child_button = ndb.StringProperty(u'chb')  # Defaults to u'Add'; not used if child_interview_names is None
+    completed_button = ndb.StringProperty(u'cob')  # No default
     next_button = ndb.StringProperty(
-        "nb") # Defaults to "Continue"; not used if no next interview in parent's child_interview_names
+        u'nb')  # Defaults to u'Continue'; not used if no next interview in parent's child_interview_names
     parent_button = ndb.StringProperty(
-        "pab") # Defaults to "Done"; if None, not displayed if next interview in parent's child_interview_names exists
+        u'pab')  # Defaults to u'Done'; if None, not displayed if next interview in parent's child_interview_names exists
     previous_button = ndb.StringProperty(
-        "prb") # Defaults to "Previous"; not used if no previous interview in parent's child_interview_names
+        u'prb')  # Defaults to u'Previous'; not used if no previous interview in parent's child_interview_names
 
     # Non-cloned properties
     assigned_email = ndb.StringProperty(
-        "ae") # Used only for root nodes; identifies user who is to conduct this interview
-    assigned_index = ndb.IntegerProperty("ai") # Used only for root nodes; identifies index of a repeatable interview
-    assigned_interview_id = ndb.IntegerProperty("aii") # Identifies interview assigned by use of assign_button
-    completed = ndb.BooleanProperty("c") # Used only for root nodes
-    has_been_reviewed = ndb.BooleanProperty("hbr")
+        u'ae')  # Used only for root nodes; identifies user who is to conduct this interview
+    assigned_index = ndb.IntegerProperty(u'ai')  # Used only for root nodes; identifies index of a repeatable interview
+    assigned_interview_id = ndb.IntegerProperty(u'aii')  # Identifies interview assigned by use of assign_button
+    completed = ndb.BooleanProperty(u'c')  # Used only for root nodes
+    has_been_reviewed = ndb.BooleanProperty(u'hbr')
     bookmark_interview_name = ndb.StringProperty(
-        "bin") # Computed by engine; used only in the root node; defaults to first node with content
-    child_count = ndb.IntegerProperty("cc")
-    assignment_name = ndb.StringProperty("an")
-    manager_instructions_to_writer = ndb.TextProperty("mitw")
-    reviewer_comment = ndb.TextProperty("rc")
+        u'bin')  # Computed by engine; used only in the root node; defaults to first node with content
+    child_count = ndb.IntegerProperty(u'cc')
+    assignment_name = ndb.StringProperty(u'an')
+    manager_instructions_to_writer = ndb.TextProperty(u'mitw')
+    reviewer_comment = ndb.TextProperty(u'rc')
 
-    def clone(self, project, suffix=""):
-        mask = "{}.{}" if suffix else "{}{}"
+    def clone(self, project, suffix=u''):
+        mask = u'{}.{}' if suffix else u'{}{}'
 
         prereq_interview_names_with_suffix = list()
         for prereq_interview_name in self.prereq_interview_names:
@@ -161,8 +161,8 @@ class Interview(ndb.Model):
 
         child_interview_names_with_suffix = None
         if self.child_interview_names:
-            child_interview_names_with_suffix = "|".join(
-                [mask.format(name, suffix) for name in str(self.child_interview_names).split("|")]
+            child_interview_names_with_suffix = u'|'.join(
+                [mask.format(name, suffix) for name in self.child_interview_names.split(u'|')]
             )
 
         return Interview(name=mask.format(self.name, suffix),
@@ -181,11 +181,11 @@ class Project(ndb.Model):
     """
         The datastore contains one Project entity for each project on the site.
     """
-    name = ndb.StringProperty("n", required=True)
-    project_type = ndb.StringProperty("t", required=True) # PROJECT/PRIVATE_TEMPLATE/PUBLIC_TEMPLATE
-    description = ndb.TextProperty("d")
-    add_date = ndb.DateTimeProperty("ad", auto_now_add=True)
-    update_date = ndb.DateTimeProperty("ud", auto_now=True)
+    name = ndb.StringProperty(u'n', required=True)
+    project_type = ndb.StringProperty(u't', required=True)  # PROJECT/PRIVATE_TEMPLATE/PUBLIC_TEMPLATE
+    description = ndb.TextProperty(u'd')
+    add_date = ndb.DateTimeProperty(u'ad', auto_now_add=True)
+    update_date = ndb.DateTimeProperty(u'ud', auto_now=True)
 
 
 class ProjectUser(ndb.Model):
@@ -195,11 +195,11 @@ class ProjectUser(ndb.Model):
 
         Parent must contain a Project key.
     """
-    email = ndb.StringProperty("e", required=True) # Stored as lowercase
-    is_owner = ndb.BooleanProperty("io")
-    project_roles = ndb.StringProperty("pr", repeated=True) # A list of ProjectRole IDs
-    add_date = ndb.DateTimeProperty("ad", auto_now_add=True)
-    update_date = ndb.DateTimeProperty("ud", auto_now=True)
+    email = ndb.StringProperty(u'e', required=True)  # Stored as lowercase
+    is_owner = ndb.BooleanProperty(u'io')
+    project_roles = ndb.StringProperty(u'pr', repeated=True)  # A list of ProjectRole IDs
+    add_date = ndb.DateTimeProperty(u'ad', auto_now_add=True)
+    update_date = ndb.DateTimeProperty(u'ud', auto_now=True)
 
 
 class SitePermission(ndb.Model):
@@ -209,7 +209,7 @@ class SitePermission(ndb.Model):
 
         Entity ID is the site permission ID, a short mnemonic string.
     """
-    description = ndb.TextProperty("d", required=True)
+    description = ndb.TextProperty(u'd', required=True)
 
 
 class SiteRole(ndb.Model):
@@ -219,8 +219,8 @@ class SiteRole(ndb.Model):
 
         Entity ID is the site role ID, a short mnemonic string.
     """
-    description = ndb.TextProperty("d")
-    site_permissions = ndb.StringProperty("sp", repeated=True) # A list of SitePermission IDs
+    description = ndb.TextProperty(u'd')
+    site_permissions = ndb.StringProperty(u'sp', repeated=True)  # A list of SitePermission IDs
 
 
 class SiteUser(ndb.Model):
@@ -230,10 +230,10 @@ class SiteUser(ndb.Model):
         Entity ID is assigned automatically, since we don't want to use email addresses in links
         that specify the user.
     """
-    email = ndb.StringProperty("e", required=True) # Stored as lowercase
-    site_roles = ndb.StringProperty("sr", repeated=True) # A list of SiteRole IDs
-    add_date = ndb.DateTimeProperty("ad", auto_now_add=True)
-    update_date = ndb.DateTimeProperty("ud", auto_now=True)
+    email = ndb.StringProperty(u'e', required=True)  # Stored as lowercase
+    site_roles = ndb.StringProperty(u'sr', repeated=True)  # A list of SiteRole IDs
+    add_date = ndb.DateTimeProperty(u'ad', auto_now_add=True)
+    update_date = ndb.DateTimeProperty(u'ud', auto_now=True)
 
 
 class Style(ndb.Model):
@@ -242,9 +242,9 @@ class Style(ndb.Model):
 
         Parent must contain a Project key for a public or private template.
     """
-    name = ndb.StringProperty("n", required=True)
-    description = ndb.TextProperty("d")
-    css = ndb.TextProperty("c", compressed=True)
+    name = ndb.StringProperty(u'n', required=True)
+    description = ndb.TextProperty(u'd')
+    css = ndb.TextProperty(u'c', compressed=True)
 
     def clone(self, project):
         return Style(name=self.name, description=self.description, css=self.css, parent=project.key)
@@ -256,14 +256,14 @@ class Variable(ndb.Model):
 
         Parent must contain a Project key.
     """
-    name = ndb.StringProperty("n", required=True)
-    internal_name = ndb.StringProperty("in", required=True)
-    input_field = ndb.StringProperty("if") # SMALL/MEDIUM/LARGE/FILE
-    description = ndb.TextProperty("d")
-    is_repeating = ndb.BooleanProperty("ir")
-    content = ndb.TextProperty("c", compressed=True)
-    blob_key = ndb.BlobKeyProperty("bk")
-    filename = ndb.StringProperty("f")
+    name = ndb.StringProperty(u'n', required=True)
+    internal_name = ndb.StringProperty(u'in', required=True)
+    input_field = ndb.StringProperty(u'if')  # SMALL/MEDIUM/LARGE/FILE
+    description = ndb.TextProperty(u'd')
+    is_repeating = ndb.BooleanProperty(u'ir')
+    content = ndb.TextProperty(u'c', compressed=True)
+    blob_key = ndb.BlobKeyProperty(u'bk')
+    filename = ndb.StringProperty(u'f')
 
     def clone(self, project):
         return Variable(name=self.name, internal_name=self.internal_name, input_field=self.input_field,
@@ -273,8 +273,8 @@ class Variable(ndb.Model):
 
 # Functions
 def convert_name_to_internal_name(name):
-    internal_name = re.sub("[\s]+", "_", name.strip())
-    internal_name = re.sub("[\W]+", "", internal_name)
+    internal_name = re.sub(r'[\s]+', u'_', name.strip())
+    internal_name = re.sub(r'[\W]+', u'', internal_name)
     return internal_name
 
 
@@ -369,7 +369,7 @@ def get_document_item_count(document):
 
 def get_document_items(document):
     return DocumentItem.query(ancestor=document.key).order(
-        DocumentItem.position).fetch() # NOTE: This ".fetch()" is needed for html_generator_service # TODO: Make use of ".fetch()" consistent in this module
+        DocumentItem.position).fetch()  # NOTE: This ".fetch()" is needed for html_generator_service  # TODO: Make use of ".fetch()" consistent in this module
 
 
 def get_documents(project):
@@ -377,14 +377,14 @@ def get_documents(project):
 
 
 def get_indexed_variable(project, variable_name, index):
-    indexed_variable_name = "{}[{}]".format(variable_name, index)
+    indexed_variable_name = u'{}[{}]'.format(variable_name, index)
     variables = Variable.query(Variable.name == indexed_variable_name, ancestor=project.key).fetch()
     for variable in variables:
         if variable.input_field == FILE and variable.blob_key and variable.filename:
-            return "\n<!--B-KEY:{}-->\n[Insert \"{}\" here]\n".format(variable.blob_key, variable.filename)
+            return u'\n<!--B-KEY:{}-->\n[Insert "{}" here]\n'.format(variable.blob_key, variable.filename)
         else:
-            return variable.content if variable.content else ""
-    return ""
+            return variable.content if variable.content else u''
+    return u''
 
 
 def get_interview_count(project):
@@ -477,10 +477,10 @@ def get_standard_project_values(project):
     jinja_template_values = get_standard_site_values()
     current_user = users.get_current_user()
     current_email = current_user.email()
-    jinja_template_values["project"] = project
+    jinja_template_values[u'project'] = project
 
     # Set documents
-    jinja_template_values["documents"] = get_documents(project)
+    jinja_template_values[u'documents'] = get_documents(project)
 
     # Set workflow
     workflow_interviews = list()
@@ -495,16 +495,16 @@ def get_standard_project_values(project):
                 interview.name)
             if content_interview_entity:
                 workflow_interview = dict()
-                workflow_interview["name"] = content_interview_entity.name
+                workflow_interview[u'name'] = content_interview_entity.name
                 try:
-                    # if assigned_index has been filled in, include "index" in the URL's query string
-                    workflow_interview["index"] = int(content_interview_entity.assigned_index)
-                    workflow_interview["show_index"] = True
+                    # if assigned_index has been filled in, include u'index' in the URL's query string
+                    workflow_interview[u'index'] = int(content_interview_entity.assigned_index)
+                    workflow_interview[u'show_index'] = True
                 except:
                     pass
                 workflow_interview[
-                    "menu_title"] = interview.menu_title if interview.menu_title else "Conduct Interview"
-                workflow_interview["add_date"] = content_interview_entity.add_date
+                    u'menu_title'] = interview.menu_title if interview.menu_title else u'Conduct Interview'
+                workflow_interview[u'add_date'] = content_interview_entity.add_date
                 workflow_interviews.append(workflow_interview)
 
     assign_writer_interviews = list()
@@ -513,53 +513,53 @@ def get_standard_project_values(project):
     reviewer_interviews = list()
 
     for interview in workflow_interviews:
-        name = interview["name"]
-        if name.startswith("assign_writer_"):
+        name = interview[u'name']
+        if name.startswith(u'assign_writer_'):
             assign_writer_interviews.append(interview)
-        elif name.startswith("assign_reviewer_"):
+        elif name.startswith(u'assign_reviewer_'):
             assign_reviewer_interviews.append(interview)
-        elif name.startswith("write_"):
+        elif name.startswith(u'write_'):
             writer_interviews.append(interview)
         else:
             reviewer_interviews.append(interview)
 
-    jinja_template_values["assign_writer_interviews"] = assign_writer_interviews
-    jinja_template_values["assign_reviewer_interviews"] = assign_reviewer_interviews
-    jinja_template_values["writer_interviews"] = writer_interviews
-    jinja_template_values["reviewer_interviews"] = reviewer_interviews
+    jinja_template_values[u'assign_writer_interviews'] = assign_writer_interviews
+    jinja_template_values[u'assign_reviewer_interviews'] = assign_reviewer_interviews
+    jinja_template_values[u'writer_interviews'] = writer_interviews
+    jinja_template_values[u'reviewer_interviews'] = reviewer_interviews
 
     project_user = get_project_user_by_email(project, current_email)
     if project_user:
-        jinja_template_values["is_owner"] = project_user.is_owner
+        jinja_template_values[u'is_owner'] = project_user.is_owner
 
     return jinja_template_values
 
 
 def get_standard_site_values():
     current_user = users.get_current_user()
-    jinja_template_values = {"url": users.create_logout_url("/"), "email": current_user.email()}
+    jinja_template_values = {u'url': users.create_logout_url(u'/'), u'email': current_user.email()}
     if current_user:
         for site_user in SiteUser.query(SiteUser.email == current_user.email().lower()):
             for site_role in site_user.site_roles:
                 site_role_entity = SiteRole.get_by_id(site_role)
                 if SITEPERMISSION_ADMIN in site_role_entity.site_permissions:
-                    jinja_template_values["SITEPERMISSION_ADMIN"] = True
+                    jinja_template_values[u'SITEPERMISSION_ADMIN'] = True
                 if SITEPERMISSION_ADMINSETTINGS in site_role_entity.site_permissions:
-                    jinja_template_values["SITEPERMISSION_ADMINSETTINGS"] = True
+                    jinja_template_values[u'SITEPERMISSION_ADMINSETTINGS'] = True
                 if SITEPERMISSION_ADMINTEMPLATES in site_role_entity.site_permissions:
-                    jinja_template_values["SITEPERMISSION_ADMINTEMPLATES"] = True
+                    jinja_template_values[u'SITEPERMISSION_ADMINTEMPLATES'] = True
                 if SITEPERMISSION_ADMINUSERS in site_role_entity.site_permissions:
-                    jinja_template_values["SITEPERMISSION_ADMINUSERS"] = True
+                    jinja_template_values['SITEPERMISSION_ADMINUSERS'] = True
             user_projects = list()
             user_templates = list()
             for project_user in ProjectUser.query(ProjectUser.email == site_user.email):
                 project = project_user.key.parent().get()
                 if project.project_type == PROJECT:
-                    user_projects.append({"project_id": project.key.id(), "name": project.name})
+                    user_projects.append({u'project_id': project.key.id(), u'name': project.name})
                 elif project.project_type == PRIVATE_TEMPLATE and project_user.is_owner:
-                    user_templates.append({"template_id": project.key.id(), "name": project.name})
-            jinja_template_values["user_projects"] = user_projects
-            jinja_template_values["user_templates"] = user_templates
+                    user_templates.append({u'template_id': project.key.id(), u'name': project.name})
+            jinja_template_values[u'user_projects'] = user_projects
+            jinja_template_values[u'user_templates'] = user_templates
     return jinja_template_values
 
 
@@ -567,11 +567,11 @@ def get_standard_template_values(template):
     jinja_template_values = get_standard_site_values()
     current_user = users.get_current_user()
     current_email = current_user.email()
-    jinja_template_values["template"] = template
+    jinja_template_values[u'template'] = template
 
     template_user = get_template_user_by_email(template, current_email)
     if template_user:
-        jinja_template_values["is_owner"] = template_user.is_owner
+        jinja_template_values[u'is_owner'] = template_user.is_owner
 
     return jinja_template_values
 
@@ -645,7 +645,7 @@ def set_bookmark(root_interview, current_interview):
 
 
 def set_variable(project, internal_name, value):
-    for variable in Variable.query(Variable.internal_name == str(internal_name), ancestor=project.key):
+    for variable in Variable.query(Variable.internal_name == internal_name, ancestor=project.key):
         set_variable_content(variable, value)
         variable.put()
         return
@@ -653,20 +653,20 @@ def set_variable(project, internal_name, value):
     if match:
         base_name = match.group(1)
         if not base_name:
-            raise Exception("Unexpected call to set_variable #1: internal_name={}".format(internal_name))
+            raise Exception(u'Unexpected call to set_variable #1: internal_name={}'.format(internal_name))
         base_variable = get_variable_by_internal_name(project, base_name)
         if not base_variable:
-            raise Exception("Unexpected call to set_variable #2: internal_name={}".format(internal_name))
-        variable = Variable(name=str(internal_name), internal_name=str(internal_name),
+            raise Exception(u'Unexpected call to set_variable #2: internal_name={}'.format(internal_name))
+        variable = Variable(name=internal_name, internal_name=internal_name,
                             input_field=base_variable.input_field, parent=project.key)
         set_variable_content(variable, value)
         variable.put()
     else:
-        raise Exception("Unexpected call to set_variable #3: internal_name={}".format(internal_name))
+        raise Exception(u'Unexpected call to set_variable #3: internal_name={}'.format(internal_name))
 
 
 def set_variable_blob_key(project, internal_name, blob_key):
-    for variable in Variable.query(Variable.internal_name == str(internal_name), ancestor=project.key):
+    for variable in Variable.query(Variable.internal_name == internal_name, ancestor=project.key):
         variable.blob_key = blob_key
         variable.filename = BlobInfo.get(blob_key).filename
         variable.put()
@@ -675,19 +675,19 @@ def set_variable_blob_key(project, internal_name, blob_key):
     if match:
         base_name = match.group(1)
         if not base_name:
-            raise Exception("Unexpected call to set_variable_blob_key #1: internal_name={}".format(internal_name))
+            raise Exception(u'Unexpected call to set_variable_blob_key #1: internal_name={}'.format(internal_name))
         base_variable = get_variable_by_name(project, base_name)
         if not base_variable:
-            raise Exception("Unexpected call to set_variable_blob_key #2: internal_name={}".format(internal_name))
+            raise Exception(u'Unexpected call to set_variable_blob_key #2: internal_name={}'.format(internal_name))
         if base_variable.input_field != FILE:
-            raise Exception("Unexpected call to set_variable_blob_key #3: internal_name={}".format(internal_name))
-        variable = Variable(name=str(internal_name), internal_name=str(internal_name),
-                            input_field=base_variable.input_field, parent=project.key)
+            raise Exception(u'Unexpected call to set_variable_blob_key #3: internal_name={}'.format(internal_name))
+        variable = Variable(name=internal_name, internal_name=internal_name, input_field=base_variable.input_field,
+                            parent=project.key)
         variable.blob_key = blob_key
         variable.filename = BlobInfo.get(blob_key).filename
         variable.put()
     else:
-        raise Exception("Unexpected call to set_variable_blob_key #4: internal_name={}".format(internal_name))
+        raise Exception(u'Unexpected call to set_variable_blob_key #4: internal_name={}'.format(internal_name))
 
 
 def set_variable_content(variable, value):
@@ -697,9 +697,9 @@ def set_variable_content(variable, value):
         if variable.blob_key:
             blobstore.delete(variable.blob_key)
         variable.blob_key = blob_key
-        variable.filename = urllib2.unquote(value.split("/")[-1])
+        variable.filename = urllib2.unquote(value.split(u'/')[-1])
     else:
-        variable.content = str(value)
+        variable.content = value
 
 
 def test_current_user_registered():
@@ -758,28 +758,29 @@ def test_template_permitted(template):
 # If datastore contains no site users, initialize it
 if not SiteUser.query().count():
     # Add site permissions
-    SitePermission(id=SITEPERMISSION_ADMIN, description="View the Site Administration menu").put()
-    SitePermission(id=SITEPERMISSION_ADMINSETTINGS, description="Maintain master properties for the site").put()
+    SitePermission(id=SITEPERMISSION_ADMIN, description=u'View the Site Administration menu').put()
+    SitePermission(id=SITEPERMISSION_ADMINSETTINGS, description=u'Maintain master properties for the site').put()
     SitePermission(id=SITEPERMISSION_ADMINTEMPLATES,
-                   description="Maintain templates in the site's Template Gallery").put()
-    SitePermission(id=SITEPERMISSION_ADMINUSERS, description="Maintain user entities for the site").put()
+                   description=u'Maintain templates in the site\'s Template Gallery').put()
+    SitePermission(id=SITEPERMISSION_ADMINUSERS, description=u'Maintain user entities for the site').put()
 
     # Add site roles
     SiteRole(id=SITE_MASTER,
-             description="Site Master Administrator",
+             description=u'Site Master Administrator',
              site_permissions=[SITEPERMISSION_ADMIN, SITEPERMISSION_ADMINSETTINGS, SITEPERMISSION_ADMINUSERS,
                                SITEPERMISSION_ADMINTEMPLATES]).put()
     SiteRole(id=SITE_MASTER_ADMIN,
-             description="Site Template Administrator",
+             description=u'Site Template Administrator',
              site_permissions=[SITEPERMISSION_ADMIN, SITEPERMISSION_ADMINTEMPLATES]).put()
 
     # Add site users: site masters
-    SiteUser(email="LDRidgeway@gmail.com".lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
-    SiteUser(email="ltlamberton@gmail.com".lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
-    SiteUser(email="awieder@zephyrmediacommunications.com".lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
-    SiteUser(email="awieder@ztech-group.com".lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
-    # SiteUser(email="MHanderhan@meesha.net".lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
+    SiteUser(email=u'LDRidgeway@gmail.com'.lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
+    SiteUser(email=u'ltlamberton@gmail.com'.lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
+    SiteUser(email=u'awieder@zephyrmediacommunications.com'.lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
+    SiteUser(email=u'awieder@ztech-group.com'.lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
+    # SiteUser(email=u'MHanderhan@meesha.net'.lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
 
+'''
 # If datastore contains no templates in the Template Gallery, initialize it
 if not Project.query(Project.project_type == PUBLIC_TEMPLATE).count():
     novel_template = Project(name="Novel",
@@ -1218,3 +1219,4 @@ Chapter One. A Beginning
     This is where you write the epilogue for the novel.
 </p>
         """, parent=novel_template).put()
+'''

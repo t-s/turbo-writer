@@ -2,9 +2,9 @@ import re
 
 import dao
 
-interview_name_pattern = re.compile(r"(.*)\.\d*")
-interview_basename_pattern1 = re.compile(r"(.*_)*(.*)\.\d*")
-interview_basename_pattern2 = re.compile(r"(.*_)*(.*)")
+interview_name_pattern = re.compile(r'(.*)\.\d*')
+interview_basename_pattern1 = re.compile(r'(.*_)*(.*)\.\d*')
+interview_basename_pattern2 = re.compile(r'(.*_)*(.*)')
 
 
 class InterviewService():
@@ -46,16 +46,16 @@ class InterviewService():
             cloned_interview.put()
             child_interview_names = []
             if cloned_interview.child_interview_names:
-                child_interview_names = str(cloned_interview.child_interview_names).split("|")
+                child_interview_names = cloned_interview.child_interview_names.split(u'|')
             for child_interview_name in child_interview_names:
-                tokens = child_interview_name.split(".")
-                child_interview_name_base = ".".join(tokens[0:len(tokens) - 1])
+                tokens = child_interview_name.split(u'.')
+                child_interview_name_base = u'.'.join(tokens[0:len(tokens) - 1])
                 self.clone_hierarchy(child_interview_name_base, suffix, internal=True)
             if not internal:
                 self.__init__(self.project)
             return cloned_interview
 
-    def delete_hierarchy(self, interview_name): # TODO Delete if not needed
+    def delete_hierarchy(self, interview_name):  # TODO Delete if not needed
         root_interview_name = self.get_interview_by_name(interview_name).root_interview_name
         for interview in self.interviews:
             if interview.root_interview_name == root_interview_name:
@@ -65,7 +65,7 @@ class InterviewService():
     def get_closest_ancestor_interview_with_content(self, interview_name):
         for interview in self.interviews:
             if interview.child_interview_names:
-                child_interview_names = interview.child_interview_names.split("|")
+                child_interview_names = interview.child_interview_names.split(u'|')
                 if interview_name in child_interview_names:
                     if interview.content:
                         return interview
@@ -74,14 +74,14 @@ class InterviewService():
     def get_first_child_interview_with_content(self, interview_name):
         interview = self.get_interview_by_name(interview_name)
         if interview and interview.child_interview_names:
-            child_interview_names = interview.child_interview_names.split("|")
+            child_interview_names = interview.child_interview_names.split(u'|')
             return self.get_first_interview_with_content(child_interview_names[0].strip())
 
     def get_first_interview_with_content(self, root_interview_name):
         interview = self.get_interview_by_name(root_interview_name)
         while interview and not interview.content:
             if interview.child_interview_names:
-                child_interview_names = interview.child_interview_names.split("|")
+                child_interview_names = interview.child_interview_names.split(u'|')
                 interview = self.get_interview_by_name(child_interview_names[0].strip())
         return interview
 
@@ -139,7 +139,7 @@ class InterviewService():
                         prereq_basename = match.group(2)
                         if prereq_basename != name:
                             name_entry.add(prereq_basename)
-        # Add entries to the list of names where all prereqs are already on the list
+            # Add entries to the list of names where all prereqs are already on the list
         names = list()
         any_changes = True
         while any_changes:
@@ -161,7 +161,7 @@ class InterviewService():
                     del name_entries[name]
                     any_changes = True
                     break
-        # Add any entries for prereqs not met
+            # Add any entries for prereqs not met
         for name in name_entries.keys():
             names.append(name)
         return names
@@ -174,7 +174,7 @@ class InterviewService():
     def get_next_name_in_child(self, interview_name, current_name):
         interview = self.get_interview_by_name(interview_name)
         if interview and interview.child_interview_names and len(interview.child_interview_names):
-            child_interview_names = interview.child_interview_names.split("|")
+            child_interview_names = interview.child_interview_names.split(u'|')
             try:
                 index = child_interview_names.index(current_name)
                 return child_interview_names[index + 1] if index < (len(child_interview_names) - 1) else None
@@ -185,7 +185,7 @@ class InterviewService():
     def get_parent_interview(self, child_interview):
         for interview in self.interviews:
             if interview.child_interview_names:
-                if child_interview.name in interview.child_interview_names.split("|"):
+                if child_interview.name in interview.child_interview_names.split(u'|'):
                     return interview
 
     def get_prereq_interviews(self, i1):
@@ -216,7 +216,7 @@ class InterviewService():
     def get_previous_name_in_child(self, interview_name, current_name):
         interview = self.get_interview_by_name(interview_name)
         if interview and interview.child_interview_names and len(interview.child_interview_names):
-            child_interview_names = interview.child_interview_names.split("|")
+            child_interview_names = interview.child_interview_names.split(u'|')
             try:
                 index = child_interview_names.index(current_name)
                 return child_interview_names[index - 1] if index else None
@@ -226,7 +226,7 @@ class InterviewService():
 
     def get_root_interview_names(self):
         names = list()
-        for interview in self.interviews: # Note that these are sorted by dependency
+        for interview in self.interviews:  # Note that these are sorted by dependency
             if interview.root_interview_name not in names:
                 names.append(interview.root_interview_name)
         return names
@@ -244,7 +244,7 @@ class InterviewService():
                 match = interview_basename_pattern1.match(interview.name)
                 if not match:
                     match = interview_basename_pattern2.match(interview.name)
-                test_name = match.group(2) if match else name # else-condition should never happen
+                test_name = match.group(2) if match else name  # else-condition should never happen
                 if test_name == name:
                     sorted_interviews.append(interview)
         self.interviews = sorted_interviews

@@ -12,12 +12,12 @@ class HtmlGeneratorService():
             self.generate_document_html(document)
 
     def generate_document_html(self, document):
-        html = ""
+        html = u''
         style = dao.get_style_by_name(self.template, document.style_name)
         if style:
-            html += "<div style=\"{}\">".format(style.css)
+            html += u'<div style="{}">'.format(style.css)
         else:
-            html += "<div>"
+            html += u'<div>'
         begin_repeating_group = False
         within_repeating_group = False
         end_repeating_group = False
@@ -52,113 +52,113 @@ class HtmlGeneratorService():
             # Generate HTML for the document item
             if begin_repeating_group:
                 internal_index_variable_name = dao.convert_name_to_internal_name(index_variable_name)
-                html += "{{% if {}_count %}}".format(internal_index_variable_name)
-                html += "{{% for index in range(1, {}_count) %}}".format(internal_index_variable_name)
+                html += u'{{% if {}_count %}}'.format(internal_index_variable_name)
+                html += u'{{% for index in range(1, {}_count) %}}'.format(internal_index_variable_name)
                 begin_repeating_group = False
             style = dao.get_style_by_name(self.template, document_item.style_name)
             if item_type == dao.TEXT:
                 html = self.update_html(html, document_item.text,
-                                        style) # TODO How do we guard against cross-site scripting?
+                                        style)  # TODO How do we guard against cross-site scripting?
             else:
                 internal_variable_name = dao.convert_name_to_internal_name(document_item.variable_name)
                 if item_type == dao.SINGLE_VARIABLE:
-                    content = "{{{{ {} }}}}".format(
-                        internal_variable_name) # TODO How do we guard against cross-site scripting?
+                    content = u'{{{{ {} }}}}'.format(
+                        internal_variable_name)  # TODO How do we guard against cross-site scripting?
                     html = self.update_html(html, content, style)
                 else:
-                    content = "{{{{ get_indexed_variable(project, '{}', index) }}}}".format(
-                        internal_variable_name) # TODO How do we guard against cross-site scripting?
+                    content = u'{{{{ get_indexed_variable(project, "{}", index) }}}}'.format(
+                        internal_variable_name)  # TODO How do we guard against cross-site scripting?
                     html = self.update_html(html, content, style)
             if end_repeating_group:
-                html += "{% endfor %}"
-                html += "{% endif %}"
+                html += u'{% endfor %}'
+                html += u'{% endif %}'
                 begin_repeating_group = False
                 within_repeating_group = False
                 end_repeating_group = False
                 index_variable_name = None
-        html += "</div>"
+        html += u'</div>'
         document.content = html
         document.put()
 
     def generate_assign_reviewer_interview_html(self, assignment):
-        interview = dao.Interview(name="assign_reviewer_{}".format(assignment.name),
-                                  root_interview_name="assign_reviewer_{}".format(assignment.name),
-                                  menu_title=assignment.name, assign_button="Assign Reviewer",
-                                  assign_interview_name="review_{}".format(assignment.name),
+        interview = dao.Interview(name=u'assign_reviewer_{}'.format(assignment.name),
+                                  root_interview_name=u'assign_reviewer_{}'.format(assignment.name),
+                                  menu_title=assignment.name, assign_button=u'Assign Reviewer',
+                                  assign_interview_name=u'review_{}'.format(assignment.name),
                                   assignment_name=assignment.name, parent=self.template.key)
-        html = "<h3>Assign Reviewer for \"{}\"</h3>".format(
-            "{{ assignment_name | e }}" if assignment.is_repeating else assignment.name)
-        html += "{% if error_msg %}<p>"
-        html += "<span class='error'>{{ error_msg | e }}</span>"
-        html += "</p>{% endif %}"
-        html += "{% if assigned_email %}<p>Assignment completed:</p>"
-        html += "<blockquote><div style='width: 500px; background-color: lightgray'>"
-        html += "{{ assigned_email | e }}</div></blockquote>"
-        html += "{% else %}<table width='100%'>"
-        html += "<tr><th>Team Member:</th>"
-        html += "<td><select name='_email'><option value=''>(Select team member)</option>"
-        html += "{% for email in emails %}<option value='{{ email | e }}'>{{ email | e }}</option>{% endfor %}"
-        html += "</select></td></tr></table>{% endif %}"
+        html = u'<h3>Assign Reviewer for "{}"</h3>'.format(
+            u'{{ assignment_name | e }}' if assignment.is_repeating else assignment.name)
+        html += u'{% if error_msg %}<p>'
+        html += u'<span class="error">{{ error_msg | e }}</span>'
+        html += u'</p>{% endif %}'
+        html += u'{% if assigned_email %}<p>Assignment completed:</p>'
+        html += u'<blockquote><div style="width: 500px; background-color: lightgray">'
+        html += u'{{ assigned_email | e }}</div></blockquote>'
+        html += u'{% else %}<table width="100%">'
+        html += u'<tr><th>Team Member:</th>'
+        html += u'<td><select name="_email"><option value="">(Select team member)</option>'
+        html += u'{% for email in emails %}<option value="{{ email | e }}">{{ email | e }}</option>{% endfor %}'
+        html += u'</select></td></tr></table>{% endif %}'
         interview.content = html
         if assignment.is_repeating:
-            interview.generate_after = "assign_writer_{}".format(assignment.name)
+            interview.generate_after = u'assign_writer_{}'.format(assignment.name)
         else:
             interview.auto_assign = True
         interview.put()
 
     def generate_assign_writer_interview_html(self, assignment):
-        interview = dao.Interview(name="assign_writer_{}".format(assignment.name),
-                                  root_interview_name="assign_writer_parent_{}".format(assignment.name),
-                                  menu_title=assignment.name, assign_button="Assign Writer",
-                                  assign_interview_name="write_{}".format(assignment.name),
+        interview = dao.Interview(name=u'assign_writer_{}'.format(assignment.name),
+                                  root_interview_name=u'assign_writer_parent_{}'.format(assignment.name),
+                                  menu_title=assignment.name, assign_button=u'Assign Writer',
+                                  assign_interview_name=u'write_{}'.format(assignment.name),
                                   assignment_name=assignment.name, parent=self.template.key)
-        html = "<h3>Assign Writer for \"{}\"</h3>".format(assignment.name)
-        html += "{% if error_msg %}<p>"
-        html += "<span class='error'>{{ error_msg | e }}</span>"
-        html += "</p>{% endif %}"
-        html += "{% if assigned_email %}<p>Assignment completed:</p>"
-        html += "<blockquote><div style='width: 500px; background-color: lightgray'>"
-        html += "{{ assigned_email | e }}</div></blockquote>"
-        html += "{% else %}"
-        html += "<p><blockquote style='width: 500px; font-style: italic; background-color: lightgray'>"
-        html += "{}".format(assignment.instructions_to_manager)
-        html += "</blockquote></p>"
-        html += "<table width='100%'>"
+        html = u'<h3>Assign Writer for "{}"</h3>'.format(assignment.name)
+        html += u'{% if error_msg %}<p>'
+        html += u'<span class="error">{{ error_msg | e }}</span>'
+        html += u'</p>{% endif %}'
+        html += u'{% if assigned_email %}<p>Assignment completed:</p>'
+        html += u'<blockquote><div style="width: 500px; background-color: lightgray">'
+        html += u'{{ assigned_email | e }}</div></blockquote>'
+        html += u'{% else %}'
+        html += u'<p><blockquote style="width: 500px; font-style: italic; background-color: lightgray">'
+        html += u'{}'.format(assignment.instructions_to_manager)
+        html += u'</blockquote></p>'
+        html += u'<table width="100%">'
         if assignment.is_repeating:
-            html += "<tr><th>Assignment Name of This {}</th>".format(assignment.name)
-            html += "<td><input name='_assignment_name' value='{{ assignment_name | e }}'></td></tr>"
-        html += "<tr><th>Team Member:</th>"
-        html += "<td><select name='_email'><option value=''>(Select team member)</option>"
-        html += "{% for email in emails %}<option value='{{ email | e }}'>{{ email | e }}</option>{% endfor %}"
-        html += "</select></td></tr>"
-        html += "<tr><th>Instructions:</th>"
-        html += "<td>{}</td></tr>".format(assignment.instructions_to_writer)
-        html += "<tr><th>Additional instructions:</th><td>"
-        html += "<textarea name='_manager_instructions_to_writer' style='height: 200px; width: 500px'>"
-        html += "{{ manager_instructions_to_writer | e }}</textarea></td></tr>"
-        html += "<tr><th>Checklist:</th>"
-        html += "<td>"
+            html += u'<tr><th>Assignment Name of This {}</th>'.format(assignment.name)
+            html += u'<td><input name="_assignment_name" value="{{ assignment_name | e }}"></td></tr>'
+        html += u'<tr><th>Team Member:</th>'
+        html += u'<td><select name="_email"><option value="">(Select team member)</option>'
+        html += u'{% for email in emails %}<option value="{{ email | e }}">{{ email | e }}</option>{% endfor %}'
+        html += u'</select></td></tr>'
+        html += u'<tr><th>Instructions:</th>'
+        html += u'<td>{}</td></tr>'.format(assignment.instructions_to_writer)
+        html += u'<tr><th>Additional instructions:</th><td>'
+        html += u'<textarea name="_manager_instructions_to_writer" style="height: 200px; width: 500px">'
+        html += u'{{ manager_instructions_to_writer | e }}</textarea></td></tr>'
+        html += u'<tr><th>Checklist:</th>'
+        html += u'<td>'
         for checklist_item in assignment.checklist_items:
-            html += "<li>{}</li>".format(checklist_item)
-        html += "</td></tr>"
-        html += "</table>{% endif %}"
+            html += u'<li>{}</li>'.format(checklist_item)
+        html += u'</td></tr>'
+        html += u'</table>{% endif %}'
         interview.content = html
         if assignment.is_repeating:
-            interview.root_interview_name = "assign_writer_parent_{}".format(assignment.name)
+            interview.root_interview_name = u'assign_writer_parent_{}'.format(assignment.name)
         else:
-            interview.root_interview_name = "assign_writer_{}".format(assignment.name)
+            interview.root_interview_name = u'assign_writer_{}'.format(assignment.name)
             interview.auto_assign = True
         interview.put()
 
     def generate_assign_writer_parent_interview_html(self, assignment):
-        interview = dao.Interview(name="assign_writer_parent_{}".format(assignment.name),
-                                  root_interview_name="assign_writer_parent_{}".format(assignment.name),
-                                  completed_button="Done", child_button="Add Writing Assignment",
-                                  child_interview_names="assign_writer_{}".format(assignment.name),
-                                  menu_title="{}".format(assignment.name), assignment_name=assignment.name,
+        interview = dao.Interview(name=u'assign_writer_parent_{}'.format(assignment.name),
+                                  root_interview_name=u'assign_writer_parent_{}'.format(assignment.name),
+                                  completed_button=u'Done', child_button=u'Add Writing Assignment',
+                                  child_interview_names=u'assign_writer_{}'.format(assignment.name),
+                                  menu_title=u'{}'.format(assignment.name), assignment_name=assignment.name,
                                   parent=self.template.key)
 
-        html = "<h3>Assign Writers for \"{}\"</h3>".format(assignment.name)
+        html = u'<h3>Assign Writers for "{}"</h3>'.format(assignment.name)
 
         interview.content = html
         interview.auto_assign = True
@@ -174,39 +174,39 @@ class HtmlGeneratorService():
             self.generate_assign_writer_parent_interview_html(assignment)
 
     def generate_reviewer_interview_html(self, assignment):
-        interview = dao.Interview(name="review_{}".format(assignment.name),
-                                  root_interview_name="review_{}".format(assignment.name),
-                                  prereq_interview_names=["write_{}".format(assignment.name)],
+        interview = dao.Interview(name=u'review_{}'.format(assignment.name),
+                                  root_interview_name=u'review_{}'.format(assignment.name),
+                                  prereq_interview_names=[u'write_{}'.format(assignment.name)],
                                   checklist_items=assignment.checklist_items, menu_title=assignment.name,
-                                  parent_button="Save Incomplete Review", completed_button="Review Completed",
+                                  parent_button=u'Save Incomplete Review', completed_button=u'Review Completed',
                                   assignment_name=assignment.name, parent=self.template.key)
-        html = "<h3>Review \"{}\"</h3>".format(
-            "{{ assignment_name | e }}" if assignment.is_repeating else assignment.name)
-        html += """
+        html = u'<h3>Review "{}"</h3>'.format(
+            u'{{ assignment_name | e }}' if assignment.is_repeating else assignment.name)
+        html += u'''
             <script type="text/javascript" src="https://www.dropbox.com/static/api/1/dropbox.js" id="dropboxjs"
             data-app-key="dnerajsj9p29gc3"></script>
-            """
-        html += "<p><blockquote style='width: 500px; font-style: italic; background-color: lightgray'>"
-        html += "{}".format(assignment.instructions_to_writer)
-        html += "</blockquote></p>"
+            '''
+        html += u'<p><blockquote style="width: 500px; font-style: italic; background-color: lightgray">'
+        html += u'{}'.format(assignment.instructions_to_writer)
+        html += u'</blockquote></p>'
         if assignment.checklist_items:
-            html += "<h4><i>Checklist</i></h4>"
-            html += "<p><table border='1' cellpadding='5' cellspacing='0' style='width: 700px'>"
+            html += u'<h4><i>Checklist</i></h4>'
+            html += u'<p><table border="1" cellpadding="5" cellspacing="0" style="width: 700px">'
             for index in range(len(assignment.checklist_items)):
-                html += "<tr>"
-                html += "<td style='text-align: center'>Writer<br/><input type='checkbox' name='_writer_check_{}'" \
-                        "{{% if writer_check_{} %}} checked{{% endif %}}{{% if not writer %}} disabled{{% endif %}}" \
-                        "></td>".format(index, index)
-                html += "{% if not writer or has_been_reviewed %}"
-                html += "<td style='text-align: center'>Reviewer<br/><input type='checkbox' name='_reviewer_check_{}'" \
-                        "{{% if reviewer_check_{} %}} checked{{% endif %}}{{% if not reviewer %}} disabled{{% endif %}}" \
-                        "></td>".format(index, index)
-                html += "{% endif %}"
-                html += "<td>{}</td>".format(assignment.checklist_items[index])
-                html += "</tr>"
-            html += "</table></p>"
-        html += "<h4><i>Reviewer Comments</i></h4>"
-        html += "<textarea name='_reviewer_comment' style='height: 100px; width: 700px'>{{ reviewer_comment | e }}</textarea>"
+                html += u'<tr>'
+                html += u'<td style="text-align: center">Writer<br/><input type="checkbox" name="_writer_check_{}"' \
+                        u'{{% if writer_check_{} %}} checked{{% endif %}}{{% if not writer %}} disabled{{% endif %}}' \
+                        u'></td>'.format(index, index)
+                html += u'{% if not writer or has_been_reviewed %}'
+                html += u'<td style="text-align: center">Reviewer<br/><input type="checkbox" name="_reviewer_check_{}"' \
+                        u'{{% if reviewer_check_{} %}} checked{{% endif %}}{{% if not reviewer %}} disabled{{% endif %}}' \
+                        u'></td>'.format(index, index)
+                html += u'{% endif %}'
+                html += u'<td>{}</td>'.format(assignment.checklist_items[index])
+                html += u'</tr>'
+            html += u'</table></p>'
+        html += u'<h4><i>Reviewer Comments</i></h4>'
+        html += u'<textarea name="_reviewer_comment" style="height: 100px; width: 700px">{{ reviewer_comment | e }}</textarea>'
         html += self.get_html_for_variables(assignment)
         interview.content = html
         interview.put()
@@ -214,91 +214,91 @@ class HtmlGeneratorService():
     def generate_writer_interview_html(self, assignment):
         prereq_interview_names = list()
         for prereq_assignment_name in assignment.prereq_assignment_names:
-            prereq_interview_names.append("review_{}".format(prereq_assignment_name))
-        interview = dao.Interview(name="write_{}".format(assignment.name),
-                                  root_interview_name="write_{}".format(assignment.name),
+            prereq_interview_names.append(u'review_{}'.format(prereq_assignment_name))
+        interview = dao.Interview(name=u'write_{}'.format(assignment.name),
+                                  root_interview_name=u'write_{}'.format(assignment.name),
                                   checklist_items=assignment.checklist_items, is_writer_interview=True,
                                   prereq_interview_names=prereq_interview_names, menu_title=assignment.name,
-                                  parent_button="Save Draft", completed_button="Writing Completed",
+                                  parent_button=u'Save Draft', completed_button=u'Writing Completed',
                                   assignment_name=assignment.name, parent=self.template.key)
-        html = "<h3>Write \"{}\"</h3>".format(
-            "{{ assignment_name | e }}" if assignment.is_repeating else assignment.name)
-        html += """
+        html = u'<h3>Write "{}"</h3>'.format(
+            u'{{ assignment_name | e }}' if assignment.is_repeating else assignment.name)
+        html += u'''
             <script type="text/javascript" src="https://www.dropbox.com/static/api/1/dropbox.js" id="dropboxjs"
             data-app-key="dnerajsj9p29gc3"></script>
-            """
-        html += "<p><blockquote style='width: 500px; font-style: italic; background-color: lightgray'>"
-        html += "{}".format(assignment.instructions_to_writer)
-        html += "</blockquote></p>"
-        html += "<p><blockquote style='width: 500px; font-style: italic; background-color: lightgray'>"
-        html += "{{ manager_instructions_to_writer }}"
-        html += "</blockquote></p>"
+            '''
+        html += u'<p><blockquote style="width: 500px; font-style: italic; background-color: lightgray">'
+        html += u'{}'.format(assignment.instructions_to_writer)
+        html += u'</blockquote></p>'
+        html += u'<p><blockquote style="width: 500px; font-style: italic; background-color: lightgray">'
+        html += u'{{ manager_instructions_to_writer }}'
+        html += u'</blockquote></p>'
         if assignment.checklist_items:
-            html += "<h4><i>Checklist</i></h4>"
-            html += "<p><table border='1' cellpadding='5' cellspacing='0' style='width: 700px'>"
+            html += u'<h4><i>Checklist</i></h4>'
+            html += u'<p><table border="1" cellpadding="5" cellspacing="0" style="width: 700px">'
             for index in range(len(assignment.checklist_items)):
-                html += "<tr>"
-                html += "<td style='text-align: center'>Writer<br/><input type='checkbox' name='_writer_check_{}'" \
-                        "{{% if writer_check_{} %}} checked{{% endif %}}{{% if not writer %}} disabled{{% endif %}}" \
-                        "></td>".format(index, index)
-                html += "{% if has_been_reviewed %}"
-                html += "<td style='text-align: center'>Reviewer<br/><input type='checkbox' name='_reviewer_check_{}'" \
-                        "{{% if reviewer_check_{} %}} checked{{% endif %}}{{% if not reviewer %}} disabled{{% endif %}}" \
-                        "></td>".format(index, index)
-                html += "{% endif %}"
-                html += "<td>{}</td>".format(assignment.checklist_items[index])
-                html += "</tr>"
-            html += "</table></p>"
+                html += u'<tr>'
+                html += u'<td style="text-align: center">Writer<br/><input type="checkbox" name="_writer_check_{}"' \
+                        u'{{% if writer_check_{} %}} checked{{% endif %}}{{% if not writer %}} disabled{{% endif %}}' \
+                        u'></td>'.format(index, index)
+                html += u'{% if has_been_reviewed %}'
+                html += u'<td style="text-align: center">Reviewer<br/><input type="checkbox" name="_reviewer_check_{}"' \
+                        u'{{% if reviewer_check_{} %}} checked{{% endif %}}{{% if not reviewer %}} disabled{{% endif %}}' \
+                        u'></td>'.format(index, index)
+                html += u'{% endif %}'
+                html += u'<td>{}</td>'.format(assignment.checklist_items[index])
+                html += u'</tr>'
+            html += u'</table></p>'
         html += self.get_html_for_variables(assignment)
         interview.content = html
         interview.put()
 
     def get_html_for_variables(self, assignment):
-        html = "<p><table>"
+        html = u'<p><table>'
         for variable_name in assignment.variable_names:
             variable = dao.get_variable_by_name(self.template, variable_name)
             if variable:
-                html += "<tr>"
-                html += "<th>{}:</th>".format(variable_name)
+                html += u'<tr>'
+                html += u'<th>{}:</th>'.format(variable_name)
                 if variable.input_field == dao.SMALL:
-                    html += "<td><input name='{}' value='{{{{ {} | e }}}}'></td>".format(variable.internal_name,
-                                                                                         variable.internal_name)
+                    html += u'<td><input name="{}" value="{{{{ {} | e }}}}"></td>'.format(variable.internal_name,
+                                                                                          variable.internal_name)
                 elif variable.input_field == dao.MEDIUM:
-                    html += "<td><input name='{}' style='width: 500px' value='{{{{ {} | e }}}}'></td>".format(
+                    html += u'<td><input name="{}" style="width: 500px" value="{{{{ {} | e }}}}"></td>'.format(
                         variable.internal_name, variable.internal_name)
                 elif variable.input_field == dao.LARGE:
-                    html += "<td><textarea name='{}' style='height: 200px; width: 500px'>{{{{ {} | e }}}}</textarea></td>".format(
+                    html += u'<td><textarea name="{}" style="height: 200px; width: 500px">{{{{ {} | e }}}}</textarea></td>'.format(
                         variable.internal_name, variable.internal_name)
                 else:
-                    html += "<td>"
+                    html += u'<td>'
 
-                    html += "{{% if {}_filename %}}".format(variable.internal_name)
-                    html += "<a href='/project/download_file/{{{{ {}_blob_key }}}}?filename={{{{ {}_filename }}}}".format(
+                    html += u'{{% if {}_filename %}}'.format(variable.internal_name)
+                    html += u'<a href="/project/download_file/{{{{ {}_blob_key }}}}?filename={{{{ {}_filename }}}}'.format(
                         variable.internal_name, variable.internal_name)
-                    html += "'>Click here</a> to download \"{{{{ {}_filename }}}}\" for viewing and editing<br/><br/>".format(
+                    html += u'">Click here</a> to download "{{{{ {}_filename }}}}" for viewing and editing<br/><br/>'.format(
                         variable.internal_name)
-                    html += "{% endif %}"
+                    html += u'{% endif %}'
 
-                    html += "To upload into TurboWriter:<br/><br/>"
+                    html += u'To upload into TurboWriter:<br/><br/>'
 
-                    html += "<input type='submit'"
-                    html += " style='background-color: #f8f8f8; border-color: #eeeeee; border-radius: 3px; border-width: 1px; color: #777777; font-weight: bold; height: 25px; width: 152px;'"
-                    html += " value='Choose from Disk' name='"
-                    html += "_choose_{}".format(variable.internal_name)
-                    html += "'><br/><br/>"
+                    html += u'<input type="submit"'
+                    html += u' style="background-color: #f8f8f8; border-color: #eeeeee; border-radius: 3px; border-width: 1px; color: #777777; font-weight: bold; height: 25px; width: 152px;"'
+                    html += u' value="Choose from Disk" name="'
+                    html += u'_choose_{}'.format(variable.internal_name)
+                    html += u'"><br/><br/>'
 
-                    html += "<input type='dropbox-chooser' name='{}' style='visibility: hidden;' data-link-type='direct'/>".format(
+                    html += u'<input type="dropbox-chooser" name="{}" style="visibility: hidden;" data-link-type="direct"/>'.format(
                         variable.internal_name)
 
-                    html += "</td>"
-                html += "</tr>"
-        html += "</table></p>"
+                    html += u'</td>'
+                html += u'</tr>'
+        html += u'</table></p>'
         return html
 
     def update_html(self, html, content, style):
         if content:
             if style:
-                html += "<p><span style=\"{}\">{}</span></p>".format(style.css, content)
+                html += u'<p><span style="{}">{}</span></p>'.format(style.css, content)
             else:
-                html += "<p>{}</p>".format(content)
+                html += u'<p>{}</p>'.format(content)
         return html

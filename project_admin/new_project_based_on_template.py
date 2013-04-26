@@ -1,7 +1,9 @@
 import webapp2
+from google.appengine.api import users
+
 import dao
 import ui
-from google.appengine.api import users
+
 
 class RequestHandler(webapp2.RequestHandler):
     def get(self):
@@ -20,22 +22,22 @@ class RequestHandler(webapp2.RequestHandler):
 
         # Attempt to create a new project
         try:
-            name = self.request.get("name").strip()
+            name = self.request.get(u'name').strip()
             if not name:
-                raise Exception("You must provide a name for your project")
+                raise Exception(u'You must provide a name for your project')
             for project in dao.get_projects_by_name(name):
                 if dao.test_email_is_project_owner(project, current_email):
-                    raise Exception("Sorry, you already own a project by that name")
+                    raise Exception(u'Sorry, you already own a project by that name')
 
             # Create the new Project entity
-            project = dao.Project(name=name, project_type=dao.PROJECT, description=self.request.get("description"))
+            project = dao.Project(name=name, project_type=dao.PROJECT, description=self.request.get(u'description'))
             project_key = project.put()
 
             # Create a ProjectUser entity, making the current user owner of the new project
             dao.ProjectUser(email=dao.get_current_site_user().email, is_owner=True, parent=project_key).put()
 
             # Get the selected template ID
-            template_id = self.request.get("template_id")
+            template_id = self.request.get(u'template_id')
 
             if template_id:
                 # Copy entities owned by the template entity into the project
@@ -53,22 +55,22 @@ class RequestHandler(webapp2.RequestHandler):
                 for variable_entity in dao.get_variables(template_entity):
                     variable_entity.clone(project).put()
 
-            self.redirect("/project?project_id={}".format(project_key.id()))
+            self.redirect(u'/project?project_id={}'.format(project_key.id()))
             return
         except Exception as e:
-            error_msg = "Creating project failed: {}".format(e)
+            error_msg = u'Creating project failed: {}'.format(e)
 
         # Display the webpage
         self.render(error_msg)
 
     def render(self, error_msg=None):
         # Create template and template values, render the page
-        jinja_template = ui.get_template(self, "project_admin/new_project_based_on_template.html")
+        jinja_template = ui.get_template(self, u'project_admin/new_project_based_on_template.html')
 
         jinja_template_values = dao.get_standard_site_values()
-        jinja_template_values["template_id"] = self.request.get("template_id")
-        jinja_template_values["error_msg"] = error_msg
-        jinja_template_values["name"] = self.request.get("name")
-        jinja_template_values["description"] = self.request.get("description")
+        jinja_template_values[u'template_id'] = self.request.get(u'template_id')
+        jinja_template_values[u'error_msg'] = error_msg
+        jinja_template_values[u'name'] = self.request.get(u'name')
+        jinja_template_values[u'description'] = self.request.get(u'description')
 
         self.response.out.write(jinja_template.render(jinja_template_values))
