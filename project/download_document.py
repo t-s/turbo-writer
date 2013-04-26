@@ -7,9 +7,10 @@ class DownloadHandler(blobstore_handlers.BlobstoreDownloadHandler):
         blob_info = blobstore.BlobInfo.get(blob_key)
         if blob_info:
             try:
-                self.send_blob(blob_key, save_as=self.request.get(u'filename'))
-                self.response.write(u'Download successful')
+                filename = self.request.get(u'filename')
+                self.send_blob(blob_key, save_as=filename)
+                self.response.write('Download successful')  # Writing Unicode string throws exception
             except:
-                self.response.write(u'Download unsuccessful')
+                self.response.write('Download unsuccessful')  # Writing Unicode string throws exception
         else:
-            self.response.write(u'Download unsuccessful')
+            self.response.write('Download unsuccessful')  # Writing Unicode string throws exception
