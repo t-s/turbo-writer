@@ -1,4 +1,5 @@
 import re
+import urllib
 
 import webapp2
 from google.appengine.api import users
@@ -200,9 +201,14 @@ class RequestHandler(webapp2.RequestHandler):
         else:
             for param in self.request.POST:
                 if param.startswith(u'_choose_'):
-                    index_query_string = u'&_index={}'.format(index) if index else u''
-                    self.redirect(u'/project/upload_file?_project_id={}&_interview_name={}&_variable_name={}{}'.format(
-                        project.key.id(), interview_name, param[8:], index_query_string))
+                    query_string_dict = {u'_project_id': project.key.id(),
+                                         u'_interview_name': interview_name.encode(u'utf-8'),
+                                         u'_variable_name': param[8:].encode(u'utf-8')}
+                    if index:
+                        query_string_dict[u'_index'] = index
+                    query_string = urllib.urlencode(query_string_dict)
+                    url = u'/project/upload_file?{}'.format(query_string)
+                    self.redirect(url)
                     return
         self.redirect(u'/project?project_id={}'.format(project.key.id()))
 

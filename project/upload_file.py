@@ -1,9 +1,13 @@
+import urllib
+
 import webapp2
+
 from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 
 import dao
 import ui
+
 from service.interview_service import InterviewService
 
 
@@ -44,9 +48,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         if not dao.test_project_permitted(project):
             webapp2.abort(401)
 
-        interview_service = InterviewService(project)
         interview_name = self.request.get(u'_interview_name')
-        interview = interview_service.get_interview_by_name(interview_name)
 
         index = self.request.get(u'_index')
 
@@ -57,18 +59,27 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
             variable_name = u'{}[{}]'.format(name, index) if index else name
             dao.set_variable_blob_key(project, variable_name, blob_info.key())
 
-        suffix = u'&_index={}'.format(index) if index else u''
-        self.redirect(
-            u'/project/conduct_interview?_project_id={}&_interview_name={}{}'.format(project.key.id(), interview.name,
-                                                                                     suffix))
+        query_string_dict = {u'_project_id': project.key.id(),
+                             u'_interview_name': interview_name.encode(u'utf-8')}
+        if index:
+            query_string_dict[u'_index'] = index
+        query_string = urllib.urlencode(query_string_dict)
+        url = u'/project/conduct_interview?{}'.format(query_string)
+        self.redirect(url)
 
 
 class DownloadHandler(blobstore_handlers.BlobstoreDownloadHandler):
     def get(self, blob_key):
+        # Set header so that we can write Unicode body; note that headers must be
+        # byte strings, not unicode strings
+        self.response.content_type = 'charset=utf-8'
+
         blob_info = blobstore.BlobInfo.get(blob_key)
         if blob_info:
             try:
                 self.send_blob(blob_key, save_as=self.request.get(u'filename'))
+                # Set header again, in case cleared by send_blob
+                self.response.content_type = 'charset=utf-8'
                 self.response.write(u'Download successful')
             except:
                 self.response.write(u'Download unsuccessful')

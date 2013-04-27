@@ -13,6 +13,8 @@ class DownloadHandler(blobstore_handlers.BlobstoreDownloadHandler):
             try:
                 filename = self.request.get(u'filename')
                 self.send_blob(blob_key, save_as=filename)
+                # Set header again, in case cleared by send_blob
+                self.response.content_type = 'charset=utf-8'
                 self.response.write(u'Download successful')
             except:
                 self.response.write(u'Download unsuccessful')

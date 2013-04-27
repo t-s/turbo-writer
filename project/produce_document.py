@@ -51,7 +51,7 @@ class RequestHandler(webapp2.RequestHandler):
 
         # Generate document
         document_service = DocumentService()
-        document_service.generate_document(project, document, html_document)
+        document_service.generate_document(document, html_document)
 
         # Deliver HTTP response
         jinja_template = ui.get_template(self, u'project/produce_document.html')

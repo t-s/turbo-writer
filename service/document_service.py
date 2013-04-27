@@ -9,7 +9,7 @@ blob_key_pattern = re.compile(r'(.*)-->\n\[Insert "(.*)" here\].*')
 
 
 class DocumentService:
-    def generate_document(self, project, document, html_document):
+    def generate_document(self, document, html_document):
         file_string = self.generate_zip(document, html_document)
         blob_file_name = files.blobstore.create(mime_type=u'application/octet-stream')
         with files.open(blob_file_name, u'a') as f:
@@ -25,12 +25,12 @@ class DocumentService:
         output_string = StringIO.StringIO()
         with zipfile.ZipFile(output_string, u'w', zipfile.ZIP_DEFLATED) as zip_file:
             zip_file.writestr(u'{}.html'.format(document.internal_name), html_document.encode(u'utf-8'))
-            attachments = self.generate_attachments(document, html_document)
+            attachments = self.generate_attachments(html_document)
             if attachments:
-                zip_file.writestr(u'attachments.zip', attachments.encode(u'utf-8'))
+                zip_file.writestr(u'attachments.zip', attachments)
         return output_string.getvalue()
 
-    def generate_attachments(self, document, html_document):
+    def generate_attachments(self, html_document):
         b_key_segments = html_document.split(u'\n<!--B-KEY:')[1:]  # Ignore text in front of first blob_key
         if b_key_segments:
             output_string = StringIO.StringIO()
@@ -39,6 +39,5 @@ class DocumentService:
                     match = blob_key_pattern.match(b_key_segment)
                     if match:
                         blob_reader = blobstore.BlobReader(match.group(1))
-                        zip_file.writestr(match.group(2), blob_reader.read().encode(u'utf-8'))
+                        zip_file.writestr(match.group(2), blob_reader.read())
             return output_string.getvalue()
-
