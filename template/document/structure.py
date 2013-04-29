@@ -2,7 +2,6 @@ import re
 import webapp2
 import dao
 import ui
-from service.html_generator_service import HtmlGeneratorService
 
 change_pattern = re.compile(r'change_position\.(\d)')
 remove_pattern = re.compile(r'remove_position\.(\d)')
@@ -101,9 +100,6 @@ class RequestHandler(webapp2.RequestHandler):
                     item.key.delete()
                     new_items = items[:index] + items[index + 1:]
                     self.compute_positions(new_items)
-
-        html_generator_service = HtmlGeneratorService(template)
-        html_generator_service.generate_document_html(document_entity)
 
         if self.request.get(u'update') and not error_msg:
             self.redirect(u'/template/document?template_id={}'.format(template.key.id()))

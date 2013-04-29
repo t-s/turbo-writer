@@ -1,7 +1,6 @@
 import webapp2
 import dao
 import ui
-from service.html_generator_service import HtmlGeneratorService
 
 
 class RequestHandler(webapp2.RequestHandler):
@@ -30,10 +29,6 @@ class RequestHandler(webapp2.RequestHandler):
         if style_entity and self.request.get(u'delete'):
             try:
                 style_entity.key.delete()
-
-                html_generator_service = HtmlGeneratorService(template)
-                html_generator_service.generate_all_html()
-
                 self.redirect(u'/template/style?template_id={}'.format(template.key.id()))
                 return
             except Exception as e:
@@ -45,10 +40,6 @@ class RequestHandler(webapp2.RequestHandler):
                 style_entity.description = self.request.get(u'description')
                 style_entity.css = self.request.get(u'css')
                 style_entity.put()
-
-                html_generator_service = HtmlGeneratorService(template)
-                html_generator_service.generate_all_html()
-
                 self.redirect(u'/template/style?template_id={}'.format(template.key.id()))
                 return
             except Exception as e:

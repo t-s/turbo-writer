@@ -3,6 +3,7 @@ from google.appengine.api import users
 
 import dao
 import ui
+from service.html_generator_service import HtmlGeneratorService
 
 
 class RequestHandler(webapp2.RequestHandler):
@@ -40,9 +41,12 @@ class RequestHandler(webapp2.RequestHandler):
             template_id = self.request.get(u'template_id')
 
             if template_id:
-                # Copy entities owned by the template entity into the project
+                # Generate HTML for the template
                 template_entity = dao.get_template_by_id(template_id)
+                html_generator_service = HtmlGeneratorService(template_entity)
+                html_generator_service.generate_all_html()
 
+                # Copy entities owned by the template entity into the project
                 for document_entity in dao.get_documents(template_entity):
                     document_entity.clone(project).put()
 

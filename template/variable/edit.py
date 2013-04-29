@@ -1,7 +1,6 @@
 import webapp2
 import dao
 import ui
-from service.html_generator_service import HtmlGeneratorService
 
 
 class RequestHandler(webapp2.RequestHandler):
@@ -30,10 +29,6 @@ class RequestHandler(webapp2.RequestHandler):
         if variable_entity and self.request.get(u'delete'):
             try:
                 variable_entity.key.delete()
-
-                html_generator_service = HtmlGeneratorService(template)
-                html_generator_service.generate_all_html()
-
                 self.redirect(u'/template/variable?template_id={}'.format(template.key.id()))
                 return
             except Exception as e:
@@ -46,10 +41,6 @@ class RequestHandler(webapp2.RequestHandler):
                 variable_entity.is_repeating = (self.request.get(u'type') == u'repeating')
                 variable_entity.input_field = self.request.get(u'input_field')
                 variable_entity.put()
-
-                html_generator_service = HtmlGeneratorService(template)
-                html_generator_service.generate_all_html()
-
                 self.redirect(u'/template/variable?template_id={}'.format(template.key.id()))
                 return
             except Exception as e:

@@ -1,7 +1,6 @@
 import webapp2
 import dao
 import ui
-from service.html_generator_service import HtmlGeneratorService
 
 
 class RequestHandler(webapp2.RequestHandler):
@@ -33,10 +32,6 @@ class RequestHandler(webapp2.RequestHandler):
             else:
                 try:
                     dao.Style(name=name, description=description, css=css, parent=template.key).put()
-
-                    html_generator_service = HtmlGeneratorService(template)
-                    html_generator_service.generate_all_html()
-
                     self.redirect(u'/template/style?template_id={}'.format(template.key.id()))
                     return
                 except Exception as e:

@@ -1,7 +1,6 @@
 import webapp2
 import dao
 import ui
-from service.html_generator_service import HtmlGeneratorService
 
 
 class RequestHandler(webapp2.RequestHandler):
@@ -41,10 +40,6 @@ class RequestHandler(webapp2.RequestHandler):
                 document_entity.description = self.request.get(u'description')
                 document_entity.style_name = self.request.get(u'doc_style')
                 document_entity.put()
-
-                html_generator_service = HtmlGeneratorService(template)
-                html_generator_service.generate_document_html(document_entity)
-
                 self.redirect(u'/template/document?template_id={}'.format(template.key.id()))
                 return
             except Exception as e:

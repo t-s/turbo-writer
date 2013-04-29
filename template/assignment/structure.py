@@ -2,7 +2,6 @@ import re
 import webapp2
 import dao
 import ui
-from service.html_generator_service import HtmlGeneratorService
 
 
 prereq_pattern = re.compile(r'prereq_assignment_name\.(\d)')
@@ -151,9 +150,6 @@ class RequestHandler(webapp2.RequestHandler):
                 assignment_entity.checklist_items.append(u'')
 
             assignment_entity.put()
-
-            html_generator_service = HtmlGeneratorService(template)
-            html_generator_service.generate_interview_html(assignment_entity)
 
         if self.request.get(u'update') and not error_msg:
             self.redirect(u'/template/assignment?template_id={}'.format(template.key.id()))

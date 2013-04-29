@@ -1,7 +1,6 @@
 import webapp2
 import dao
 import ui
-from service.html_generator_service import HtmlGeneratorService
 
 
 class RequestHandler(webapp2.RequestHandler):
@@ -44,10 +43,6 @@ class RequestHandler(webapp2.RequestHandler):
                 assignment_entity.description = self.request.get(u'description')
                 assignment_entity.is_repeating = (self.request.get(u'type') == u'repeating')
                 assignment_entity.put()
-
-                html_generator_service = HtmlGeneratorService(template)
-                html_generator_service.generate_interview_html(assignment_entity)
-
                 self.redirect(u'/template/assignment?template_id={}'.format(template.key.id()))
                 return
             except Exception as e:

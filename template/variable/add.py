@@ -1,7 +1,6 @@
 import webapp2
 import dao
 import ui
-from service.html_generator_service import HtmlGeneratorService
 
 
 class RequestHandler(webapp2.RequestHandler):
@@ -41,10 +40,6 @@ class RequestHandler(webapp2.RequestHandler):
                     dao.Variable(name=name, internal_name=internal_name, description=description,
                                  is_repeating=(variable_type == u'repeating'), input_field=input_field, content=u'',
                                  parent=template.key).put()
-
-                    html_generator_service = HtmlGeneratorService(template)
-                    html_generator_service.generate_all_html()
-
                     self.redirect(u'/template/variable?template_id={}'.format(template.key.id()))
                     return
                 except Exception as e:
