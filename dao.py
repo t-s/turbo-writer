@@ -667,6 +667,8 @@ def set_variable(project, internal_name, value):
 
 def set_variable_blob_key(project, internal_name, blob_key):
     for variable in Variable.query(Variable.internal_name == internal_name, ancestor=project.key):
+        if variable.blob_key:
+            blobstore.delete(variable.blob_key)
         variable.blob_key = blob_key
         variable.filename = BlobInfo.get(blob_key).filename
         variable.put()
