@@ -215,7 +215,7 @@ class RequestHandler(webapp2.RequestHandler):
     def parse_checklist_item(self, checklist_item):
         match = None
         while True:
-            match = checklist_pattern.match(checklist_item)
+            match = checklist_pattern.search(checklist_item)
             if match:
                 break
             checklist_item += u'[F][F]'
