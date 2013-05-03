@@ -34,7 +34,7 @@
         <tr>
             <th>CSS:</th>
             <td>
-                <input id="css" name="css" value="{{ css | e }}" style="width: 600px">
+                <input id="css" name="css" value="{{ css | e }}" style="width: 600px" onchange="update_sample()">
                 <div id="sample" style="{{ css | e }}">Sample Text 0123456789</div>
             </td>
         </tr>
