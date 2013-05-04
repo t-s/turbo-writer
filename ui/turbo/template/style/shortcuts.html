@@ -5,10 +5,21 @@
         style = css.val();
         i1 = style.indexOf(property);
         if (i1 >= 0) {
-            i2 = style.indexOf("; ", i1);
-            style = style.substring(0, i1) + style.substring(i2 + 2);
+            newStyle = style.substring(0, i1);
+            i2 = style.indexOf(";", i1);
+            if (i2 >= 0) {
+                newStyle += style.substring(i2 + 1).trim();
+            }
+            style = newStyle;
         }
-        style += property + ": " + value + "; ";
+        style = style.trim();
+        if (style.length > 0) {
+            if (style.charAt(style.length - 1) != ";") {
+                style += ";";
+            }
+            style += " ";
+        }
+        style += property + ": " + value + ";";
         css.val(style);
         update_sample()
     }
