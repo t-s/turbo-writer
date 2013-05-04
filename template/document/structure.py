@@ -3,8 +3,8 @@ import webapp2
 import dao
 import ui
 
-change_pattern = re.compile(r'change_position\.(\d)')
-remove_pattern = re.compile(r'remove_position\.(\d)')
+change_pattern = re.compile(r'change_position\.(\d*)')
+remove_pattern = re.compile(r'remove_position\.(\d*)')
 
 
 class RequestHandler(webapp2.RequestHandler):

@@ -4,17 +4,17 @@ import dao
 import ui
 
 
-prereq_pattern = re.compile(r'prereq_assignment_name\.(\d)')
-change_prereq_position_pattern = re.compile(r'change_prereq_assignment_name_position\.(\d)')
-remove_prereq_position_pattern = re.compile(r'remove_prereq_assignment_name_position\.(\d)')
+prereq_pattern = re.compile(r'prereq_assignment_name\.(\d*)')
+change_prereq_position_pattern = re.compile(r'change_prereq_assignment_name_position\.(\d*)')
+remove_prereq_position_pattern = re.compile(r'remove_prereq_assignment_name_position\.(\d*)')
 
-variable_pattern = re.compile(r'variable_name\.(\d)')
-change_variable_position_pattern = re.compile(r'change_variable_name_position\.(\d)')
-remove_variable_position_pattern = re.compile(r'remove_variable_name_position\.(\d)')
+variable_pattern = re.compile(r'variable_name\.(\d*)')
+change_variable_position_pattern = re.compile(r'change_variable_name_position\.(\d*)')
+remove_variable_position_pattern = re.compile(r'remove_variable_name_position\.(\d*)')
 
-checklist_pattern = re.compile(r'checklist_item\.(\d)')
-change_checklist_position_pattern = re.compile(r'change_checklist_item_position\.(\d)')
-remove_checklist_position_pattern = re.compile(r'remove_checklist_item_position\.(\d)')
+checklist_pattern = re.compile(r'checklist_item\.(\d*)')
+change_checklist_position_pattern = re.compile(r'change_checklist_item_position\.(\d*)')
+remove_checklist_position_pattern = re.compile(r'remove_checklist_item_position\.(\d*)')
 
 
 class RequestHandler(webapp2.RequestHandler):
