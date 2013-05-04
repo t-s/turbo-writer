@@ -2,6 +2,8 @@ import os
 import jinja2
 import dao
 
+enterprise_logo = os.environ[u'ENTERPRISE_LOGO'] if u'ENTERPRISE_LOGO' in os.environ.keys() else None
+
 
 def get_indexed_variable(project, variable_name, index):
     return dao.get_indexed_variable(project, variable_name, index)
@@ -19,6 +21,8 @@ class UIService():
             loader=jinja2.FileSystemLoader(os.path.dirname(os.path.dirname(__file__)) + u'/ui/{}'.format(ui)))
         jinja_environment.globals[u'get_indexed_variable'] = get_indexed_variable
         jinja_environment.globals[u'ui'] = ui
+        if enterprise_logo:
+            jinja_environment.globals[u'enterprise_logo'] = enterprise_logo
         return jinja_environment.from_string(template)
 
     def get_template(self, relative_name):
@@ -29,4 +33,6 @@ class UIService():
             loader=jinja2.FileSystemLoader(os.path.dirname(os.path.dirname(__file__)) + u'/ui/{}'.format(ui)))
         jinja_environment.globals[u'get_indexed_variable'] = get_indexed_variable
         jinja_environment.globals[u'ui'] = ui
+        if enterprise_logo:
+            jinja_environment.globals[u'enterprise_logo'] = enterprise_logo
         return jinja_environment.get_template(relative_name)

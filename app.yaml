@@ -1,4 +1,8 @@
 application: turbo-writer
+
+env_variables:
+#  ENTERPRISE_LOGO: 'juniper_logo.png'
+
 version: 1
 runtime: python27
 api_version: 1

@@ -2,10 +2,13 @@
 <head>
     <title>TurboWriter</title>
     <link type="text/css" rel="stylesheet" href="/ui/{{ ui }}/stylesheets/main.css"/>
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <!--<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>-->
 </head>
 <body>
 <div id="header-top">
+    {% if enterprise_logo %}
+        <img id="enterprise-logo" src="/ui/{{ ui }}/images/{{ enterprise_logo }}">
+    {% endif %}
     <a href="/"><img id="header-logo" src="/ui/{{ ui }}/images/turbowriter_logo.png"/></a>
   <span id="header-menu">
     <a href="{{ url }}">Sign in</a>

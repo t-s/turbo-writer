@@ -56,6 +56,10 @@ th {
     font-weight: bold;
 }
 
+#enterprise-logo {
+    margin-right: 10px;
+}
+
 #header-byline {
     color: dimgrey;
     font-family: monospace;
@@ -64,8 +68,7 @@ th {
 }
 
 #header-logo {
-    height: 65;
-    width: 625;
+    height: 50px;
 }
 
 #header-menu {
