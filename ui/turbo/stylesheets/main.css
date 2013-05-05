@@ -51,6 +51,49 @@ th {
     vertical-align: top;
 }
 
+.menu-table {
+    width: 100%;
+    border-spacing: 0;
+    font-family: Verdana, sans-serif;
+}
+
+.progress-cell-checklist {
+    border-left-color: white;
+    border-left-style: solid;
+    border-left-width: 1px;
+    font-size: 8pt;
+    padding: 0 3px 0 6px;
+}
+
+.progress-cell-interview {
+    border-right-color: white;
+    border-right-style: solid;
+    border-right-width: 1px;
+    font-size: 8pt;
+    padding: 0 3px 0 6px;
+}
+
+.progress-percent {
+    font-size: 18pt;
+}
+
+.progress-table {
+    background-color: #999999;
+    border-radius: 7px;
+    border-style: solid;
+    border-width: 1px;
+    color: white;
+    float: right;
+    text-align: center;
+    border-spacing: 0;
+}
+
+.progress-title {
+    border-bottom-color: white;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+}
+
 .tw {
     font-style: italic;
     font-weight: bold;

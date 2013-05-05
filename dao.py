@@ -10,6 +10,7 @@ from service.dropbox_service import DropboxService
 # DATA ACCESS OBJECT
 
 # Regex patterns
+checklist_pattern = re.compile(r'(.*)\[([FT])\]\[([FT])\]')
 optionally_indexed_name_pattern = re.compile(r'(.*)\[(.*)\]')
 
 # Constants
@@ -486,9 +487,42 @@ def get_standard_project_values(project):
     # Set documents
     jinja_template_values[u'documents'] = get_documents(project)
 
+    # Load interviews
+    interview_service = InterviewService(project)
+
+    # Compute progress
+    interview_count = 0
+    interview_complete = 0
+    checklist_count = 0
+    checklist_complete = 0
+    for root_interview_name in interview_service.get_root_interview_names():
+        interview = interview_service.get_interview_by_name(root_interview_name)
+        if interview and interview.assigned_email:
+            interview_count += 1
+            if interview.completed or interview.assigned_interview_id:
+                interview_complete += 1
+            for checklist_item in interview.checklist_items:
+                checklist_count += 1
+                match = parse_checklist_item(checklist_item)
+                if interview.name.startswith(u'write_') and match.group(2) == u'T':
+                    checklist_complete += 1
+                if interview.name.startswith(u'review_') and match.group(3) == u'T':
+                    checklist_complete += 1
+    interview_percent = u'&ndash;'
+    if interview_count > 0:
+        interview_percent = u'{}%'.format(interview_complete * 100 / interview_count)
+    checklist_percent = u'&ndash;'
+    if checklist_count > 0:
+        checklist_percent = u'{}%'.format(checklist_complete * 100 / checklist_count)
+    jinja_template_values[u'interview_count'] = interview_count
+    jinja_template_values[u'interview_complete'] = interview_complete
+    jinja_template_values[u'interview_percent'] = interview_percent
+    jinja_template_values[u'checklist_count'] = checklist_count
+    jinja_template_values[u'checklist_complete'] = checklist_complete
+    jinja_template_values[u'checklist_percent'] = checklist_percent
+
     # Set workflow
     workflow_interviews = list()
-    interview_service = InterviewService(project)
     for root_interview_name in interview_service.get_root_interview_names():
         interview = interview_service.get_interview_by_name(root_interview_name)
         if interview and interview.assigned_email == current_email.lower() and not interview.completed and not interview.assigned_interview_id and interview_service.are_prereqs_complete(
@@ -640,6 +674,16 @@ def get_variable_by_name(template, variable_name):
 
 def get_variables(project):
     return Variable.query(ancestor=project.key).order(Variable.name).fetch()
+
+
+def parse_checklist_item(checklist_item):
+    match = None
+    while True:
+        match = checklist_pattern.search(checklist_item)
+        if match:
+            break
+        checklist_item += u'[F][F]'
+    return match
 
 
 def set_bookmark(root_interview, current_interview):

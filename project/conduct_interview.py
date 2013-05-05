@@ -8,7 +8,6 @@ import dao
 import ui
 from service.interview_service import InterviewService
 
-checklist_pattern = re.compile(r'(.*)\[([FT])\]\[([FT])\]')
 dot_pattern_with_one_group = re.compile(r'(.*)\.\d*')
 indexed_name_pattern = re.compile(r'(.*)\[(.*)\]')
 
@@ -212,15 +211,6 @@ class RequestHandler(webapp2.RequestHandler):
                     return
         self.redirect(u'/project?project_id={}'.format(project.key.id()))
 
-    def parse_checklist_item(self, checklist_item):
-        match = None
-        while True:
-            match = checklist_pattern.search(checklist_item)
-            if match:
-                break
-            checklist_item += u'[F][F]'
-        return match
-
     def render(self, project, interview_name, interview_service, index, error_msg=None):
         interview_service.set_bookmark(interview_name)
         interview = interview_service.get_interview_by_name(interview_name)
@@ -250,7 +240,7 @@ class RequestHandler(webapp2.RequestHandler):
 
         for checklist_index in range(len(interview.checklist_items)):
             checklist_item = interview.checklist_items[checklist_index]
-            match = self.parse_checklist_item(checklist_item)
+            match = dao.parse_checklist_item(checklist_item)
             inner_template_values[u'writer_check_{}'.format(checklist_index)] = (match.group(2) == u'T')
             inner_template_values[u'reviewer_check_{}'.format(checklist_index)] = (match.group(3) == u'T')
 
@@ -301,7 +291,7 @@ class RequestHandler(webapp2.RequestHandler):
 
     def update_checklists(self, interview):
         for index in range(len(interview.checklist_items)):
-            match = self.parse_checklist_item(interview.checklist_items[index])
+            match = dao.parse_checklist_item(interview.checklist_items[index])
             if interview.is_writer_interview:
                 writer_check = u'T' if self.request.get(u'_writer_check_{}'.format(index)) else u'F'
                 reviewer_check = match.group(3)

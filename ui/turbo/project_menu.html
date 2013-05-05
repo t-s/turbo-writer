@@ -1,84 +1,117 @@
 {% include "site_menu.html" %}
-<div class="menu-separator">{{ project.name | e }}:</div>
-<ul class="project-menu">
-    <li class="topfirst"><a href="/project?project_id={{ project.key.id() }}" style="height:16px;line-height:16px;">Project
-        Home</a></li>
-    {% if documents %}
-    <li><a href="#" style="height:16px;line-height:16px;">View Documents</a>
-        <ul>
-            {% for document in documents %}
-            <li>
-                <a href="/project/produce_document?project_id={{ project.key.id() }}&document_id={{ document.key.id() }}"
-                        >{{ document.name }}</a></li>
-            {% endfor %}
-        </ul>
-    </li>
-    {% endif %}
-    {% if assign_writer_interviews %}
-    <li><a href="#" style="height:16px;line-height:16px;">Assign Writers</a>
-        <ul>
-            {% for interview in assign_writer_interviews %}
-            <li><a href="/project/conduct_interview?_project_id={{
+<table class="menu-table">
+    <tr>
+        <td>
+            <div class="menu-separator">{{ project.name | e }}:</div>
+            <ul class="project-menu">
+                <li class="topfirst"><a href="/project?project_id={{ project.key.id() }}"
+                                        style="height:16px;line-height:16px;">Project
+                    Home</a></li>
+                {% if documents %}
+                <li><a href="#" style="height:16px;line-height:16px;">View Documents</a>
+                    <ul>
+                        {% for document in documents %}
+                        <li>
+                            <a href="/project/produce_document?project_id={{ project.key.id() }}&document_id={{ document.key.id() }}"
+                                    >{{ document.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endif %}
+                {% if assign_writer_interviews %}
+                <li><a href="#" style="height:16px;line-height:16px;">Assign Writers</a>
+                    <ul>
+                        {% for interview in assign_writer_interviews %}
+                        <li><a href="/project/conduct_interview?_project_id={{
                                     project.key.id() }}&_interview_name={{
                                     interview.name }}{% if interview.show_index %}&_index={{
                                     interview.index }}{% endif %}">{{
-                interview.menu_title }}</a></li>
-            {% endfor %}
-        </ul>
-    </li>
-    {% endif %}
-    {% if assign_reviewer_interviews %}
-    <li><a href="#" style="height:16px;line-height:16px;">Assign Reviewers</a>
-        <ul>
-            {% for interview in assign_reviewer_interviews %}
-            <li><a href="/project/conduct_interview?_project_id={{
+                            interview.menu_title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endif %}
+                {% if assign_reviewer_interviews %}
+                <li><a href="#" style="height:16px;line-height:16px;">Assign Reviewers</a>
+                    <ul>
+                        {% for interview in assign_reviewer_interviews %}
+                        <li><a href="/project/conduct_interview?_project_id={{
                                     project.key.id() }}&_interview_name={{
                                     interview.name }}{% if interview.show_index %}&_index={{
                                     interview.index }}{% endif %}">{{
-                interview.menu_title }}</a></li>
-            {% endfor %}
-        </ul>
-    </li>
-    {% endif %}
-    {% if writer_interviews %}
-    <li><a href="#" style="height:16px;line-height:16px;">Write</a>
-        <ul>
-            {% for interview in writer_interviews %}
-            <li><a href="/project/conduct_interview?_project_id={{
+                            interview.menu_title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endif %}
+                {% if writer_interviews %}
+                <li><a href="#" style="height:16px;line-height:16px;">Write</a>
+                    <ul>
+                        {% for interview in writer_interviews %}
+                        <li><a href="/project/conduct_interview?_project_id={{
                                     project.key.id() }}&_interview_name={{
                                     interview.name }}{% if interview.show_index %}&_index={{
                                     interview.index }}{% endif %}">{{
-                interview.menu_title }}</a></li>
-            {% endfor %}
-        </ul>
-    </li>
-    {% endif %}
-    {% if reviewer_interviews %}
-    <li><a href="#" style="height:16px;line-height:16px;">Review</a>
-        <ul>
-            {% for interview in reviewer_interviews %}
-            <li><a href="/project/conduct_interview?_project_id={{
+                            interview.menu_title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endif %}
+                {% if reviewer_interviews %}
+                <li><a href="#" style="height:16px;line-height:16px;">Review</a>
+                    <ul>
+                        {% for interview in reviewer_interviews %}
+                        <li><a href="/project/conduct_interview?_project_id={{
                                     project.key.id() }}&_interview_name={{
                                     interview.name }}{% if interview.show_index %}&_index={{
                                     interview.index }}{% endif %}">{{
-                interview.menu_title }}</a></li>
-            {% endfor %}
-        </ul>
-    </li>
-    {% endif %}
-    {% if is_owner %}
-    <li class="toplast"><a href="#" style="height:16px;line-height:16px;">Project Administration</a>
-        <ul>
-            <li>
-                <a href="/project_admin/project_settings?project_id={{ project.key.id() }}">Settings</a>
-            </li>
-            <li><a href="/project_admin/project_user_admin?project_id={{ project.key.id() }}"
-                    >Team Members</a>
-            </li>
-        </ul>
-    </li>
-    {% else %}
-    <li class="toplast"><a href="/project_admin/project_user_admin?project_id={{ project.key.id() }}" style="height:16px;line-height:16px;">Team Members</a>
-    </li>
-    {% endif %}
-</ul>
+                            interview.menu_title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endif %}
+                {% if is_owner %}
+                <li class="toplast"><a href="#" style="height:16px;line-height:16px;">Project Administration</a>
+                    <ul>
+                        <li>
+                            <a href="/project_admin/project_settings?project_id={{ project.key.id() }}">Settings</a>
+                        </li>
+                        <li><a href="/project_admin/project_user_admin?project_id={{ project.key.id() }}"
+                                >Team Members</a>
+                        </li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="toplast"><a href="/project_admin/project_user_admin?project_id={{ project.key.id() }}"
+                                       style="height:16px;line-height:16px;">Team Members</a>
+                </li>
+                {% endif %}
+            </ul>
+        </td>
+        <td style="vertical-align: bottom;">
+            <table class="progress-table">
+                <tr>
+                    <td class="progress-title" colspan="2">
+                        PROGRESS
+                    </td>
+                </tr>
+                <tr>
+                    <td class="progress-cell-interview">
+                        INTERVIEWS
+                        <br/>
+                        {{ interview_complete }} of {{ interview_count }}
+                        <br/>
+                        <span class="progress-percent">{{ interview_percent }}</span>
+                    </td>
+                    <td class="progress-cell-checklist">
+                        CHECKMARKS
+                        <br/>
+                        {{ checklist_complete }} of {{ checklist_count }}
+                        <br/>
+                        <span class="progress-percent">{{ checklist_percent }}</span>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
