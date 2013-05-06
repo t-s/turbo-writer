@@ -36,6 +36,11 @@ th {
     width: 100%;
 }
 
+.css-sample {
+    border-style: inset;
+    border-width: 2px;
+}
+
 .error {
     color: red;
 }
