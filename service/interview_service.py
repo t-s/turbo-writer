@@ -44,10 +44,7 @@ class InterviewService():
             cloned_interview = interview.clone(self.project, suffix)
             cloned_interview.assigned_index = int(suffix)
             cloned_interview.put()
-            child_interview_names = []
-            if cloned_interview.child_interview_names:
-                child_interview_names = cloned_interview.child_interview_names.split(u'|')
-            for child_interview_name in child_interview_names:
+            for child_interview_name in cloned_interview.child_interview_names:
                 tokens = child_interview_name.split(u'.')
                 child_interview_name_base = u'.'.join(tokens[0:len(tokens) - 1])
                 self.clone_hierarchy(child_interview_name_base, suffix, internal=True)
@@ -65,8 +62,7 @@ class InterviewService():
     def get_closest_ancestor_interview_with_content(self, interview_name):
         for interview in self.interviews:
             if interview.child_interview_names:
-                child_interview_names = interview.child_interview_names.split(u'|')
-                if interview_name in child_interview_names:
+                if interview_name in interview.child_interview_names:
                     if interview.content:
                         return interview
                     return self.get_closest_ancestor_interview_with_content(interview.name)
@@ -74,15 +70,13 @@ class InterviewService():
     def get_first_child_interview_with_content(self, interview_name):
         interview = self.get_interview_by_name(interview_name)
         if interview and interview.child_interview_names:
-            child_interview_names = interview.child_interview_names.split(u'|')
-            return self.get_first_interview_with_content(child_interview_names[0].strip())
+            return self.get_first_interview_with_content(interview.child_interview_names[0].strip())
 
     def get_first_interview_with_content(self, root_interview_name):
         interview = self.get_interview_by_name(root_interview_name)
         while interview and not interview.content:
             if interview.child_interview_names:
-                child_interview_names = interview.child_interview_names.split(u'|')
-                interview = self.get_interview_by_name(child_interview_names[0].strip())
+                interview = self.get_interview_by_name(interview.child_interview_names[0].strip())
         return interview
 
     def get_dependent_interviews(self, i1):
@@ -174,7 +168,7 @@ class InterviewService():
     def get_next_name_in_child(self, interview_name, current_name):
         interview = self.get_interview_by_name(interview_name)
         if interview and interview.child_interview_names and len(interview.child_interview_names):
-            child_interview_names = interview.child_interview_names.split(u'|')
+            child_interview_names = interview.child_interview_names
             try:
                 index = child_interview_names.index(current_name)
                 return child_interview_names[index + 1] if index < (len(child_interview_names) - 1) else None
@@ -185,7 +179,7 @@ class InterviewService():
     def get_parent_interview(self, child_interview):
         for interview in self.interviews:
             if interview.child_interview_names:
-                if child_interview.name in interview.child_interview_names.split(u'|'):
+                if child_interview.name in interview.child_interview_names:
                     return interview
 
     def get_prereq_interviews(self, i1):
@@ -216,7 +210,7 @@ class InterviewService():
     def get_previous_name_in_child(self, interview_name, current_name):
         interview = self.get_interview_by_name(interview_name)
         if interview and interview.child_interview_names and len(interview.child_interview_names):
-            child_interview_names = interview.child_interview_names.split(u'|')
+            child_interview_names = interview.child_interview_names
             try:
                 index = child_interview_names.index(current_name)
                 return child_interview_names[index - 1] if index else None

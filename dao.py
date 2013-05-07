@@ -120,8 +120,7 @@ class Interview(ndb.Model):
     name = ndb.StringProperty(u'n', required=True)
     root_interview_name = ndb.StringProperty(u'rin', required=True)
     prereq_interview_names = ndb.StringProperty(u'pin', repeated=True)  # Used only in the root node
-    child_interview_names = ndb.StringProperty(
-        u'cin')  # Used for nodes with child nodes: pipe-separated interview names  # TODO Convert to "repeated=True"
+    child_interview_names = ndb.StringProperty(u'cin', repeated=True)  # Used for nodes with child nodes
     is_writer_interview = ndb.BooleanProperty(u'iwi')
     menu_title = ndb.StringProperty(u'mt')  # Used only in the root node; defaults to u'Conduct Interview'
     content = ndb.TextProperty(u'content', compressed=True)  # None if navigation is directly to first child
@@ -166,11 +165,9 @@ class Interview(ndb.Model):
         for prereq_interview_name in self.prereq_interview_names:
             prereq_interview_names_with_suffix.append(mask.format(prereq_interview_name, suffix))
 
-        child_interview_names_with_suffix = None
+        child_interview_names_with_suffix = []
         if self.child_interview_names:
-            child_interview_names_with_suffix = u'|'.join(
-                [mask.format(name, suffix) for name in self.child_interview_names.split(u'|')]
-            )
+            child_interview_names_with_suffix = [mask.format(name, suffix) for name in self.child_interview_names]
 
         return Interview(name=mask.format(self.name, suffix),
                          root_interview_name=mask.format(self.root_interview_name, suffix),

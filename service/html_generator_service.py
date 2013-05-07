@@ -156,7 +156,7 @@ class HtmlGeneratorService():
         interview = dao.Interview(name=u'assign_writer_parent_{}'.format(assignment.name),
                                   root_interview_name=u'assign_writer_parent_{}'.format(assignment.name),
                                   completed_button=u'Done', child_button=u'Add Writing Assignment',
-                                  child_interview_names=u'assign_writer_{}'.format(assignment.name),
+                                  child_interview_names=[u'assign_writer_{}'.format(assignment.name)],
                                   menu_title=u'{}'.format(assignment.name), assignment_name=assignment.name,
                                   parent=self.template.key)
 
