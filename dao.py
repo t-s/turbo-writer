@@ -4,6 +4,8 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext import blobstore
 from google.appengine.ext.blobstore import BlobInfo
+
+from lib import crc16pure
 from service.interview_service import InterviewService
 from service.dropbox_service import DropboxService
 
@@ -280,6 +282,9 @@ class Variable(ndb.Model):
 def convert_name_to_internal_name(name):
     internal_name = re.sub(r'[\s]+', u'_', name.strip())
     internal_name = re.sub(r'[\W]+', u'', internal_name)
+    if internal_name[0].isdigit():
+        internal_name = u'v{}'.format(internal_name)
+    internal_name = u'{}_{}'.format(internal_name, crc16pure.crc16xmodem(str(name)))
     return internal_name
 
 
