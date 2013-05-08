@@ -59,3 +59,46 @@ th {
     font-style: italic;
     font-weight: bold;
 }
+
+#enterprise-logo {
+    margin-right: 10px;
+}
+
+#header-byline {
+    color: dimgrey;
+    font-family: monospace;
+    font-size: 12pt;
+    /* text-shadow: darkgrey 2px 2px 5px; */
+}
+
+#header-logo {
+    height: 50px;
+}
+
+#header-menu {
+    float: right;
+    font-size: 10pt;
+    margin: 20px;
+}
+
+#header-menu a:hover {
+    text-decoration: none;
+}
+
+#header-top {
+    width: 100%;
+}
+
+#header-top a {
+    color: black;
+    font-style: normal;
+    font-weight: normal;
+}
+
+#footer-copyright {
+    color: grey;
+    font-style: italic;
+    font-size: 10pt;
+    margin-top: 16px;
+    text-align: center;
+}
