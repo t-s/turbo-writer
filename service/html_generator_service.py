@@ -25,9 +25,9 @@ class HtmlGeneratorService():
         document_items = dao.get_document_items(document)
         for index in range(len(document_items)):
             document_item = document_items[index]
-            if not document_item.variable_name:
-                continue;
             item_type = document_item.item_type
+            if item_type != dao.TEXT and not document_item.variable_name:
+                continue;
             flow_control = document_item.flow_control
             # Set begin/within/end repeating group and index_variable_name
             if within_repeating_group:
