@@ -63,13 +63,12 @@ class Assignment(ndb.Model):
     variable_names = ndb.StringProperty(u'vn', repeated=True)
     checklist_items = ndb.TextProperty(u'ci', repeated=True)
 
-
-def clone(self, project):
-    return Assignment(name=self.name, description=self.description,
-                      prereq_assignment_names=self.prereq_assignment_names, is_repeating=self.is_repeating,
-                      instructions_to_manager=self.instructions_to_manager,
-                      instructions_to_writer=self.instructions_to_writer,
-                      variable_names=self.variable_names, checklist_items=self.checklist_items, parent=project.key)
+    def clone(self, project):
+        return Assignment(name=self.name, description=self.description,
+                          prereq_assignment_names=self.prereq_assignment_names, is_repeating=self.is_repeating,
+                          instructions_to_manager=self.instructions_to_manager,
+                          instructions_to_writer=self.instructions_to_writer,
+                          variable_names=self.variable_names, checklist_items=self.checklist_items, parent=project.key)
 
 
 class Document(ndb.Model):
