@@ -47,14 +47,23 @@ class RequestHandler(webapp2.RequestHandler):
                 html_generator_service.generate_all_html()
 
                 # Copy entities owned by the template entity into the project
+                for assignment_entity in dao.get_assignments(template_entity):
+                    assignment_entity.clone(project).put()
+
                 for document_entity in dao.get_documents(template_entity):
-                    document_entity.clone(project).put()
+                    template_document_entity = document_entity.clone(project)
+                    template_document_entity.put()
+                    for document_item_entity in dao.get_document_items(template_document_entity):
+                        document_item_entity.clone(template_document_entity).put()
 
                 for interview_entity in dao.get_interviews(template_entity):
                     cloned_interview_entity = interview_entity.clone(project)
                     if cloned_interview_entity.auto_assign:
                         cloned_interview_entity.assigned_email = current_email
                     cloned_interview_entity.put()
+
+                for style_entity in dao.get_styles(template_entity):
+                    style_entity.clone(project).put()
 
                 for variable_entity in dao.get_variables(template_entity):
                     variable_entity.clone(project).put()
