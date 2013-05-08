@@ -27,7 +27,7 @@
 <div id="header-band"></div>
 <div style="height: 10px;"></div>
 
-<table>
+<table width=100%>
     <tr>
         <td style="vertical-align: top; width: 300px;">
             {% include "project_menu.html" %}
@@ -38,6 +38,31 @@
 
             <div style="font-size: 14pt; font-weight: bold; margin-left: 20px">{{ project.name | e}}</div>
             {% block workspace %}{% endblock %}
+        </td>
+        <td style="vertical-align: top">
+            <table class="progress-table">
+                <tr>
+                    <td class="progress-title" colspan="2">
+                        PROGRESS
+                    </td>
+                </tr>
+                <tr>
+                    <td class="progress-cell-interview">
+                        INTERVIEWS
+                        <br/>
+                        {{ interview_complete }} of {{ interview_count }}
+                        <br/>
+                        <span class="progress-percent">{{ interview_percent }}</span>
+                    </td>
+                    <td class="progress-cell-checklist">
+                        CHECKMARKS
+                        <br/>
+                        {{ checklist_complete }} of {{ checklist_count }}
+                        <br/>
+                        <span class="progress-percent">{{ checklist_percent }}</span>
+                    </td>
+                </tr>
+            </table>
         </td>
     </tr>
 </table>
