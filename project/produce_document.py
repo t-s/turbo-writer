@@ -2,6 +2,7 @@ import re
 import webapp2
 import dao
 import ui
+from service.html_generator_service import HtmlGeneratorService
 from service.document_service import DocumentService
 
 indexed_name_pattern = re.compile(r'(.*)\[(.*)\]')

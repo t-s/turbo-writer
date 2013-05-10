@@ -1,0 +1,200 @@
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script xmlns="http://www.w3.org/1999/html">
+
+    function add_to_css(property, value) {
+        css = $("#css");
+        style = css.val();
+        i1 = style.indexOf(property);
+        if (i1 >= 0) {
+            newStyle = style.substring(0, i1);
+            i2 = style.indexOf(";", i1);
+            if (i2 >= 0) {
+                newStyle += style.substring(i2 + 1).trim();
+            }
+            style = newStyle;
+        }
+        style = style.trim();
+        if (style.length > 0) {
+            if (style.charAt(style.length - 1) != ";") {
+                style += ";";
+            }
+            style += " ";
+        }
+        style += property + ": " + value + ";";
+        css.val(style);
+        update_sample()
+    }
+
+    function update_sample() {
+        css = $("#css");
+        style = css.val()
+        index = 0;
+        while (true) {
+            colon_index = style.indexOf(":", index);
+            if (colon_index < 0) {
+                break;
+            }
+            semicolon_index = style.indexOf(";", colon_index);
+            if (semicolon_index < 0) {
+                semicolon_index = style.length
+            }
+            prop = style.substring(index, colon_index).trim();
+            val = style.substring(colon_index + 1, semicolon_index).trim();
+            $('#sample').css(prop, val);
+            index = semicolon_index + 1;
+        }
+    }
+
+</script>
+
+<p>
+    Shortcuts:
+<ul>
+    <li>Set color to:
+        <a onclick="add_to_css('color', 'black')" style="text-decoration: underline">black</a>
+        |
+        <a onclick="add_to_css('color', 'blue')" style="text-decoration: underline">blue</a>
+        |
+        <a onclick="add_to_css('color', 'gray')" style="text-decoration: underline">gray</a>
+        |
+        <a onclick="add_to_css('color', 'lightgray')" style="text-decoration: underline">lightgray</a>
+        |
+        <a onclick="add_to_css('color', 'lightgreen')" style="text-decoration: underline">lightgreen</a>
+        |
+        <a onclick="add_to_css('color', 'red')" style="text-decoration: underline">red</a>
+        |
+        <a onclick="add_to_css('color', 'white')" style="text-decoration: underline">white</a>
+    <li>Set font-family to:
+        <br/>
+        - Cursive:
+        <a onclick="add_to_css('font-family', 'Comic Sans MS, cursive')" style="text-decoration: underline">Comic
+            Sans MS</a>
+        |
+        <a onclick="add_to_css('font-family', 'Lucida Handwriting, cursive')" style="text-decoration: underline">
+            Lucida Handwriting</a>
+        |
+        <a onclick="add_to_css('font-family', 'Zapf Chancery, cursive')" style="text-decoration: underline">Zapf
+            Chancery</a>
+        |
+        <a onclick="add_to_css('font-family', 'cursive')" style="text-decoration: underline">cursive (generic)</a>
+        <br/>
+        - Fantasy:
+        <a onclick="add_to_css('font-family', 'Copperplate, fantasy')"
+           style="text-decoration: underline">Copperplate</a>
+        |
+        <a onclick="add_to_css('font-family', 'Desdemona, fantasy')" style="text-decoration: underline">Desdemona</a>
+        |
+        <a onclick="add_to_css('font-family', 'Impact, fantasy')" style="text-decoration: underline">Impact</a>
+        |
+        <a onclick="add_to_css('font-family', 'Kino, fantasy')" style="text-decoration: underline">Kino</a>
+        |
+        <a onclick="add_to_css('font-family', 'fantasy')" style="text-decoration: underline">fantasy (generic)</a>
+        <br/>
+        - Monospace:
+        <a onclick="add_to_css('font-family', 'Courier, monospace')" style="text-decoration: underline">Courier</a>
+        |
+        <a onclick="add_to_css('font-family', 'Courier New, monospace')" style="text-decoration: underline">Courier
+            New</a>
+        |
+        <a onclick="add_to_css('font-family', 'Lucida Console, monospace')" style="text-decoration: underline">Lucida
+            Console</a>
+        |
+        <a onclick="add_to_css('font-family', 'Monaco, monospace')" style="text-decoration: underline">Monaco</a>
+        |
+        <a onclick="add_to_css('font-family', 'monospace')" style="text-decoration: underline">monospace (generic)</a>
+        <br/>
+        - Sans-Serif:
+        <a onclick="add_to_css('font-family', 'Arial, sans-serif')" style="text-decoration: underline">Arial</a>
+        |
+        <a onclick="add_to_css('font-family', 'Arial Black, sans-serif')" style="text-decoration: underline">Arial
+            Black</a>
+        |
+        <a onclick="add_to_css('font-family', 'Charcoal, sans-serif')" style="text-decoration: underline">Charcoal</a>
+        |
+        <a onclick="add_to_css('font-family', 'Gadget, sans-serif')" style="text-decoration: underline">Gadget</a>
+        |
+        <a onclick="add_to_css('font-family', 'Geneva, sans-serif')" style="text-decoration: underline">Geneva</a>
+        |
+        <a onclick="add_to_css('font-family', 'Helvetica, sans-serif')" style="text-decoration: underline">Helvetica</a>
+        |
+        <a onclick="add_to_css('font-family', 'Lucida Grande, sans-serif')" style="text-decoration: underline">Lucida
+            Grande</a>
+        |
+        <a onclick="add_to_css('font-family', 'Lucida Sans Unicode, sans-serif')" style="text-decoration: underline">Lucida
+            Sans Unicode</a>
+        |
+        <a onclick="add_to_css('font-family', 'Tahoma, sans-serif')"
+           style="text-decoration: underline">Tahoma</a>
+        |
+        <a onclick="add_to_css('font-family', 'Trebuchet MS, sans-serif')" style="text-decoration: underline">Trebuchet
+            MS</a>
+        |
+        <a onclick="add_to_css('font-family', 'Verdana, sans-serif')" style="text-decoration: underline">Verdana</a>
+        |
+        <a onclick="add_to_css('font-family', 'sans-serif')" style="text-decoration: underline">sans-serif (generic)</a>
+        <br/>
+        - Serif:
+        <a onclick="add_to_css('font-family', 'Garamond, serif')" style="text-decoration: underline">Garamond</a>
+        |
+        <a onclick="add_to_css('font-family', 'Georgia, serif')" style="text-decoration: underline">Georgia</a>
+        |
+        <a onclick="add_to_css('font-family', 'New York, serif')" style="text-decoration: underline">New York</a>
+        |
+        <a onclick="add_to_css('font-family', 'Palatino Linotype, serif')" style="text-decoration: underline">Palatino
+            Linotype</a>
+        |
+        <a onclick="add_to_css('font-family', 'Times New Roman, serif')" style="text-decoration: underline">Times New
+            Roman</a>
+        |
+        <a onclick="add_to_css('font-family', 'serif')" style="text-decoration: underline">serif (generic)</a>
+    <li>Set font-size to:
+        <a onclick="add_to_css('font-size', '8pt')" style="text-decoration: underline">8pt</a>
+        |
+        <a onclick="add_to_css('font-size', '10pt')" style="text-decoration: underline">10pt</a>
+        |
+        <a onclick="add_to_css('font-size', '12pt')" style="text-decoration: underline">12pt</a>
+        |
+        <a onclick="add_to_css('font-size', '14pt')" style="text-decoration: underline">14pt</a>
+        |
+        <a onclick="add_to_css('font-size', '18pt')" style="text-decoration: underline">18pt</a>
+        |
+        <a onclick="add_to_css('font-size', '24pt')" style="text-decoration: underline">24pt</a>
+        |
+        <a onclick="add_to_css('font-size', '36pt')" style="text-decoration: underline">36pt</a>
+    <li>Set font-style to:
+        <a onclick="add_to_css('font-style', 'italic')" style="text-decoration: underline">italic</a>
+        |
+        <a onclick="add_to_css('font-style', 'normal')" style="text-decoration: underline">normal</a>
+    <li>Set font-weight to:
+        <a onclick="add_to_css('font-weight', 'bold')" style="text-decoration: underline">bold</a>
+        |
+        <a onclick="add_to_css('font-weight', 'normal')" style="text-decoration: underline">normal</a>
+    <li>Set margin-left to:
+        <a onclick="add_to_css('margin-left', '0')" style="text-decoration: underline">0</a>
+        |
+        <a onclick="add_to_css('margin-left', '25')" style="text-decoration: underline">25</a>
+        |
+        <a onclick="add_to_css('margin-left', '50')" style="text-decoration: underline">50</a>
+        |
+        <a onclick="add_to_css('margin-left', '75')" style="text-decoration: underline">75</a>
+        |
+        <a onclick="add_to_css('margin-left', '100')" style="text-decoration: underline">100</a>
+    <li>Set margin-right to:
+        <a onclick="add_to_css('margin-right', '0')" style="text-decoration: underline">0</a>
+        |
+        <a onclick="add_to_css('margin-right', '25')" style="text-decoration: underline">25</a>
+        |
+        <a onclick="add_to_css('margin-right', '50')" style="text-decoration: underline">50</a>
+        |
+        <a onclick="add_to_css('margin-right', '75')" style="text-decoration: underline">75</a>
+        |
+        <a onclick="add_to_css('margin-right', '100')" style="text-decoration: underline">100</a>
+    <li>Set text-align to:
+        <a onclick="add_to_css('text-align', 'center')" style="text-decoration: underline">center</a>
+        |
+        <a onclick="add_to_css('text-align', 'left')" style="text-decoration: underline">left</a>
+        |
+        <a onclick="add_to_css('text-align', 'right')" style="text-decoration: underline">right</a>
+
+</ul>
+</p>

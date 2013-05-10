@@ -6,6 +6,7 @@ from google.appengine.ext import blobstore
 from google.appengine.ext.blobstore import BlobInfo
 
 from lib import crc16pure
+from service.html_generator_service import HtmlGeneratorService
 from service.interview_service import InterviewService
 from service.dropbox_service import DropboxService
 
@@ -187,6 +188,9 @@ class Project(ndb.Model):
     name = ndb.StringProperty(u'n', required=True)
     project_type = ndb.StringProperty(u't', required=True)  # PROJECT/PRIVATE_TEMPLATE/PUBLIC_TEMPLATE
     description = ndb.TextProperty(u'd')
+    has_assignment_definition_changed = ndb.BooleanProperty(u'hadc')
+    has_document_definition_changed = ndb.BooleanProperty(u'hddc')
+    any_interview_conducted = ndb.BooleanProperty(u'aic')
     add_date = ndb.DateTimeProperty(u'ad', auto_now_add=True)
     update_date = ndb.DateTimeProperty(u'ud', auto_now=True)
 
@@ -482,8 +486,29 @@ def get_site_users():
 def get_standard_project_values(project):
     jinja_template_values = get_standard_site_values()
     current_user = users.get_current_user()
-    current_email = current_user.email()
+    current_email = current_user.email().lower()
     jinja_template_values[u'project'] = project
+
+    # For updated definitions, generate new HTML
+    update_project = False
+    if not project.any_interview_conducted and project.has_assignment_definition_changed:
+        html_generator_service = HtmlGeneratorService(project)
+        html_generator_service.generate_all_assignments()
+        for interview in get_interviews(project):
+            if interview.auto_assign:
+                interview.assigned_email = current_email
+                interview.put()
+        project.has_assignment_definition_changed = False
+        update_project = True
+
+    if project.has_document_definition_changed:
+        html_generator_service = HtmlGeneratorService(project)
+        html_generator_service.generate_all_documents()
+        project.has_document_definition_changed = False
+        update_project = True
+
+    if update_project:
+        project.put()
 
     # Set documents
     jinja_template_values[u'documents'] = get_documents(project)
@@ -526,7 +551,7 @@ def get_standard_project_values(project):
     workflow_interviews = list()
     for root_interview_name in interview_service.get_root_interview_names():
         interview = interview_service.get_interview_by_name(root_interview_name)
-        if interview and interview.assigned_email == current_email.lower() and not interview.completed and not interview.assigned_interview_id and interview_service.are_prereqs_complete(
+        if interview and interview.assigned_email == current_email and not interview.completed and not interview.assigned_interview_id and interview_service.are_prereqs_complete(
                 interview):
             bookmark_interview_name = interview.bookmark_interview_name
             content_interview_entity = interview_service.get_interview_by_name(
@@ -570,6 +595,8 @@ def get_standard_project_values(project):
     project_user = get_project_user_by_email(project, current_email)
     if project_user:
         jinja_template_values[u'is_owner'] = project_user.is_owner
+
+    jinja_template_values[u'any_interviews'] = project.any_interview_conducted
 
     return jinja_template_values
 
@@ -804,6 +831,16 @@ def test_template_permitted(template):
         for template in get_private_templates_by_name(template.name):
             if test_email_in_template(template, site_user.email):
                 return True
+
+
+def touch_project_assignments(project):
+    project.has_assignment_definition_changed = True
+    project.put()
+
+
+def touch_project_documents(project):
+    project.has_document_definition_changed = True
+    project.put()
 
 
 # If datastore contains no site users, initialize it

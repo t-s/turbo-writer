@@ -1,0 +1,168 @@
+{% extends "project_base.html" %}
+
+{% block workspace %}
+
+<h3>Define Assignment Structure</h3>
+
+{% if error_msg %}
+<p>
+    <span class="error">{{ error_msg | e }}</span>
+</p>
+{% endif %}
+
+<form method="post">
+    <input type="hidden" name="project_id" value="{{ project.key.id() }}">
+    <input type="hidden" name="assignment_id" value="{{ assignment_id }}">
+    <table>
+        <tr>
+            <th>Assignment Name:</th>
+            <th>{{ name | e }}</th>
+        </tr>
+    </table>
+    <h3>Prerequisite Assignments</h3>
+    <table class="bordered_table">
+        {% if prereq_assignment_names %}
+        <tr>
+            <th class="bordered_cell">Prerequisite</th>
+            <th class="bordered_cell">Position</th>
+        </tr>
+        {% endif %}
+        {% for prereq_assignment_name in prereq_assignment_names %}
+        <tr>
+            <td class="bordered_cell">
+                Prerequisite Assignment:
+                <select name="prereq_assignment_name.{{ loop.index }}">
+                    <option value="">(select)</option>
+                    {% for assignment_name in assignment_names %}
+                    <option value="{{ assignment_name | e }}"
+                    {% if prereq_assignment_name == assignment_name %} selected{% endif %}>{{ assignment_name | e }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td class="bordered_cell" style="text-align: center">
+                <input name="prereq_assignment_name_position.{{ loop.index }}" style="width: 30px" value="{{ loop.index }}"/>
+                <input type="submit" name="change_prereq_assignment_name_position.{{ loop.index }}" value="Change"/>
+                <input type="submit" name="remove_prereq_assignment_name_position.{{ loop.index }}" value="Remove"/>
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td class="bordered_cell" colspan="4" style="text-align: center">
+                <input type="submit" name="add_prereq_assignment_name"
+                       value="Add Prerequisite Assignment"/>
+            </td>
+        </tr>
+    </table>
+    <h3>Variables</h3>
+    <table class="bordered_table">
+        {% if variable_names %}
+        <tr>
+            <th class="bordered_cell">Variable Name</th>
+            <th class="bordered_cell">Position</th>
+        </tr>
+        {% endif %}
+        {% for variable_name in variable_names %}
+        <tr>
+            <td class="bordered_cell">
+                {% if is_repeating %}
+                Repeating Variable:
+                <select name="variable_name.{{ loop.index }}">
+                    <option value="">(select)</option>
+                    {% for repeating_name in repeating_names %}
+                    <option value="{{ repeating_name | e }}"
+                    {% if variable_name == repeating_name %} selected{% endif %}>{{ repeating_name | e }}</option>
+                    {% endfor %}
+                </select>
+                {% else %}
+                Single Variable:
+                <select name="variable_name.{{ loop.index }}">
+                    <option value="">(select)</option>
+                    {% for single_name in single_names %}
+                    <option value="{{ single_name | e }}"
+                    {% if variable_name == single_name %} selected{% endif %}>{{ single_name | e }}</option>
+                    {% endfor %}
+                </select>
+                {% endif %}
+            </td>
+            <td class="bordered_cell" style="text-align: center">
+                <input name="variable_name_position.{{ loop.index }}" style="width: 30px" value="{{ loop.index }}"/>
+                <input type="submit" name="change_variable_name_position.{{ loop.index }}" value="Change"/>
+                <input type="submit" name="remove_variable_name_position.{{ loop.index }}" value="Remove"/>
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td class="bordered_cell" colspan="4" style="text-align: center">
+                <input type="submit" name="add_variable_name"
+                       value="Add {% if is_repeating %}Repeating{% else %}Single{% endif %} Variable"/>
+            </td>
+        </tr>
+    </table>
+    <h3>Checklist Items</h3>
+    <table class="bordered_table">
+        {% if checklist_items %}
+        <tr>
+            <th class="bordered_cell">Checklist Item</th>
+            <th class="bordered_cell">Position</th>
+        </tr>
+        {% endif %}
+        {% for checklist_item in checklist_items %}
+        <tr>
+            <th class="bordered_cell">
+                Checklist Item:
+                <textarea name="checklist_item.{{ loop.index }}" style="height: 48px; width: 500px">{{ checklist_item |
+                    e }}</textarea>
+            </th>
+            <td class="bordered_cell" style="text-align: center">
+                <input name="checklist_item_position.{{ loop.index }}" style="width: 30px" value="{{ loop.index }}"/>
+                <input type="submit" name="change_checklist_item_position.{{ loop.index }}" value="Change"/>
+                <input type="submit" name="remove_checklist_item_position.{{ loop.index }}" value="Remove"/>
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td class="bordered_cell" colspan="4" style="text-align: center">
+                <input type="submit" name="add_checklist_item" value="Add Checklist Item"/>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>Instructions to Manager:</th>
+            <td>
+                <textarea name="instructions_to_manager">{{ instructions_to_manager
+                    | e }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th>Instructions to Writer:</th>
+            <td>
+                <textarea name="instructions_to_writer">{{ instructions_to_writer |
+                    e }}</textarea>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input type="submit" name="update" value="Update Structure">
+            </td>
+            <td>
+                <input type="button" value="Cancel"
+                       onclick="document.location='/project/assignment?project_id={{ project.key.id() }}'">
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}

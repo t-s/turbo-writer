@@ -5,11 +5,17 @@ class HtmlGeneratorService():
     def __init__(self, template):
         self.template = template
 
-    def generate_all_html(self):
+    def generate_all_assignments(self):
         for assignment in dao.get_assignments(self.template):
             self.generate_interview_html(assignment)
+
+    def generate_all_documents(self):
         for document in dao.get_documents(self.template):
             self.generate_document_html(document)
+
+    def generate_all_html(self):
+        self.generate_all_assignments()
+        self.generate_all_documents()
 
     def generate_document_html(self, document):
         html = u''

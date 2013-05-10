@@ -41,6 +41,13 @@ th {
     border-width: 2px;
 }
 
+.disabled-anchor {
+    color: grey;
+    cursor: default;
+    pointer-events: none;
+    text-decoration: none;
+}
+
 .error {
     color: red;
 }

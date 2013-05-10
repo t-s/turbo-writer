@@ -1,0 +1,67 @@
+{% extends "project_base.html" %}
+
+{% block workspace %}
+
+<h3>Define Styles: Add New Style</h3>
+
+<p>
+    Use this page to specify the Cascading Style Sheet (CSS) notation for a style you wish to use in one or more of the
+    documents produced by this project.
+</p>
+<p>
+    <i>(Note: In the future, you'll enter styles by clicking options on a more complete control panel.)</i>
+</p>
+
+{% if error_msg %}
+<p>
+    <span class="error">{{ error_msg | e }}</span>
+</p>
+{% endif %}
+
+<form method="post">
+    <input type="hidden" name="project_id" value="{{ project.key.id() }}">
+    <table>
+        <tr>
+            <th>Style Name:</th>
+            <td><input name="name" value="{{ name | e }}" size="30" autofocus></td>
+        </tr>
+        <tr>
+            <th>Description:</th>
+            <td>
+                <textarea name="description">{{ description | e }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th>CSS:</th>
+            <td>
+                <input id="css" name="css" value="{{ css | e }}" style="width: 600px" onchange="update_sample()">
+
+                <div id="sample" class="css-sample" style="{{ css | e }}">
+                    ABCDEFGHIJKLMNOPQRSTUVWXYZ &ndash; The quick brown fox jumps over the lazy dog &ndash; 0123456789
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    {% include "project/style/shortcuts.html" %}
+
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input type="submit" value="Add Style">
+            </td>
+            <td>
+                <input type="button" value="Cancel"
+                       onclick="document.location='/project/style?project_id={{ project.key.id() }}'">
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}
+

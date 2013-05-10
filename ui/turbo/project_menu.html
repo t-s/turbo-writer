@@ -8,16 +8,18 @@
                                         style="height:16px;line-height:16px;">Project
                     Home</a></li>
                 {% if documents %}
-                <li><a href="#" style="height:16px;line-height:16px;">View Documents</a>
+                <li><a href="#" style="height:16px; line-height:16px;">View Documents</a>
                     <ul>
                         {% for document in documents %}
                         <li>
                             <a href="/project/produce_document?project_id={{ project.key.id() }}&document_id={{ document.key.id() }}"
                                     >{{ document.name }}</a></li>
                         {% endfor %}
+
                     </ul>
                 </li>
                 {% endif %}
+
                 {% if assign_writer_interviews %}
                 <li><a href="#" style="height:16px;line-height:16px;">Assign Writers</a>
                     <ul>
@@ -71,6 +73,25 @@
                 </li>
                 {% endif %}
                 {% if is_owner %}
+                <li><a href="#" style="height:16px;line-height:16px;">Project Definition</a>
+                    <ul>
+                        {% if any_interviews %}
+                        <li class="disabled-anchor"><a style="color: grey;">Define Assignments</a>
+                        </li>
+                        {% else %}
+                        <li><a href="/project/assignment?project_id={{ project.key.id() }}">Define Assignments</a>
+                        </li>
+                        {% endif %}
+                        <li><a href="/project/document?project_id={{ project.key.id() }}">Define Documents</a></li>
+                        <li><a href="/project/style?project_id={{ project.key.id() }}">Define Styles</a></li>
+                        {% if any_interviews %}
+                        <li class="disabled-anchor"><a style="color: grey;">Define Variables</a>
+                            {% else %}
+                        <li><a href="/project/variable?project_id={{ project.key.id() }}">Define Variables</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+
                 <li class="toplast"><a href="#" style="height:16px;line-height:16px;">Project Administration</a>
                     <ul>
                         <li>

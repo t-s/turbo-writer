@@ -53,7 +53,7 @@ class RequestHandler(webapp2.RequestHandler):
                 for document_entity in dao.get_documents(template_entity):
                     template_document_entity = document_entity.clone(project)
                     template_document_entity.put()
-                    for document_item_entity in dao.get_document_items(template_document_entity):
+                    for document_item_entity in dao.get_document_items(document_entity):
                         document_item_entity.clone(template_document_entity).put()
 
                 for interview_entity in dao.get_interviews(template_entity):

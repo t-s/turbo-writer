@@ -1,0 +1,74 @@
+{% extends "project_base.html" %}
+
+{% block workspace %}
+
+<h3>Define Variables: Edit Variable</h3>
+
+{% if error_msg %}
+<p>
+    <span class="error">{{ error_msg | e }}</span>
+</p>
+{% endif %}
+
+<form method="post">
+    <input type="hidden" name="project_id" value="{{ project.key.id() }}">
+    <input type="hidden" name="variable_id" value="{{ variable_id }}">
+    <table>
+        <tr>
+            <th>Variable Name: {{ name | e }}</th>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>Description:</th>
+            <td>
+                <textarea name="description" autofocus>{{ description | e }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th>Type:</th>
+            <td>
+                <input type="radio" name="type" value="single"{% if type == "single" %} checked{% endif %}> Single
+                <input type="radio" name="type" value="repeating"{% if type == "repeating" %} checked{% endif %}>
+                Repeating
+            </td>
+        </tr>
+        <tr>
+            <th>Input Field:</th>
+            <td>
+                <input type="radio" name="input_field" value="S"{% if input_field == "S" %} checked{% endif %}> Short
+                Field
+                <input type="radio" name="input_field" value="M"{% if input_field == "M" %} checked{% endif %}> Full
+                Line
+                <input type="radio" name="input_field" value="L"{% if input_field == "L" %} checked{% endif %}> Edit Box
+                <input type="radio" name="input_field" value="X"{% if input_field == "X" %} checked{% endif %}> File
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input type="submit" name="update" value="Update Variable">
+            </td>
+            <td>
+                <input type="submit" name="delete" value="Delete Variable from Project">
+            </td>
+            <td>
+                <input type="button" value="Cancel"
+                       onclick="document.location='/project/variable?project_id={{ project.key.id() }}'">
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}

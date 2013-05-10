@@ -6,6 +6,7 @@ from google.appengine.api import users
 
 import dao
 import ui
+from service.html_generator_service import HtmlGeneratorService
 from service.interview_service import InterviewService
 
 dot_pattern_with_one_group = re.compile(r'(.*)\.\d*')
@@ -152,6 +153,9 @@ class RequestHandler(webapp2.RequestHandler):
             interview.reviewer_comment = reviewer_comment
 
         interview.put()
+
+        project.any_interview_conducted = True
+        project.put()
 
         if self.request.get(u'_previous'):
             self.render(project, interview_service.get_previous_name(interview_name), interview_service, index)

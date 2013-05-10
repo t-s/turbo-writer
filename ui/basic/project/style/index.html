@@ -1,0 +1,36 @@
+{% extends "project_base.html" %}
+
+{% block workspace %}
+
+<h3>Define Styles</h3>
+
+<table class="bordered_table">
+    <tr>
+        <th class="bordered_cell">Style Name</th>
+        <th class="bordered_cell">Description</th>
+        <th class="bordered_cell">Definition</th>
+    </tr>
+    {% for style in styles %}
+    <tr>
+        <td class="bordered_cell">
+            <a href="/project/style/edit?project_id={{ project.key.id() }}&style_id={{ style.id }}"
+                >{{ style.name | e }}</a>
+        </td>
+        <td class="bordered_cell">
+            {{ style.description | e }}
+        </td>
+        <td class="bordered_cell">
+            {{ style.css }}
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td class="bordered_cell">
+            <a href="/project/style/add?project_id={{ project.key.id() }}">+</a>
+        </td>
+        <td class="bordered_cell"></td>
+        <td class="bordered_cell"></td>
+    </tr>
+</table>
+
+{% endblock %}

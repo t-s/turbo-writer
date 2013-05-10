@@ -48,6 +48,24 @@ app.router.add((u'/project/produce_document', project.produce_document.RequestHa
 app.router.add((u'/project/upload_file', project.upload_file.RequestHandler))
 app.router.add((u'/project/upload_file_post', project.upload_file.UploadHandler))
 
+app.router.add((u'/project/assignment', project.assignment.index.RequestHandler))
+app.router.add((u'/project/assignment/add', project.assignment.add.RequestHandler))
+app.router.add((u'/project/assignment/edit', project.assignment.edit.RequestHandler))
+app.router.add((u'/project/assignment/structure', project.assignment.structure.RequestHandler))
+
+app.router.add((u'/project/document', project.document.index.RequestHandler))
+app.router.add((u'/project/document/add', project.document.add.RequestHandler))
+app.router.add((u'/project/document/edit', project.document.edit.RequestHandler))
+app.router.add((u'/project/document/structure', project.document.structure.RequestHandler))
+
+app.router.add((u'/project/style', project.style.index.RequestHandler))
+app.router.add((u'/project/style/add', project.style.add.RequestHandler))
+app.router.add((u'/project/style/edit', project.style.edit.RequestHandler))
+
+app.router.add((u'/project/variable', project.variable.index.RequestHandler))
+app.router.add((u'/project/variable/add', project.variable.add.RequestHandler))
+app.router.add((u'/project/variable/edit', project.variable.edit.RequestHandler))
+
 app.router.add((u'/project_admin/new_project', new_project.RequestHandler))
 app.router.add((u'/project_admin/new_project_based_on_template', new_project_based_on_template.RequestHandler))
 app.router.add((u'/project_admin/project_settings', project_settings.RequestHandler))

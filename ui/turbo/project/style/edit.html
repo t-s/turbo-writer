@@ -1,0 +1,69 @@
+{% extends "project_base.html" %}
+
+{% block workspace %}
+
+<h3>Define Styles: Edit Style</h3>
+
+{% if error_msg %}
+<p>
+    <span class="error">{{ error_msg | e }}</span>
+</p>
+{% endif %}
+
+<form method="post">
+    <input type="hidden" name="project_id" value="{{ project.key.id() }}">
+    <input type="hidden" name="style_id" value="{{ style_id }}">
+    <table>
+        <tr>
+            <th>Style Name: {{ name | e }}</th>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>Description:</th>
+            <td>
+                <textarea name="description" autofocus>{{ description | e }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th>CSS:</th>
+            <td>
+                <input id="css" name="css" value="{{ css | e }}" style="width: 600px" onchange="update_sample()">
+
+                <div id="sample" class="css-sample" style="{{ css | e }}">
+                    ABCDEFGHIJKLMNOPQRSTUVWXYZ &ndash; The quick brown fox jumps over the lazy dog &ndash; 0123456789
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    {% include "project/style/shortcuts.html" %}
+
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input type="submit" name="update" value="Update Style">
+            </td>
+            <td>
+                <input type="submit" name="delete" value="Delete Style from Template">
+            </td>
+            <td>
+                <input type="button" value="Cancel"
+                       onclick="document.location='/project/style?project_id={{ project.key.id() }}'">
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}
+
