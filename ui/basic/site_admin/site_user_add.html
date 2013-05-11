@@ -24,13 +24,13 @@
     </table>
     <table class="bordered_table">
         <tr>
-            <th class="bordered_cell">Site Roles</th>
-            {% for role in roles %}
+            <th class="bordered_cell">Site Permissions</th>
         </tr>
+        {% for permission in permissions %}
         <tr>
             <td class="bordered_cell">
-                <input type="checkbox" name="{{ role.name | e }}" {% if role.checked %} checked {% endif %}>
-                {{ role.name | e }}
+                <input type="checkbox" name="{{ permission.name }}" {% if permission.checked %} checked {% endif %}>
+                {{ permission.name | e }}
             </td>
         </tr>
         {% endfor %}
@@ -53,4 +53,3 @@
 </form>
 
 {% endblock %}
-

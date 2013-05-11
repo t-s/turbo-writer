@@ -7,25 +7,24 @@
 <table class="bordered_table">
     <tr>
         <th class="bordered_cell">Email</th>
-        <th class="bordered_cell" colspan="{{ role_count }}">Site Roles</th>
+        <th class="bordered_cell">Site Permissions</th>
     </tr>
     {% for user in users %}
     <tr>
         <td class="bordered_cell">
-            <a href='/site_admin/site_user_edit?site_user_id={{ user["site_user_id"] }}'>{{ user["email"] | e }}</a>
+            <a href='/site_admin/site_user_edit?site_user_id={{ user.key.id() }}'>{{ user["email"] | e }}</a>
         </td>
-        {% for role in roles %}
         <td class="bordered_cell">
-            {{ role | e }}={{ user[role] }}
+            {% set first = True %}
+            {% for permission in user.site_permissions %}{% if not first %}, {% endif %}{{ permission }}{% set first = False %}{% endfor %}
         </td>
-        {% endfor %}
     </tr>
     {% endfor %}
     <tr>
         <td class="bordered_cell">
             <a href="/site_admin/site_user_add">+</a>
         </td>
-        <td class="bordered_cell" colspan="{{ role_count }}"></td>
+        <td class="bordered_cell"></td>
     </tr>
 </table>
 

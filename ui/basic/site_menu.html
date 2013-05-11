@@ -29,20 +29,20 @@
             </ul>
         </td>
     </tr>
-    {% if SITEPERMISSION_ADMIN %}
+    {% if SITE_ADMIN %}
         <tr>
             <td>
                 <b>Site Administration</b>
                 <ul>
-                    {% if SITEPERMISSION_ADMINSETTINGS %}
+                    {% if SITE_ADMIN_SETTINGS %}
                     <li><a href="/site_admin/site_settings">Site Settings</a></li>
                     {% endif %}
 
-                    {% if SITEPERMISSION_ADMINUSERS %}
+                    {% if SITE_ADMIN_USERS %}
                     <li><a href="/site_admin/site_user_admin">User Administration</a></li>
                     {% endif %}
 
-                    {% if SITEPERMISSION_ADMINTEMPLATES %}
+                    {% if SITE_ADMIN_TEMPLATES %}
                     <li><a href="/site_admin/template_admin">Template Gallery Administration</a></li>
                     {% endif %}
                 </ul>

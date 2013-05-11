@@ -24,13 +24,13 @@
     </table>
     <table border="1" cellpadding="5" cellspacing="0">
         <tr>
-            <th>Site Roles</th>
-            {% for role in roles %}
+            <th>Site Permissions</th>
         </tr>
+        {% for permission in permissions %}
         <tr>
             <td>
-                <input type="checkbox" name="{{ role.name | e }}" {{ role.checked }}>
-                {{ role.name | e }}
+                <input type="checkbox" name="{{ permission.name }}" {{ permission.checked }}>
+                {{ permission.name | e }}
             </td>
         </tr>
         {% endfor %}

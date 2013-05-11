@@ -5,7 +5,7 @@ import ui
 
 class RequestHandler(webapp2.RequestHandler):
     def get(self):
-        if not dao.test_permission(dao.SITEPERMISSION_ADMINTEMPLATES):
+        if not dao.test_site_permission(dao.SITE_ADMIN_TEMPLATES):
             webapp2.abort(401)
 
         jinja_template = ui.get_template(self, u'site_admin/template_admin.html')

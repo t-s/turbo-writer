@@ -34,14 +34,17 @@ PROJECT = u'J'
 PRIVATE_TEMPLATE = u'V'
 PUBLIC_TEMPLATE = u'U'
 
-SITE_MASTER = u'SiteMaster'
-SITE_MASTER_ADMIN = u'SiteTemplateAdmin'
+# Site permissions
+SITE_ADMIN = u'sp-a'
 
-SITEPERMISSION_ADMIN = u'sp-a'
-SITEPERMISSION_ADMINSETTINGS = u'sp-as'
-SITEPERMISSION_ADMINTEMPLATES = u'sp-at'
-SITEPERMISSION_ADMINUSERS = u'sp-au'
+SITE_ADMIN_SETTINGS = u'SITE_ADMIN_SETTINGS'
+SITE_ADMIN_TEMPLATES = u'SITE_ADMIN_TEMPLATES'
+SITE_ADMIN_USERS = u'SITE_ADMIN_USERS'
 
+def get_all_site_permissions():
+    return [SITE_ADMIN_SETTINGS, SITE_ADMIN_TEMPLATES, SITE_ADMIN_USERS]
+
+# Template permissions
 TEMPLATEPERMISSION_OWN = u'tp-o'
 TEMPLATEPERMISSION_EDIT = u'tp-e'
 TEMPLATEPERMISSION_USE = u'tp-u'
@@ -183,7 +186,7 @@ class Interview(ndb.Model):
 
 class Project(ndb.Model):
     """
-        The datastore contains one Project entity for each project on the site.
+        The datastore contains one Project entity for each project, and each template, on the site.
     """
     name = ndb.StringProperty(u'n', required=True)
     project_type = ndb.StringProperty(u't', required=True)  # PROJECT/PRIVATE_TEMPLATE/PUBLIC_TEMPLATE
@@ -197,37 +200,17 @@ class Project(ndb.Model):
 
 class ProjectUser(ndb.Model):
     """
-        The datastore contains one ProjectUser entity for each user associated with a project. At the time
+        The datastore contains one ProjectUser entity for each user associated with a template or project. At the time
         the user is added to the project, the user might or might not be registered as a site user.
 
         Parent must contain a Project key.
     """
     email = ndb.StringProperty(u'e', required=True)  # Stored as lowercase
     is_owner = ndb.BooleanProperty(u'io')
-    project_roles = ndb.StringProperty(u'pr', repeated=True)  # A list of ProjectRole IDs
+    template_permissions = ndb.StringProperty(u'tp', repeated=True)
+    project_permissions = ndb.StringProperty(u'pp', repeated=True)
     add_date = ndb.DateTimeProperty(u'ad', auto_now_add=True)
     update_date = ndb.DateTimeProperty(u'ud', auto_now=True)
-
-
-class SitePermission(ndb.Model):
-    """
-        The datastore contains one SitePermission entity for each site permission. Site permissions are used to
-         authorize particular site functionality.
-
-        Entity ID is the site permission ID, a short mnemonic string.
-    """
-    description = ndb.TextProperty(u'd', required=True)
-
-
-class SiteRole(ndb.Model):
-    """
-        The datastore contains one SiteRole entity for each site-management role that can be assigned to a user. Each
-        SiteRole contains a collection of the SitePermissions available to users with that role.
-
-        Entity ID is the site role ID, a short mnemonic string.
-    """
-    description = ndb.TextProperty(u'd')
-    site_permissions = ndb.StringProperty(u'sp', repeated=True)  # A list of SitePermission IDs
 
 
 class SiteUser(ndb.Model):
@@ -238,7 +221,7 @@ class SiteUser(ndb.Model):
         that specify the user.
     """
     email = ndb.StringProperty(u'e', required=True)  # Stored as lowercase
-    site_roles = ndb.StringProperty(u'sr', repeated=True)  # A list of SiteRole IDs
+    site_permissions = ndb.StringProperty(u'sp', repeated=True)
     add_date = ndb.DateTimeProperty(u'ad', auto_now_add=True)
     update_date = ndb.DateTimeProperty(u'ud', auto_now=True)
 
@@ -466,10 +449,6 @@ def get_public_templates_by_name(template_name):
     return Project.query(Project.name == template_name, Project.project_type == PUBLIC_TEMPLATE).fetch()
 
 
-def get_site_roles():
-    return [site_role_key.id() for site_role_key in SiteRole.query().order(SiteRole.key).fetch(keys_only=True)]
-
-
 def get_site_user_by_email(email):
     for site_user in SiteUser.query(SiteUser.email == email).fetch():
         return site_user
@@ -606,16 +585,15 @@ def get_standard_site_values():
     jinja_template_values = {u'url': users.create_logout_url(u'/'), u'email': current_user.email()}
     if current_user:
         for site_user in SiteUser.query(SiteUser.email == current_user.email().lower()):
-            for site_role in site_user.site_roles:
-                site_role_entity = SiteRole.get_by_id(site_role)
-                if SITEPERMISSION_ADMIN in site_role_entity.site_permissions:
-                    jinja_template_values[u'SITEPERMISSION_ADMIN'] = True
-                if SITEPERMISSION_ADMINSETTINGS in site_role_entity.site_permissions:
-                    jinja_template_values[u'SITEPERMISSION_ADMINSETTINGS'] = True
-                if SITEPERMISSION_ADMINTEMPLATES in site_role_entity.site_permissions:
-                    jinja_template_values[u'SITEPERMISSION_ADMINTEMPLATES'] = True
-                if SITEPERMISSION_ADMINUSERS in site_role_entity.site_permissions:
-                    jinja_template_values['SITEPERMISSION_ADMINUSERS'] = True
+            if SITE_ADMIN_SETTINGS in site_user.site_permissions:
+                jinja_template_values[u'SITE_ADMIN'] = True
+                jinja_template_values[u'SITE_ADMIN_SETTINGS'] = True
+            if SITE_ADMIN_TEMPLATES in site_user.site_permissions:
+                jinja_template_values[u'SITE_ADMIN'] = True
+                jinja_template_values[u'SITE_ADMIN_TEMPLATES'] = True
+            if SITE_ADMIN_USERS in site_user.site_permissions:
+                jinja_template_values['SITE_ADMIN'] = True
+                jinja_template_values['SITE_ADMIN_USERS'] = True
             user_projects = list()
             user_templates = list()
             for project_user in ProjectUser.query(ProjectUser.email == site_user.email):
@@ -807,14 +785,12 @@ def test_email_registered(email):
     return SiteUser.query(SiteUser.email == email.lower()).count()
 
 
-def test_permission(permission):
+def test_site_permission(permission):
     current_user = users.get_current_user()
     if current_user:
-        for user_entity in SiteUser.query(SiteUser.email == current_user.email().lower()):
-            for site_role in user_entity.site_roles:
-                site_role_entity = SiteRole.get_by_id(site_role)
-                if permission in site_role_entity.site_permissions:
-                    return True
+        for site_user in SiteUser.query(SiteUser.email == current_user.email().lower(),
+                                        SiteUser.site_permissions == permission):
+            return True
 
 
 def test_project_permitted(project):
@@ -843,468 +819,16 @@ def touch_project_documents(project):
     project.put()
 
 
-# If datastore contains no site users, initialize it
-if not SiteUser.query().count():
-    # Add site permissions
-    SitePermission(id=SITEPERMISSION_ADMIN, description=u'View the Site Administration menu').put()
-    SitePermission(id=SITEPERMISSION_ADMINSETTINGS, description=u'Maintain master properties for the site').put()
-    SitePermission(id=SITEPERMISSION_ADMINTEMPLATES,
-                   description=u'Maintain templates in the site\'s Template Gallery').put()
-    SitePermission(id=SITEPERMISSION_ADMINUSERS, description=u'Maintain user entities for the site').put()
-
-    # Add site roles
-    SiteRole(id=SITE_MASTER,
-             description=u'Site Master Administrator',
-             site_permissions=[SITEPERMISSION_ADMIN, SITEPERMISSION_ADMINSETTINGS, SITEPERMISSION_ADMINUSERS,
-                               SITEPERMISSION_ADMINTEMPLATES]).put()
-    SiteRole(id=SITE_MASTER_ADMIN,
-             description=u'Site Template Administrator',
-             site_permissions=[SITEPERMISSION_ADMIN, SITEPERMISSION_ADMINTEMPLATES]).put()
+# If datastore contains no site users with user admin permission, initialize it
+if not SiteUser.query(SiteUser.site_permissions == SITE_ADMIN_USERS).count():
+    # Remove obsolete SiteUser rows
+    for site_user in get_site_users():
+        site_user.key.delete()
 
     # Add site users: site masters
-    SiteUser(email=u'LDRidgeway@gmail.com'.lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
-    SiteUser(email=u'ltlamberton@gmail.com'.lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
-    SiteUser(email=u'awieder@zephyrmediacommunications.com'.lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
-    SiteUser(email=u'awieder@ztech-group.com'.lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
-    # SiteUser(email=u'MHanderhan@meesha.net'.lower(), site_roles=[SITE_MASTER, SITE_MASTER_ADMIN]).put()
-
-'''
-# If datastore contains no templates in the Template Gallery, initialize it
-if not Project.query(Project.project_type == PUBLIC_TEMPLATE).count():
-    novel_template = Project(name="Novel",
-                             project_type=PRIVATE_TEMPLATE,
-                             description="Use this template to write a novel.").put()
-
-    Document(name="Novel", internal_name="Novel",
-             description="This is the actual novel.",
-             content="""
-<div style="font-size: {{ font_size }}pt; font-family: '{{ font_family }}';
-        margin-left: {{ margin }}px; margin-right: {{ margin }}px">
-    <h2 style="text-align: center">
-        {{ title }}
-    </h2>
-    <h3 style="text-align: center">Prologue</h3>
-    {{ novel_prologue }}
-    <h3 style="text-align: center">{{ title }}</h3>
-    {% for index in range(chapter_count) %}
-        {% if get_indexed_variable(project, "chapter_title", index) %}
-            <h4>{{ get_indexed_variable(project, "chapter_title", index) }}</h4>
-            {{ get_indexed_variable(project, "chapter", index) }}
-        {% endif %}
-    {% endfor %}
-    <h3 style="text-align: center">Epilogue</h3>
-    {{ novel_epilogue }}
-    <p style="text-align: center">
-        THE END
-    </p>
-</div>
-        """, parent=novel_template).put()
-
-    Interview(name="make_assignments",
-              root_interview_name="make_assignments",
-              child_interview_names="title_and_format|assign_prologue_writer|assign_chapter_writers|assign_epilogue_writer|assign_reviewer",
-              menu_title="Title, format, and assignments",
-              auto_assign=True,
-              parent=novel_template).put()
-
-    Interview(name="title_and_format",
-              root_interview_name="make_assignments",
-              content="""
-<h3>Title and Format Specifications</h3>
-<p>
-    Provide the title and formatting information for producing the novel.
-</p>
-<table>
-    <tr>
-        <th style="text-align: right">Title of the Novel:</th>
-        <td><input name="title" value='{{ title | e }}' style="width: 500px"></td>
-    </tr>
-    <tr>
-        <th style="text-align: right">Font size in points:</th>
-        <td><input name="font_size" value={{ font_size | e }}></td>
-    </tr>
-    <tr>
-        <th style="text-align: right">Font family:</th>
-        <td><input name="font_family" value='{{ font_family | e }}'></td>
-    </tr>
-    <tr>
-        <th style="text-align: right">Margin:</th>
-        <td><input name="margin" value={{ margin | e }}></td>
-    </tr>
-</table>
-        """, parent=novel_template).put()
-
-    Interview(name="assign_prologue_writer",
-              root_interview_name="make_assignments",
-              assign_button="Assign Writer",
-              assign_interview_name="prologue_interview",
-              content="""
-<h3>Assign a Writer for the Prologue</h3>
-{% if assigned_email %}
-    <p>
-        Prologue writer assignment completed:
-    </p>
-    <blockquote>
-        <div style="width: 500px; background-color: lightgray">
-            {{ assigned_email | e }}
-        </div>
-    </blockquote>
-{% else %}
-    <p>
-        Select a team member to write the prologue, enter your instructions, and click "Assign Writer".
-    </p>
-    <table width="100%">
-        <tr>
-            <th style="text-align: right; vertical-align: text-top">Team Member:</th>
-            <td>
-                <select name="_email">
-                    <option value="">(Select team member)</option>
-                    {% for email in emails %}
-                        <option value="{{ email | e }}">{{ email | e }}</option>
-                    {% endfor %}
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <th style="text-align: right; vertical-align: text-top">Instructions:</th>
-            <td>
-                <textarea name="prologue_instructions"
-                    style="height: 200px; width: 500px">{{ prologue_instructions | e }}</textarea>
-            </td>
-        </tr>
-    </table>
-{% endif %}
-<br/><br/>
-        """, parent=novel_template).put()
-
-    Interview(name="assign_chapter_writers",
-              root_interview_name="make_assignments",
-              child_button="Add Chapter",
-              child_interview_names="assign_chapter_writer",
-              content="""
-<h3>Assign a Writer for Each Chapter</h3>
-<p>
-    Use the "Add Chapter" button to assign each chapter writing assignment.
-</p>
-{% if chapter_title_count %}
-    <p>
-        Chapter titles so far:
-        <ul>
-            {% for index in range(chapter_title_count) %}
-                {% if get_indexed_variable(project, "chapter_title", index) %}
-                    <li>{{ get_indexed_variable(project, "chapter_title", index) | e }}</li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-    </p>
-{% endif %}
-        """, parent=novel_template).put()
-
-    Interview(name="assign_chapter_writer",
-              root_interview_name="make_assignments",
-              assign_button="Assign Writer",
-              assign_interview_name="chapter_interview",
-              content="""
-<h3>Assign a Writer for This Chapter</h3>
-{% if assigned_email %}
-    <p>
-        Chapter writer assignment completed:
-    </p>
-    <blockquote>
-        <div style="width: 500px; background-color: lightgray">
-            {{ assigned_email | e }}
-        </div>
-    </blockquote>
-{% else %}
-    <p>
-        Select a team member to write the chapter, enter your instructions, and click "Assign Writer".
-    </p>
-    <table width="100%">
-        <tr>
-            <th style="text-align: right; vertical-align: text-top">Team Member:</th>
-            <td>
-                <select name="_email">
-                    <option value="">(Select team member)</option>
-                    {% for email in emails %}
-                        <option value="{{ email | e }}">{{ email | e }}</option>
-                    {% endfor %}
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <th style="text-align: right; vertical-align: text-top">Chapter Title:</th>
-            <td>
-                <input name="chapter_title" style="width: 500px" value="{{ chapter_title | e }}"/>
-            </td>
-        </tr>
-        <tr>
-            <th style="text-align: right; vertical-align: text-top">Instructions:</th>
-            <td>
-                <textarea name="chapter_instructions"
-                    style="height: 200px; width: 500px">{{ chapter_instructions | e }}</textarea>
-            </td>
-        </tr>
-    </table>
-{% endif %}
-<br/><br/>
-        """, parent=novel_template).put()
-
-    Interview(name="assign_epilogue_writer",
-              root_interview_name="make_assignments",
-              assign_button="Assign Writer",
-              assign_interview_name="epilogue_interview",
-              content="""
-<h3>Assign a Writer for the Epilogue</h3>
-{% if assigned_email %}
-    <p>
-        Epilogue writer assignment completed:
-    </p>
-    <blockquote>
-        <div style="width: 500px; background-color: lightgray">
-            {{ assigned_email | e }}
-        </div>
-    </blockquote>
-{% else %}
-    <p>
-        Select a team member to write the epilogue, enter your instructions, and click "Assign Writer".
-    </p>
-    <table width="100%">
-        <tr>
-            <th style="text-align: right; vertical-align: text-top">Team Member:</th>
-            <td>
-                <select name="_email">
-                    <option value="">(Select team member)</option>
-                    {% for email in emails %}
-                        <option value="{{ email | e }}">{{ email | e }}</option>
-                    {% endfor %}
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <th style="text-align: right; vertical-align: text-top">Instructions:</th>
-            <td>
-                <textarea name="epilogue_instructions"
-                    style="height: 200px; width: 500px">{{ epilogue_instructions | e }}</textarea>
-            </td>
-        </tr>
-    </table>
-{% endif %}
-<br/><br/>
-        """, parent=novel_template).put()
-
-    Interview(name="assign_reviewer",
-              root_interview_name="make_assignments",
-              assign_button="Assign Reviewer",
-              assign_interview_name="review",
-              content="""
-<h3>Assign a Reviewer for All Content</h3>
-{% if assigned_email %}
-    <p>
-        Reviewer assignment completed:
-    </p>
-    <blockquote>
-        <div style="width: 500px; background-color: lightgray">
-            {{ assigned_email | e }}
-        </div>
-    </blockquote>
-{% else %}
-    <p>
-        Select a team member to review the novel contents, enter your instructions, and
-        click "Assign Writer". Suggestions:
-        <ul>
-            <li>Assign someone who can check grammar.
-            <li>Assign someone who can check style consistency.
-        </ul>
-    </p>
-    <table width="100%">
-        <tr>
-            <th style="text-align: right; vertical-align: text-top">Team Member:</th>
-            <td>
-                <select name="_email">
-                    <option value="">(Select team member)</option>
-                    {% for email in emails %}
-                        <option value="{{ email | e }}">{{ email | e }}</option>
-                    {% endfor %}
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <th style="text-align: right; vertical-align: text-top">Instructions:</th>
-            <td>
-                <textarea name="review_instructions"
-                    style="height: 200px; width: 500px">{{ review_instructions | e }}</textarea>
-            </td>
-        </tr>
-    </table>
-{% endif %}
-<br/><br/>
-        """, parent=novel_template).put()
-
-    Interview(name="prologue_interview",
-              root_interview_name="prologue_interview",
-              menu_title="Write prologue",
-              parent_button="Save",
-              completed_button="Interview Completed",
-              content="""
-<h3>Prologue of the Novel</h3>
-<p>
-    Provide the prologue of the novel. Instructions from project leader:
-    <blockquote style="width: 500px; font-style: italic; background-color: lightgray">
-        &nbsp; {{ prologue_instructions }}
-    </blockquote>
-<p>
-<table>
-    <tr>
-        <th style="text-align: right; vertical-align: text-top">Prologue of the Novel:</th>
-        <td>
-            <textarea name="novel_prologue" style="height: 200px; width: 500px">{{ novel_prologue | e }}</textarea>
-        </td>
-    </tr>
-</table>
-        """, parent=novel_template).put()
-
-    Interview(name="chapter_interview",
-              root_interview_name="chapter_interview",
-              menu_title="Write chapter of the novel",
-              parent_button="Save",
-              completed_button="Interview Completed",
-              content="""
-<h3>Chapter of the Novel</h3>
-<p>
-    Provide the chapter of the novel. Instructions from project leader:
-    <blockquote style="width: 500px; font-style: italic; background-color: lightgray">
-        &nbsp; {{ chapter_instructions }}
-    </blockquote>
-<p>
-<table>
-    <tr>
-        <th style="text-align: right; vertical-align: text-top">Chapter Title:</th>
-        <td>
-            <input name="chapter_title" style="width: 500px" value="{{ chapter_title | e }}"/>
-        </td>
-    </tr>
-    <tr>
-        <th style="text-align: right; vertical-align: text-top">Chapter:</th>
-        <td>
-            <textarea name="chapter" style="height: 200px; width: 500px">{{ chapter | e }}</textarea>
-        </td>
-    </tr>
-</table>
-        """, parent=novel_template).put()
-
-    Interview(name="epilogue_interview",
-              root_interview_name="epilogue_interview",
-              menu_title="Write epilogue",
-              parent_button="Save",
-              completed_button="Interview Completed",
-              content="""
-<h3>Epilogue of the Novel</h3>
-<p>
-    Provide the epilogue of the novel. Instructions from project leader:
-    <blockquote style="width: 500px; font-style: italic; background-color: lightgray">
-        &nbsp; {{ epilogue_instructions }}
-    </blockquote>
-<p>
-<table>
-    <tr>
-        <th style="text-align: right; vertical-align: text-top">Epilogue of the Novel:</th>
-        <td>
-            <textarea name="novel_epilogue" style="height: 200px; width: 500px">{{ novel_epilogue | e }}</textarea>
-        </td>
-    </tr>
-</table>
-        """, parent=novel_template).put()
-
-    Interview(name="review",
-              root_interview_name="review",
-              prereq_interview_names=["prologue_interview", "chapter_interview", "epilogue_interview"],
-              menu_title="Review everything",
-              parent_button="Save",
-              content="""
-<h3>Review</h3>
-<p>
-    Review all content of the novel. Instructions from project leader:
-    <blockquote style="width: 500px; font-style: italic; background-color: lightgray">
-        &nbsp; {{ review_instructions }}
-    </blockquote>
-<p>
-<table>
-    <tr>
-        <th style="text-align: right">Title of the Novel:</th>
-        <td><input name="title" value='{{ title | e }}' style="width: 500px"></td>
-    </tr>
-    <tr>
-        <th style="text-align: right; vertical-align: text-top">Prologue of the Novel:</th>
-        <td>
-            <textarea name="novel_prologue" style="height: 200px; width: 500px">{{ novel_prologue | e }}</textarea>
-        </td>
-    </tr>
-    {% for index in range(chapter_count) %}
-        {% if get_indexed_variable(project, "chapter_title", index) %}
-            <tr>
-                <th style="text-align: right; vertical-align: text-top">Chapter Title:</th>
-                <td>
-                    <input name="chapter_title" style="width: 500px" value="{{
-                        get_indexed_variable(project, "chapter_title", index) | e }}"/>
-                </td>
-            </tr>
-            <tr>
-                <th style="text-align: right; vertical-align: text-top">Chapter:</th>
-                <td>
-                    <textarea name="chapter" style="height: 200px; width: 500px">{{
-                        get_indexed_variable(project, "chapter", index) | e }}</textarea>
-                </td>
-            </tr>
-        {% endif %}
-    {% endfor %}
-    <tr>
-        <th style="text-align: right; vertical-align: text-top">Epilogue of the Novel:</th>
-        <td>
-            <textarea name="novel_epilogue" style="height: 200px; width: 500px">{{ novel_epilogue | e }}</textarea>
-        </td>
-    </tr>
-</table>
-        """, parent=novel_template).put()
-
-    # Default values for variables
-    Variable(name="font_size", internal_name="font_size", input_field=SMALL, content="14", parent=novel_template).put()
-
-    Variable(name="font_family", internal_name="font_family", input_field=SMALL, content="Courier New",
-             parent=novel_template).put()
-
-    Variable(name="margin", internal_name="margin", input_field=SMALL, content="150", parent=novel_template).put()
-
-    Variable(name="title", internal_name="title", input_field=MEDIUM, content="""
-Sample Novel
-        """, parent=novel_template).put()
-
-    Variable(name="novel_prologue", internal_name="novel_prologue", input_field=LARGE,
-             content="""
-<p>
-    This is where you write the prologue for the novel.
-</p>
-        """, parent=novel_template).put()
-
-    Variable(name="chapter_title[0]", internal_name="chapter_title[0]", input_field=MEDIUM,
-             content="""
-Chapter One. A Beginning
-        """, parent=novel_template).put()
-
-    Variable(name="chapter[0]", internal_name="chapter[0]", input_field=LARGE,
-             content="""
-<p>
-    It was a dark and stormy night. Snoopy was attempting to write his first novel.
-</p>
-<p>
-    Suddenly, the sun came up and all was bright and cheerful. <i><u>Terrible</u></i> conditions for writing
-    a novel. And even worse if the novel was to be your first. Snoopy felt sick.
-</p>
-        """, parent=novel_template).put()
-
-    Variable(name="novel_epilogue", internal_name="novel_epilogue", input_field=LARGE,
-             content="""
-<p>
-    This is where you write the epilogue for the novel.
-</p>
-        """, parent=novel_template).put()
-'''
+    all_site_permissions = get_all_site_permissions()
+    SiteUser(email=u'LDRidgeway@gmail.com'.lower(), site_permissions=all_site_permissions).put()
+    SiteUser(email=u'ltlamberton@gmail.com'.lower(), site_permissions=all_site_permissions).put()
+    SiteUser(email=u'awieder@zephyrmediacommunications.com'.lower(), site_permissions=all_site_permissions).put()
+    SiteUser(email=u'awieder@ztech-group.com'.lower(), site_permissions=all_site_permissions).put()
+    # SiteUser(email=u'MHanderhan@meesha.net'.lower(), site_permissions=all_site_permissions).put()

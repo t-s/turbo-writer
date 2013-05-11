@@ -5,14 +5,14 @@ import ui
 
 class RequestHandler(webapp2.RequestHandler):
     def get(self):
-        if not dao.test_permission(dao.SITEPERMISSION_ADMINTEMPLATES):
+        if not dao.test_site_permission(dao.SITE_ADMIN_TEMPLATES):
             webapp2.abort(401)
 
         # Display the webpage
         self.render()
 
     def post(self):
-        if not dao.test_permission(dao.SITEPERMISSION_ADMINTEMPLATES):
+        if not dao.test_site_permission(dao.SITE_ADMIN_TEMPLATES):
             webapp2.abort(401)
 
         # Attempt to add a new Template entity

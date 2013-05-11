@@ -5,7 +5,7 @@ import ui
 
 class RequestHandler(webapp2.RequestHandler):
     def get(self):
-        if not dao.test_permission(dao.SITEPERMISSION_ADMINTEMPLATES):
+        if not dao.test_site_permission(dao.SITE_ADMIN_TEMPLATES):
             webapp2.abort(401)
 
         # Get specified Template entity
@@ -17,7 +17,7 @@ class RequestHandler(webapp2.RequestHandler):
         self.render(template_id, template, error_msg)
 
     def post(self):
-        if not dao.test_permission(dao.SITEPERMISSION_ADMINUSERS):
+        if not dao.test_site_permission(dao.SITE_ADMIN_USERS):
             webapp2.abort(401)
 
         # Get specified Template entity

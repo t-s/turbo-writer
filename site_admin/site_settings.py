@@ -5,7 +5,7 @@ import ui
 
 class RequestHandler(webapp2.RequestHandler):
     def get(self):
-        if not dao.test_permission(dao.SITEPERMISSION_ADMINSETTINGS):
+        if not dao.test_site_permission(dao.SITE_ADMIN_SETTINGS):
             webapp2.abort(401)
 
         # Create template and template values, render the page
