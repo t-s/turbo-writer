@@ -31,7 +31,11 @@
         {% for permission in permissions %}
         <tr>
             <td class="bordered_cell">
-                <input type="checkbox" name="{{ permission.name }}" {% if permission.checked %} checked {% endif %}>
+                <input type="checkbox" name="{{ permission.name }}" {% if permission.checked %} checked {% endif %}
+                {% if permission.name == "OWN" and not is_owner %}
+                disabled="disabled"
+                {% endif %}
+                >
                 {{ permission.name | e }}
             </td>
         </tr>

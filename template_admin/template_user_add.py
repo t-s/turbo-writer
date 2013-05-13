@@ -39,6 +39,9 @@ class RequestHandler(webapp2.RequestHandler):
                 for permission in dao.get_all_template_permissions():
                     if self.request.get(permission):
                         permissions.append(permission)
+                if not dao.test_template_permissions(template, [dao.TEMPLATE_OWN]):
+                    if dao.TEMPLATE_OWN in permissions:
+                        webapp2.abort(401)
                 try:
                     dao.ProjectUser(email=submitted_email.lower(), parent=template.key, permissions=permissions).put()
                     self.redirect(u'/template_admin/template_user_admin?template_id={}'.format(template.key.id()))

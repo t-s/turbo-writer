@@ -223,6 +223,7 @@ class ProjectUser(ndb.Model):
     email = ndb.StringProperty(u'e', required=True)  # Stored as lowercase
     is_owner = ndb.BooleanProperty(u'io')  # TODO Obsolete, to be removed
     permissions = ndb.StringProperty(u'p', repeated=True)
+    version = ndb.StringProperty(u'v', default="1.0")
     add_date = ndb.DateTimeProperty(u'ad', auto_now_add=True)
     update_date = ndb.DateTimeProperty(u'ud', auto_now=True)
 
@@ -589,6 +590,7 @@ def get_standard_project_values(project):
 
     project_user = get_project_user_by_email(project, current_email)
     if project_user:
+        jinja_template_values[u'is_owner'] = PROJECT_OWN in project_user.permissions
         jinja_template_values[
             u'is_manager'] = PROJECT_OWN in project_user.permissions or PROJECT_MANAGE in project_user.permissions
 
@@ -791,12 +793,12 @@ def test_email_in_template(template, submitted_email):
 
 
 def test_email_is_project_owner(project, email):
-    return ProjectUser.query(ProjectUser.email == email.lower(), ProjectUser.is_owner == True,
+    return ProjectUser.query(ProjectUser.email == email.lower(), ProjectUser.permissions == PROJECT_OWN,
                              ancestor=project.key).count()
 
 
 def test_email_is_template_owner(template, email):
-    return ProjectUser.query(ProjectUser.email == email.lower(), ProjectUser.is_owner == True,
+    return ProjectUser.query(ProjectUser.email == email.lower(), ProjectUser.permissions == TEMPLATE_OWN,
                              ancestor=template.key).count()
 
 
@@ -869,9 +871,9 @@ def append_permission(project_user, permission):
     else:
         project_user.permissions = [permission]
 
-# If any projects or templates with permissions, correct them
+# If any projects or templates with old permissions, correct them
 for project in Project.query(Project.project_type.IN([PROJECT, PRIVATE_TEMPLATE])).fetch():
-    for project_user in ProjectUser.query(ancestor=project.key):
+    for project_user in ProjectUser.query(ProjectUser.version != "1.0", ancestor=project.key):
         if project.project_type == PROJECT:
             if project_user.is_owner:
                 append_permission(project_user, PROJECT_OWN)
@@ -883,4 +885,6 @@ for project in Project.query(Project.project_type.IN([PROJECT, PRIVATE_TEMPLATE]
                 append_permission(project_user, TEMPLATE_OWN)
             else:
                 append_permission(project_user, TEMPLATE_USE)
+        project_user.is_owner = None
+        project_user.version = "1.0"
         project_user.put()

@@ -39,6 +39,9 @@ class RequestHandler(webapp2.RequestHandler):
                 for permission in dao.get_all_project_permissions():
                     if self.request.get(permission):
                         permissions.append(permission)
+                if not dao.test_project_permissions(project, [dao.PROJECT_OWN]):
+                    if dao.PROJECT_OWN in permissions:
+                        webapp2.abort(401)
                 try:
                     dao.ProjectUser(email=submitted_email.lower(), parent=project.key, permissions=permissions).put()
                     self.redirect(u'/project_admin/project_user_admin?project_id={}'.format(project.key.id()))

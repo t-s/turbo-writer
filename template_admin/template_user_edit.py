@@ -30,6 +30,7 @@ class RequestHandler(webapp2.RequestHandler):
         # Handle delete request
         if template_user and self.request.get(u'delete'):
             try:
+                self.require_owner(template, exclude_user=template_user)
                 template_user.key.delete()
                 self.redirect(u'/template_admin/template_user_admin?template_id={}'.format(template.key.id()))
                 return
@@ -43,8 +44,13 @@ class RequestHandler(webapp2.RequestHandler):
             for permission in dao.get_all_template_permissions():
                 if self.request.get(permission):
                     permissions.append(permission)
+            if not dao.test_template_permissions(template, [dao.TEMPLATE_OWN]):
+                if (dao.TEMPLATE_OWN in template_user.permissions and dao.TEMPLATE_OWN not in permissions) or (
+                            dao.TEMPLATE_OWN not in template_user.permissions and dao.TEMPLATE_OWN in permissions):
+                    webapp2.abort(401)
             template_user.permissions = permissions
             try:
+                self.require_owner(template)
                 template_user.put()
                 self.redirect(u'/template_admin/template_user_admin?template_id={}'.format(template.key.id()))
                 return
@@ -72,3 +78,14 @@ class RequestHandler(webapp2.RequestHandler):
         jinja_template_values[u'permissions'] = permissions
 
         self.response.out.write(jinja_template.render(jinja_template_values))
+
+    def require_owner(self, template, exclude_user=None):
+        any_owner = False
+        for user in dao.get_template_users(template):
+            if exclude_user and user == exclude_user:
+                continue
+            if dao.TEMPLATE_OWN in user.permissions:
+                any_owner = True
+                break
+        if not any_owner:
+            raise Exception("Template must have an owner")

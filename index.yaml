@@ -50,6 +50,11 @@ indexes:
   properties:
   - name: e
 
+- kind: ProjectUser
+  ancestor: yes
+  properties:
+  - name: v
+
 - kind: Style
   ancestor: yes
   properties:

@@ -30,6 +30,7 @@ class RequestHandler(webapp2.RequestHandler):
         # Handle delete request
         if project_user and self.request.get(u'delete'):
             try:
+                self.require_owner(project, exclude_user=project_user)
                 project_user.key.delete()
                 self.redirect(u'/project_admin/project_user_admin?project_id={}'.format(project.key.id()))
                 return
@@ -43,8 +44,13 @@ class RequestHandler(webapp2.RequestHandler):
             for permission in dao.get_all_project_permissions():
                 if self.request.get(permission):
                     permissions.append(permission)
+            if not dao.test_project_permissions(project, [dao.PROJECT_OWN]):
+                if (dao.PROJECT_OWN in project_user.permissions and dao.PROJECT_OWN not in permissions) or (
+                        dao.PROJECT_OWN not in project_user.permissions and dao.PROJECT_OWN in permissions):
+                    webapp2.abort(401)
             project_user.permissions = permissions
             try:
+                self.require_owner(project)
                 project_user.put()
                 self.redirect(u'/project_admin/project_user_admin?project_id={}'.format(project.key.id()))
                 return
@@ -59,7 +65,8 @@ class RequestHandler(webapp2.RequestHandler):
         permissions = list()
         if project_user:
             for project_permission in dao.get_all_project_permissions():
-                permission = {u'name': project_permission, u'checked': u'checked' if project_permission in project_user.permissions else u''}
+                permission = {u'name': project_permission,
+                              u'checked': u'checked' if project_permission in project_user.permissions else u''}
                 permissions.append(permission)
 
         # Create template and template values, render the page
@@ -72,3 +79,14 @@ class RequestHandler(webapp2.RequestHandler):
         jinja_template_values[u'permissions'] = permissions
 
         self.response.out.write(jinja_template.render(jinja_template_values))
+
+    def require_owner(self, project, exclude_user=None):
+        any_owner = False
+        for user in dao.get_project_users(project):
+            if exclude_user and user == exclude_user:
+                continue
+            if dao.PROJECT_OWN in user.permissions:
+                any_owner = True
+                break
+        if not any_owner:
+            raise Exception("Project must have an owner")
