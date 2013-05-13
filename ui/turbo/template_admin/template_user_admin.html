@@ -2,17 +2,22 @@
 
 {% block workspace %}
 
-<h3>Sharing</h3>
+<h3>Template User Administration</h3>
 
 <table class="bordered_table">
+    <input type="hidden" name="template_id" value="{{ template.key.id() }}">
     <tr>
         <th class="bordered_cell">Email</th>
+        <th class="bordered_cell">Template Permissions</th>
     </tr>
     {% for user in users %}
     <tr>
         <td class="bordered_cell">
-            <a href="/template_admin/template_user_edit?template_id={{ template.key.id() }}&template_user_id={{ user.template_user_id }}"
-                    >{{ user.email | e }}</a>
+            <a href='/template_admin/template_user_edit?template_id={{ template.key.id() }}&template_user_id={{ user.key.id() }}'>{{ user["email"] | e }}</a>
+        </td>
+        <td class="bordered_cell">
+            {% set first = True %}
+            {% for permission in user.permissions %}{% if not first %}, {% endif %}{{ permission }}{% set first = False %}{% endfor %}
         </td>
     </tr>
     {% endfor %}
@@ -20,6 +25,7 @@
         <td class="bordered_cell">
             <a href="/template_admin/template_user_add?template_id={{ template.key.id() }}">+</a>
         </td>
+        <td class="bordered_cell"></td>
     </tr>
 </table>
 

@@ -6,8 +6,7 @@ import ui
 class RequestHandler(webapp2.RequestHandler):
     def get(self):
         template = dao.get_template_by_id(self.request.get(u'template_id'))
-        if not dao.test_template_permitted(
-                template):  # TODO Test that current user's role includes template-admin permission
+        if not dao.test_template_permissions(template, [dao.TEMPLATE_OWN, dao.TEMPLATE_EDIT]):
             webapp2.abort(401)
 
         # Display the webpage
@@ -15,13 +14,14 @@ class RequestHandler(webapp2.RequestHandler):
 
     def post(self):
         template = dao.get_template_by_id(self.request.get(u'template_id'))
-        if not dao.test_template_permitted(
-                template):  # TODO Test that current user's role includes template-admin permission
+        if not dao.test_template_permissions(template, [dao.TEMPLATE_OWN, dao.TEMPLATE_EDIT]):
             webapp2.abort(401)
         error_msg = None
 
         # Handle delete request
         if self.request.get(u'delete'):
+            if not dao.test_template_permissions(template, [dao.TEMPLATE_OWN]):
+                webapp2.abort(401)
             try:
                 dao.delete_template(template)
                 self.redirect(u'/')
@@ -49,5 +49,6 @@ class RequestHandler(webapp2.RequestHandler):
         jinja_template_values = dao.get_standard_template_values(template)
         jinja_template_values[u'template'] = template
         jinja_template_values[u'error_msg'] = error_msg
+        jinja_template_values[u'is_owner'] = dao.test_template_permissions(template, [dao.TEMPLATE_OWN])
 
         self.response.out.write(jinja_template.render(jinja_template_values))

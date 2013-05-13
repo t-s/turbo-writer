@@ -25,7 +25,7 @@ class RequestHandler(webapp2.RequestHandler):
             name = self.request.get(u'name').strip()
             if not name:
                 raise Exception(u'You must provide a name for your template')
-            for template in dao.get_private_templates_by_name(name):
+            for template in dao.get_private_template_by_name(name):
                 if dao.test_email_is_template_owner(template, current_email):
                     raise Exception(u'Sorry, you already own a template by that name')
 
@@ -35,7 +35,8 @@ class RequestHandler(webapp2.RequestHandler):
             template_key = template.put()
 
             # Create a ProjectUser entity, making the current user owner of the new template
-            dao.ProjectUser(email=dao.get_current_site_user().email, is_owner=True, parent=template_key).put()
+            dao.ProjectUser(email=dao.get_current_site_user().email, permissions=[dao.TEMPLATE_OWN],
+                            parent=template_key).put()
 
             self.redirect(u'/template?template_id={}'.format(template_key.id()))
             return

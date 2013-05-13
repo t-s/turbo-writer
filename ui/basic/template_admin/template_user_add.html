@@ -2,7 +2,7 @@
 
 {% block workspace %}
 
-<h3>Sharing: Share Template with User</h3>
+<h3>Template User Administration: Add New Template User</h3>
 
 {% if error_msg %}
 <p>
@@ -12,11 +12,30 @@
 
 <form method="post">
     <input type="hidden" name="template_id" value="{{ template.key.id() }}">
+    <input type="hidden" name="template_user_id" value="{{ template_user_id }}">
     <table>
         <tr>
             <th>Email:</th>
-            <td><input name="email" value="{{ email | e }}" size="100"></td>
+            <td><input name="email" value="{{ email | e }}" size="100" autofocus></td>
         </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table class="bordered_table">
+        <tr>
+            <th class="bordered_cell">Template Permissions</th>
+        </tr>
+        {% for permission in permissions %}
+        <tr>
+            <td class="bordered_cell">
+                <input type="checkbox" name="{{ permission.name }}" {% if permission.checked %} checked {% endif %}>
+                {{ permission.name | e }}
+            </td>
+        </tr>
+        {% endfor %}
     </table>
     <table>
         <tr>
@@ -26,7 +45,7 @@
     <table>
         <tr>
             <td>
-                <input type="submit" value="Share Template">
+                <input type="submit" value="Add Template User">
             </td>
             <td>
                 <input type="button" value="Cancel"
@@ -37,4 +56,3 @@
 </form>
 
 {% endblock %}
-

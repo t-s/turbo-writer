@@ -34,20 +34,35 @@ PROJECT = u'J'
 PRIVATE_TEMPLATE = u'V'
 PUBLIC_TEMPLATE = u'U'
 
-# Site permissions
-SITE_ADMIN = u'sp-a'
+# Project permissions
+PROJECT_OWN = u'OWN'
+PROJECT_MANAGE = u'MANAGE'
+PROJECT_WRITE = u'WRITE'
+PROJECT_REVIEW = u'REVIEW'
 
-SITE_ADMIN_SETTINGS = u'SITE_ADMIN_SETTINGS'
-SITE_ADMIN_TEMPLATES = u'SITE_ADMIN_TEMPLATES'
-SITE_ADMIN_USERS = u'SITE_ADMIN_USERS'
+
+def get_all_project_permissions():
+    return [PROJECT_OWN, PROJECT_MANAGE, PROJECT_WRITE, PROJECT_REVIEW]
+
+# Site permissions
+SITE_ADMIN = u'SITE_ADMIN'
+
+SITE_ADMIN_SETTINGS = u'ADMIN_SETTINGS'
+SITE_ADMIN_TEMPLATES = u'ADMIN_TEMPLATES'
+SITE_ADMIN_USERS = u'ADMIN_USERS'
+
 
 def get_all_site_permissions():
     return [SITE_ADMIN_SETTINGS, SITE_ADMIN_TEMPLATES, SITE_ADMIN_USERS]
 
 # Template permissions
-TEMPLATEPERMISSION_OWN = u'tp-o'
-TEMPLATEPERMISSION_EDIT = u'tp-e'
-TEMPLATEPERMISSION_USE = u'tp-u'
+TEMPLATE_OWN = u'OWN'
+TEMPLATE_EDIT = u'EDIT'
+TEMPLATE_USE = u'USE'
+
+
+def get_all_template_permissions():
+    return [TEMPLATE_OWN, TEMPLATE_EDIT, TEMPLATE_USE]
 
 
 # Entity classes
@@ -206,9 +221,8 @@ class ProjectUser(ndb.Model):
         Parent must contain a Project key.
     """
     email = ndb.StringProperty(u'e', required=True)  # Stored as lowercase
-    is_owner = ndb.BooleanProperty(u'io')
-    template_permissions = ndb.StringProperty(u'tp', repeated=True)
-    project_permissions = ndb.StringProperty(u'pp', repeated=True)
+    is_owner = ndb.BooleanProperty(u'io')  # TODO Obsolete, to be removed
+    permissions = ndb.StringProperty(u'p', repeated=True)
     add_date = ndb.DateTimeProperty(u'ad', auto_now_add=True)
     update_date = ndb.DateTimeProperty(u'ud', auto_now=True)
 
@@ -416,7 +430,7 @@ def get_private_templates():
     return private_templates
 
 
-def get_private_templates_by_name(template_name):
+def get_private_template_by_name(template_name):
     return Project.query(Project.name == template_name, Project.project_type == PRIVATE_TEMPLATE).fetch()
 
 
@@ -597,13 +611,15 @@ def get_standard_site_values():
             user_projects = list()
             user_templates = list()
             for project_user in ProjectUser.query(ProjectUser.email == site_user.email):
+                permissions = project_user.permissions
                 project = project_user.key.parent().get()
                 if project.project_type == PROJECT:
                     user_projects.append({u'project_id': project.key.id(), u'name': project.name})
-                elif project.project_type == PRIVATE_TEMPLATE and project_user.is_owner:
+                elif project.project_type == PRIVATE_TEMPLATE and (
+                        TEMPLATE_OWN in permissions or TEMPLATE_EDIT in permissions):
                     user_templates.append({u'template_id': project.key.id(), u'name': project.name})
-            jinja_template_values[u'user_projects'] = user_projects
-            jinja_template_values[u'user_templates'] = user_templates
+                jinja_template_values[u'user_projects'] = user_projects
+                jinja_template_values[u'user_templates'] = user_templates
     return jinja_template_values
 
 
@@ -785,6 +801,15 @@ def test_email_registered(email):
     return SiteUser.query(SiteUser.email == email.lower()).count()
 
 
+def test_project_permissions(project, permission_list):
+    site_user = get_current_site_user()
+    if site_user:
+        project_user = get_project_user_by_email(project, site_user.email)
+        for permission in permission_list:
+            if permission in project_user.permissions:
+                return True
+
+
 def test_site_permission(permission):
     current_user = users.get_current_user()
     if current_user:
@@ -793,19 +818,12 @@ def test_site_permission(permission):
             return True
 
 
-def test_project_permitted(project):
+def test_template_permissions(template, permission_list):
     site_user = get_current_site_user()
     if site_user:
-        for project in get_projects_by_name(project.name):
-            if test_email_in_project(project, site_user.email):
-                return True
-
-
-def test_template_permitted(template):
-    site_user = get_current_site_user()
-    if site_user:
-        for template in get_private_templates_by_name(template.name):
-            if test_email_in_template(template, site_user.email):
+        template_user = get_template_user_by_email(template, site_user.email)
+        for permission in permission_list:
+            if permission in template_user.permissions:
                 return True
 
 
@@ -821,6 +839,7 @@ def touch_project_documents(project):
 
 # If datastore contains no site users with user admin permission, initialize it
 if not SiteUser.query(SiteUser.site_permissions == SITE_ADMIN_USERS).count():
+    # TODO Removing obsolete SiteUser rows is temporary until all published sites have had this done
     # Remove obsolete SiteUser rows
     for site_user in get_site_users():
         site_user.key.delete()
@@ -832,3 +851,27 @@ if not SiteUser.query(SiteUser.site_permissions == SITE_ADMIN_USERS).count():
     SiteUser(email=u'awieder@zephyrmediacommunications.com'.lower(), site_permissions=all_site_permissions).put()
     SiteUser(email=u'awieder@ztech-group.com'.lower(), site_permissions=all_site_permissions).put()
     # SiteUser(email=u'MHanderhan@meesha.net'.lower(), site_permissions=all_site_permissions).put()
+
+# TODO Correcting obsolete project and template permissions is temporary until all published sites have had this done
+def append_permission(project_user, permission):
+    if project_user.permissions:
+        if permission not in project_user.permissions:
+            project_user.permissions.append(permission)
+    else:
+        project_user.permissions = [permission]
+
+# If any projects or templates with permissions, correct them
+for project in Project.query(Project.project_type.IN([PROJECT, PRIVATE_TEMPLATE])).fetch():
+    for project_user in ProjectUser.query(ancestor=project.key):
+        if project.project_type == PROJECT:
+            if project_user.is_owner:
+                append_permission(project_user, PROJECT_OWN)
+            else:
+                append_permission(project_user, PROJECT_WRITE)
+                append_permission(project_user, PROJECT_REVIEW)
+        if project.project_type == PRIVATE_TEMPLATE:
+            if project_user.is_owner:
+                append_permission(project_user, TEMPLATE_OWN)
+            else:
+                append_permission(project_user, TEMPLATE_USE)
+        project_user.put()
