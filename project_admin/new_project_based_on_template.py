@@ -35,7 +35,8 @@ class RequestHandler(webapp2.RequestHandler):
             project_key = project.put()
 
             # Create a ProjectUser entity, making the current user owner of the new project
-            dao.ProjectUser(email=dao.get_current_site_user().email, is_owner=True, parent=project_key).put()
+            dao.ProjectUser(email=dao.get_current_site_user().email, permissions=[dao.PROJECT_OWN],
+                            parent=project_key).put()
 
             # Get the selected template ID
             template_id = self.request.get(u'template_id')

@@ -6,8 +6,7 @@ import ui
 class RequestHandler(webapp2.RequestHandler):
     def get(self):
         project = dao.get_project_by_id(self.request.get(u'project_id'))
-        if not dao.test_project_permitted(
-                project):  # TODO Test that current user's role includes project-admin permission
+        if not dao.test_project_permissions(project, [dao.PROJECT_OWN, dao.PROJECT_MANAGE]):
             webapp2.abort(401)
 
         # Display the webpage
@@ -15,13 +14,14 @@ class RequestHandler(webapp2.RequestHandler):
 
     def post(self):
         project = dao.get_project_by_id(self.request.get(u'project_id'))
-        if not dao.test_project_permitted(
-                project):  # TODO Test that current user's role includes project-admin permission
+        if not dao.test_project_permissions(project, [dao.PROJECT_OWN, dao.PROJECT_MANAGE]):
             webapp2.abort(401)
         error_msg = None
 
         # Handle delete request
         if self.request.get(u'delete'):
+            if not dao.test_project_permissions(project, [dao.PROJECT_OWN]):
+                webapp2.abort(401)
             try:
                 dao.delete_project(project)
                 self.redirect(u'/')
@@ -49,5 +49,6 @@ class RequestHandler(webapp2.RequestHandler):
         jinja_template_values = dao.get_standard_project_values(project)
         jinja_template_values[u'project'] = project
         jinja_template_values[u'error_msg'] = error_msg
+        jinja_template_values[u'is_owner'] = dao.test_project_permissions(project, [dao.PROJECT_OWN])
 
         self.response.out.write(jinja_template.render(jinja_template_values))

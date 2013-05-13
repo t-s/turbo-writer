@@ -2,29 +2,45 @@
 
 {% block workspace %}
 
+{% if is_manager %}
+<h3>Project User Administration</h3>
+{% else %}
 <h3>Team Members</h3>
+{% endif %}
 
 <table class="bordered_table">
+    <input type="hidden" name="project_id" value="{{ project.key.id() }}">
     <tr>
         <th class="bordered_cell">Email</th>
+        {% if is_manager %}
+        <th class="bordered_cell">Project Permissions</th>
+        {% endif %}
     </tr>
     {% for user in users %}
     <tr>
         <td class="bordered_cell">
-            {% if is_owner %}
-            <a href="/project_admin/project_user_edit?project_id={{ project.key.id() }}&project_user_id={{ user.project_user_id }}"
-                >{{ user.email | e }}</a>
+            {% if is_manager %}
+            <a href='/project_admin/project_user_edit?project_id={{ project.key.id() }}&project_user_id={{ user.key.id() }}'>{{
+                user["email"] | e }}</a>
             {% else %}
-            {{ user.email | e }}
+            {{ user["email"] | e }}
             {% endif %}
         </td>
+        {% if is_manager %}
+        <td class="bordered_cell">
+            {% set first = True %}
+            {% for permission in user.permissions %}{% if not first %}, {% endif %}{{ permission }}{% set first = False
+            %}{% endfor %}
+        </td>
+        {% endif %}
     </tr>
     {% endfor %}
-    {% if is_owner %}
+    {% if is_manager %}
     <tr>
         <td class="bordered_cell">
             <a href="/project_admin/project_user_add?project_id={{ project.key.id() }}">+</a>
         </td>
+        <td class="bordered_cell"></td>
     </tr>
     {% endif %}
 </table>

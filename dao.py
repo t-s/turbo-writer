@@ -47,9 +47,9 @@ def get_all_project_permissions():
 # Site permissions
 SITE_ADMIN = u'SITE_ADMIN'
 
-SITE_ADMIN_SETTINGS = u'ADMIN_SETTINGS'
-SITE_ADMIN_TEMPLATES = u'ADMIN_TEMPLATES'
-SITE_ADMIN_USERS = u'ADMIN_USERS'
+SITE_ADMIN_SETTINGS = u'SETTINGS'
+SITE_ADMIN_TEMPLATES = u'TEMPLATES'
+SITE_ADMIN_USERS = u'USERS'
 
 
 def get_all_site_permissions():
@@ -587,7 +587,8 @@ def get_standard_project_values(project):
 
     project_user = get_project_user_by_email(project, current_email)
     if project_user:
-        jinja_template_values[u'is_owner'] = project_user.is_owner
+        jinja_template_values[
+            u'is_manager'] = PROJECT_OWN in project_user.permissions or PROJECT_MANAGE in project_user.permissions
 
     jinja_template_values[u'any_interviews'] = project.any_interview_conducted
 
@@ -616,7 +617,7 @@ def get_standard_site_values():
                 if project.project_type == PROJECT:
                     user_projects.append({u'project_id': project.key.id(), u'name': project.name})
                 elif project.project_type == PRIVATE_TEMPLATE and (
-                        TEMPLATE_OWN in permissions or TEMPLATE_EDIT in permissions):
+                            TEMPLATE_OWN in permissions or TEMPLATE_EDIT in permissions):
                     user_templates.append({u'template_id': project.key.id(), u'name': project.name})
                 jinja_template_values[u'user_projects'] = user_projects
                 jinja_template_values[u'user_templates'] = user_templates
@@ -631,7 +632,7 @@ def get_standard_template_values(template):
 
     template_user = get_template_user_by_email(template, current_email)
     if template_user:
-        jinja_template_values[u'is_owner'] = template_user.is_owner
+        jinja_template_values[u'is_owner'] = TEMPLATE_OWN in template_user.permissions
 
     return jinja_template_values
 
@@ -805,9 +806,12 @@ def test_project_permissions(project, permission_list):
     site_user = get_current_site_user()
     if site_user:
         project_user = get_project_user_by_email(project, site_user.email)
-        for permission in permission_list:
-            if permission in project_user.permissions:
+        if project_user:
+            if not permission_list:
                 return True
+            for permission in permission_list:
+                if permission in project_user.permissions:
+                    return True
 
 
 def test_site_permission(permission):
@@ -822,9 +826,12 @@ def test_template_permissions(template, permission_list):
     site_user = get_current_site_user()
     if site_user:
         template_user = get_template_user_by_email(template, site_user.email)
-        for permission in permission_list:
-            if permission in template_user.permissions:
+        if template_user:
+            if not permission_list:
                 return True
+            for permission in permission_list:
+                if permission in template_user.permissions:
+                    return True
 
 
 def touch_project_assignments(project):

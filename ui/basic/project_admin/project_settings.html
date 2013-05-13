@@ -30,11 +30,14 @@
             <td>
                 <input type="submit" name="update" value="Update Project">
             </td>
+            {% if is_owner %}
             <td>
                 <input type="submit" name="delete" value="Delete Project">
             </td>
+            {% endif %}
             <td>
-                <input type="button" value="Cancel" onclick="document.location='/project?project_id={{ project.key.id() }}'">
+                <input type="button" value="Cancel"
+                       onclick="document.location='/project?project_id={{ project.key.id() }}'">
             </td>
         </tr>
     </table>

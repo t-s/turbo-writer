@@ -6,8 +6,7 @@ import ui
 class RequestHandler(webapp2.RequestHandler):
     def get(self):
         project = dao.get_project_by_id(self.request.get(u'project_id'))
-
-        if not dao.test_project_permitted(project):
+        if not dao.test_project_permissions(project, []):
             webapp2.abort(401)
 
         jinja_template = ui.get_template(self, u'project/index.html')

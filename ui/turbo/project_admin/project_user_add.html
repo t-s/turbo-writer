@@ -2,7 +2,7 @@
 
 {% block workspace %}
 
-<h3>Team Members: Add New Team Member</h3>
+<h3>Project User Administration: Add New Project User</h3>
 
 {% if error_msg %}
 <p>
@@ -12,11 +12,30 @@
 
 <form method="post">
     <input type="hidden" name="project_id" value="{{ project.key.id() }}">
+    <input type="hidden" name="project_user_id" value="{{ project_user_id }}">
     <table>
         <tr>
-            <th style="text-align: left; vertical-align: top" autofocus>Email:</th>
-            <td><input name="email" value="{{ email | e }}" size="100"></td>
+            <th>Email:</th>
+            <td><input name="email" value="{{ email | e }}" size="100" autofocus></td>
         </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table class="bordered_table">
+        <tr>
+            <th class="bordered_cell">Project Permissions</th>
+        </tr>
+        {% for permission in permissions %}
+        <tr>
+            <td class="bordered_cell">
+                <input type="checkbox" name="{{ permission.name }}" {% if permission.checked %} checked {% endif %}>
+                {{ permission.name | e }}
+            </td>
+        </tr>
+        {% endfor %}
     </table>
     <table>
         <tr>
@@ -26,7 +45,7 @@
     <table>
         <tr>
             <td>
-                <input type="submit" value="Add Team Member">
+                <input type="submit" value="Add Project User">
             </td>
             <td>
                 <input type="button" value="Cancel"
@@ -37,4 +56,3 @@
 </form>
 
 {% endblock %}
-
