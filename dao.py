@@ -424,7 +424,9 @@ def get_private_templates():
     for project_user_key in ProjectUser.query(ProjectUser.email == users.get_current_user().email().lower()).fetch(
             keys_only=True):
         template = get_project_by_id(project_user_key.parent().id())
-        if template.project_type == PRIVATE_TEMPLATE:
+        if template.project_type == PRIVATE_TEMPLATE and test_template_permissions(template,
+                                                                                   [TEMPLATE_OWN, TEMPLATE_EDIT,
+                                                                                    TEMPLATE_USE]):
             private_templates.append(template)
     private_templates.sort(cmp=lambda x, y: cmp(x.name, y.name))
     return private_templates
