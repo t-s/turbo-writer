@@ -6,8 +6,8 @@ import ui
 class RequestHandler(webapp2.RequestHandler):
     def get(self):
         project = dao.get_project_by_id(self.request.get(u'project_id'))
-        if not dao.test_project_permitted(
-                project):  # TODO Test that current user's role includes project-admin permission
+        project = dao.get_project_by_id(self.request.get(u'project_id'))
+        if not dao.test_project_permissions(project, [dao.PROJECT_OWN, dao.PROJECT_MANAGE]):
             webapp2.abort(401)
 
         document_entity = dao.get_document_by_id(project, self.request.get(u'document_id'))
@@ -18,8 +18,7 @@ class RequestHandler(webapp2.RequestHandler):
 
     def post(self):
         project = dao.get_project_by_id(self.request.get(u'project_id'))
-        if not dao.test_project_permitted(
-                project):  # TODO Test that current user's role includes project-admin permission
+        if not dao.test_project_permissions(project, [dao.PROJECT_OWN, dao.PROJECT_MANAGE]):
             webapp2.abort(401)
 
         document_entity = dao.get_document_by_id(project, self.request.get(u'document_id'))

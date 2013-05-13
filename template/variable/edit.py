@@ -6,8 +6,7 @@ import ui
 class RequestHandler(webapp2.RequestHandler):
     def get(self):
         template = dao.get_template_by_id(self.request.get(u'template_id'))
-        if not dao.test_template_permitted(
-                template):  # TODO Test that current user's role includes template-admin permission
+        if not dao.test_template_permissions(template, [dao.TEMPLATE_OWN, dao.TEMPLATE_EDIT]):
             webapp2.abort(401)
 
         variable_entity = dao.get_variable_by_id(template, self.request.get(u'variable_id'))
@@ -18,8 +17,7 @@ class RequestHandler(webapp2.RequestHandler):
 
     def post(self):
         template = dao.get_template_by_id(self.request.get(u'template_id'))
-        if not dao.test_template_permitted(
-                template):  # TODO Test that current user's role includes template-admin permission
+        if not dao.test_template_permissions(template, [dao.TEMPLATE_OWN, dao.TEMPLATE_EDIT]):
             webapp2.abort(401)
 
         variable_entity = dao.get_variable_by_id(template, self.request.get(u'variable_id'))

@@ -34,8 +34,7 @@ class RequestHandler(webapp2.RequestHandler):
 
     def get(self):
         project = dao.get_project_by_id(self.request.get(u'project_id'))
-
-        if not dao.test_project_permitted(project):
+        if not dao.test_project_permissions(project, []):
             webapp2.abort(401)
 
         document = dao.get_document_by_id(project, self.request.get(u'document_id'))

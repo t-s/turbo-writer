@@ -14,8 +14,7 @@ from service.interview_service import InterviewService
 class RequestHandler(webapp2.RequestHandler):
     def get(self):
         project = dao.get_project_by_id(self.request.get(u'_project_id'))
-
-        if not dao.test_project_permitted(project):
+        if not dao.test_project_permissions(project, []):
             webapp2.abort(401)
 
         interview_service = InterviewService(project)
@@ -44,8 +43,7 @@ class RequestHandler(webapp2.RequestHandler):
 class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
         project = dao.get_project_by_id(self.request.get(u'_project_id'))
-
-        if not dao.test_project_permitted(project):
+        if not dao.test_project_permissions(project, []):
             webapp2.abort(401)
 
         interview_name = self.request.get(u'_interview_name')

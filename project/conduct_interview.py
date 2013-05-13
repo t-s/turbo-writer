@@ -6,7 +6,6 @@ from google.appengine.api import users
 
 import dao
 import ui
-from service.html_generator_service import HtmlGeneratorService
 from service.interview_service import InterviewService
 
 dot_pattern_with_one_group = re.compile(r'(.*)\.\d*')
@@ -100,8 +99,7 @@ class RequestHandler(webapp2.RequestHandler):
 
     def get(self):
         project = dao.get_project_by_id(self.request.get(u'_project_id'))
-
-        if not dao.test_project_permitted(project):
+        if not dao.test_project_permissions(project, []):
             webapp2.abort(401)
 
         interview_service = InterviewService(project)
@@ -125,8 +123,7 @@ class RequestHandler(webapp2.RequestHandler):
 
     def post(self):
         project = dao.get_project_by_id(self.request.get(u'_project_id'))
-
-        if not dao.test_project_permitted(project):
+        if not dao.test_project_permissions(project, []):
             webapp2.abort(401)
 
         index = self.request.get(u'_index')

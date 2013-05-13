@@ -6,10 +6,8 @@ import ui
 class RequestHandler(webapp2.RequestHandler):
     def get(self):
         template = dao.get_template_by_id(self.request.get(u'template_id'))
-        if not dao.test_template_permitted(
-                template):  # TODO Test that current user's role includes template-admin permission
+        if not dao.test_template_permissions(template, [dao.TEMPLATE_OWN, dao.TEMPLATE_EDIT]):
             webapp2.abort(401)
-
         style_list = list()
 
         for style_entity in dao.get_styles(template):

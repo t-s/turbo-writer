@@ -20,8 +20,7 @@ remove_checklist_position_pattern = re.compile(r'remove_checklist_item_position\
 class RequestHandler(webapp2.RequestHandler):
     def get(self):
         project = dao.get_project_by_id(self.request.get(u'project_id'))
-        if not dao.test_project_permitted(
-                project):  # TODO Test that current user's role includes project-admin permission
+        if not dao.test_project_permissions(project, [dao.PROJECT_OWN, dao.PROJECT_MANAGE]):
             webapp2.abort(401)
 
         assignment_entity = dao.get_assignment_by_id(project, self.request.get(u'assignment_id'))
@@ -32,8 +31,7 @@ class RequestHandler(webapp2.RequestHandler):
 
     def post(self):
         project = dao.get_project_by_id(self.request.get(u'project_id'))
-        if not dao.test_project_permitted(
-                project):  # TODO Test that current user's role includes project-admin permission
+        if not dao.test_project_permissions(project, [dao.PROJECT_OWN, dao.PROJECT_MANAGE]):
             webapp2.abort(401)
 
         assignment_entity = dao.get_assignment_by_id(project, self.request.get(u'assignment_id'))
