@@ -166,15 +166,18 @@ class RequestHandler(webapp2.RequestHandler):
                 self.assign_email(interview, interview_service, email, index)
                 parent = interview_service.get_closest_ancestor_interview_with_content(interview.name)
                 if parent:
-                    name = parent.name
-                    match = dot_pattern_with_one_group.match(name)
-                    if match:
-                        name = match.group(1)
-                    self.render(project, name, interview_service, None)
+                    self.render_parent(project, parent, interview_service)
                     return
             else:
                 error_msg = u'Assign failed: You must select an email address'
                 self.render(project, interview_name, interview_service, index, error_msg=error_msg)
+                return
+        elif self.request.get(u'_not_needed'):
+            interview.assigned_interview_id = -1
+            interview.put()
+            parent = interview_service.get_closest_ancestor_interview_with_content(interview.name)
+            if parent:
+                self.render_parent(project, parent, interview_service)
                 return
         elif self.request.get(u'_completed'):
             root_interview = interview_service.get_interview_by_name(interview.root_interview_name)
@@ -277,10 +280,20 @@ class RequestHandler(webapp2.RequestHandler):
         if assignment_needed:
             jinja_template_values[u'assign_button'] = interview.assign_button
 
+        if interview.not_needed_button:
+            jinja_template_values[u'not_needed_button'] = interview.not_needed_button
+
         if interview.completed_button:
             jinja_template_values[u'completed_button'] = interview.completed_button
 
         self.response.out.write(jinja_template.render(jinja_template_values))
+
+    def render_parent(self, project, parent, interview_service):
+        name = parent.name
+        match = dot_pattern_with_one_group.match(name)
+        if match:
+            name = match.group(1)
+        self.render(project, name, interview_service, None)
 
     def store_variables(self, project, index):
         # Note that posted parameters that are not variable names use an underscore prefix.

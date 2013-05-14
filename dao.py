@@ -153,6 +153,7 @@ class Interview(ndb.Model):
 
     # Buttons
     assign_button = ndb.StringProperty(u'ab')  # No default
+    not_needed_button = ndb.StringProperty(u'nnb') # No default
     child_button = ndb.StringProperty(u'chb')  # Defaults to u'Add'; not used if child_interview_names is None
     completed_button = ndb.StringProperty(u'cob')  # No default
     next_button = ndb.StringProperty(
@@ -166,7 +167,8 @@ class Interview(ndb.Model):
     assigned_email = ndb.StringProperty(
         u'ae')  # Used only for root nodes; identifies user who is to conduct this interview
     assigned_index = ndb.IntegerProperty(u'ai')  # Used only for root nodes; identifies index of a repeatable interview
-    assigned_interview_id = ndb.IntegerProperty(u'aii')  # Identifies interview assigned by use of assign_button
+    assigned_interview_id = ndb.IntegerProperty(
+        u'aii')  # Identifies interview assigned by use of assign_button, or -1 if user specifies assignment not needed
     completed = ndb.BooleanProperty(u'c')  # Used only for root nodes
     has_been_reviewed = ndb.BooleanProperty(u'hbr')
     bookmark_interview_name = ndb.StringProperty(
@@ -194,9 +196,10 @@ class Interview(ndb.Model):
                          is_writer_interview=self.is_writer_interview, menu_title=self.menu_title, content=self.content,
                          checklist_items=self.checklist_items, auto_assign=self.auto_assign,
                          generate_after=self.generate_after, assign_interview_name=self.assign_interview_name,
-                         assign_button=self.assign_button, child_button=self.child_button,
-                         completed_button=self.completed_button, next_button=self.next_button,
-                         parent_button=self.parent_button, previous_button=self.previous_button, parent=project.key)
+                         assign_button=self.assign_button, not_needed_button=self.not_needed_button,
+                         child_button=self.child_button, completed_button=self.completed_button,
+                         next_button=self.next_button, parent_button=self.parent_button,
+                         previous_button=self.previous_button, parent=project.key)
 
 
 class Project(ndb.Model):

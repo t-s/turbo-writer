@@ -23,6 +23,8 @@ textarea {
 th {
     text-align: left;
     vertical-align: top;
+    white-space: nowrap;
+    width: 1px;
 }
 
 .bordered_cell {

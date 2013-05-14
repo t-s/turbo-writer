@@ -1,3 +1,4 @@
+import console
 import new_project
 import new_project_based_on_template
 import project_settings

@@ -92,6 +92,7 @@ class HtmlGeneratorService():
         interview = dao.Interview(name=u'assign_reviewer_{}'.format(assignment.name),
                                   root_interview_name=u'assign_reviewer_{}'.format(assignment.name),
                                   menu_title=assignment.name, assign_button=u'Assign Reviewer',
+                                  not_needed_button=u'Review Not Needed',
                                   assign_interview_name=u'review_{}'.format(assignment.name),
                                   assignment_name=assignment.name, parent=self.template.key)
         html = u'<h3>Assign Reviewer for "{}"</h3>'.format(
