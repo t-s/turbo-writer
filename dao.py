@@ -866,7 +866,8 @@ if not SiteUser.query(SiteUser.site_permissions == SITE_ADMIN_USERS).count():
     SiteUser(email=u'awieder@ztech-group.com'.lower(), site_permissions=all_site_permissions).put()
     # SiteUser(email=u'MHanderhan@meesha.net'.lower(), site_permissions=all_site_permissions).put()
 
-# TODO Correcting obsolete project and template permissions is temporary until all published sites have had this done
+'''
+# TODO Correct obsolete project and template permissions is temporary until all published sites have had this done
 def append_permission(project_user, permission):
     if project_user.permissions:
         if permission not in project_user.permissions:
@@ -891,3 +892,4 @@ for project in Project.query(Project.project_type.IN([PROJECT, PRIVATE_TEMPLATE]
         project_user.is_owner = None
         project_user.version = "1.0"
         project_user.put()
+'''

@@ -49,6 +49,5 @@ class RequestHandler(webapp2.RequestHandler):
         jinja_template_values = dao.get_standard_template_values(template)
         jinja_template_values[u'template'] = template
         jinja_template_values[u'error_msg'] = error_msg
-        jinja_template_values[u'is_owner'] = dao.test_template_permissions(template, [dao.TEMPLATE_OWN])
 
         self.response.out.write(jinja_template.render(jinja_template_values))

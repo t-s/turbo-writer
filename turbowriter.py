@@ -68,6 +68,7 @@ app.router.add((u'/project/variable/edit', project.variable.edit.RequestHandler)
 
 app.router.add((u'/project_admin/new_project', new_project.RequestHandler))
 app.router.add((u'/project_admin/new_project_based_on_template', new_project_based_on_template.RequestHandler))
+app.router.add((u'/project_admin/console', console.RequestHandler))
 app.router.add((u'/project_admin/project_settings', project_settings.RequestHandler))
 app.router.add((u'/project_admin/project_user_admin', project_user_admin.RequestHandler))
 app.router.add((u'/project_admin/project_user_add', project_user_add.RequestHandler))

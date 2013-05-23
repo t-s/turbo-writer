@@ -1,0 +1,55 @@
+{% extends "project_base.html" %}
+
+{% block workspace %}
+
+<h3>Console</h3>
+
+<table class="bordered_table">
+    <input type="hidden" name="project_id" value="{{ project.key.id() }}">
+    <tr>
+        <th class="bordered_cell">Assignment</th>
+        <th class="bordered_cell">Status</th>
+        <th class="bordered_cell">Actions</th>
+    </tr>
+    {% for assignment in assignments %}
+    <tr>
+        <td class="bordered_cell" rowspan=5>
+            {{ assignment.name | e }}
+        </td>
+    </tr>
+    <tr>
+        <td class="bordered_cell">
+            Assigned writer: {{ assignment.write | e }}
+        </td>
+        <td class="bordered_cell">
+            <input type="submit" value="Assign Writer"/>
+        </td>
+    </tr>
+    <tr>
+        <td class="bordered_cell">
+            Assigned reviewer: {{ assignment.review | e }}
+        </td>
+        <td class="bordered_cell">
+            <input type="submit" value="Assign Reviewer"/>
+        </td>
+    </tr>
+    <tr>
+        <td class="bordered_cell">
+            Draft saved: Checkmarks 0 of 1
+        </td>
+        <td class="bordered_cell">
+            <input type="submit" value="Write"/>
+        </td>
+    </tr>
+    <tr>
+        <td class="bordered_cell">
+            Not ready for review
+        </td>
+        <td class="bordered_cell">
+            <input type="submit" value="Review" disabled="disabled"/>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
