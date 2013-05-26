@@ -1,3 +1,4 @@
+import attachment_service
 import dashboard_service
 import document_service
 import dropbox_service

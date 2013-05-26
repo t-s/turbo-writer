@@ -29,7 +29,6 @@ END_REPEATING_GROUP = u'E'
 SMALL = u'S'
 MEDIUM = u'M'
 LARGE = u'L'
-FILE = u'X'
 
 PROJECT = u'J'
 PRIVATE_TEMPLATE = u'V'
@@ -233,6 +232,7 @@ class Project(ndb.Model):
     has_assignment_definition_changed = ndb.BooleanProperty(u'hadc')
     has_document_definition_changed = ndb.BooleanProperty(u'hddc')
     any_interview_conducted = ndb.BooleanProperty(u'aic')
+    attachments_blob_key = ndb.BlobKeyProperty(u'abk')
     add_date = ndb.DateTimeProperty(u'ad', auto_now_add=True)
     update_date = ndb.DateTimeProperty(u'ud', auto_now=True)
 
@@ -287,12 +287,10 @@ class Variable(ndb.Model):
     """
     name = ndb.StringProperty(u'n', required=True)
     internal_name = ndb.StringProperty(u'in', required=True)
-    input_field = ndb.StringProperty(u'if')  # SMALL/MEDIUM/LARGE/FILE
+    input_field = ndb.StringProperty(u'if')  # SMALL/MEDIUM/LARGE
     description = ndb.TextProperty(u'd')
     is_repeating = ndb.BooleanProperty(u'ir')
     content = ndb.TextProperty(u'c', compressed=True)
-    blob_key = ndb.BlobKeyProperty(u'bk')
-    filename = ndb.StringProperty(u'f')
 
     def clone(self, project):
         return Variable(name=self.name, internal_name=self.internal_name, input_field=self.input_field,
@@ -321,6 +319,10 @@ def delete_project(project):
         project_user_key.delete()
     for assignment_key in Assignment.query(ancestor=project.key).fetch(keys_only=True):
         assignment_key.delete()
+    for attachment in Attachment.query(ancestor=project.key).fetch():
+        if attachment.blob_key:
+            blobstore.delete(attachment.blob_key)
+        attachment.key.delete()
     for document in Document.query(ancestor=project.key).fetch():
         for document_item_key in DocumentItem.query(ancestor=document.key).fetch(keys_only=True):
             document_item_key.delete()
@@ -332,9 +334,9 @@ def delete_project(project):
     for style_key in Style.query(ancestor=project.key).fetch(keys_only=True):
         style_key.delete()
     for variable in Variable.query(ancestor=project.key).fetch():
-        if variable.blob_key:
-            blobstore.delete(variable.blob_key)
         variable.key.delete()
+    if project.attachments_blob_key:
+        blobstore.delete(project.attachments_blob_key)
     project.key.delete()
 
 
@@ -376,6 +378,11 @@ def get_assignments(template):
 
 def get_attachment_by_id(project, attachment_id):
     return Attachment.get_by_id(int(attachment_id), parent=project.key)
+
+
+def get_attachment_by_filename(project, filename):
+    for attachment in Attachment.query(Attachment.filename == filename, ancestor=project.key).fetch():
+        return attachment
 
 
 def get_attachment_by_name(project, attachment_name):
@@ -823,15 +830,7 @@ def set_variable_blob_key(project, internal_name, blob_key):
 
 
 def set_variable_content(variable, value):
-    if variable.input_field == FILE and value:
-        # Must be a Dropbox file, since UploadHandler doesn't go thru this code
-        blob_key = DropboxService().store_file_as_blob(value)
-        if variable.blob_key:
-            blobstore.delete(variable.blob_key)
-        variable.blob_key = blob_key
-        variable.filename = urllib2.unquote(value.split(u'/')[-1])
-    else:
-        variable.content = value
+    variable.content = value
 
 
 def test_current_user_registered():
@@ -917,31 +916,3 @@ if not SiteUser.query(SiteUser.site_permissions == SITE_ADMIN_USERS).count():
     SiteUser(email=u'awieder@zephyrmediacommunications.com'.lower(), site_permissions=all_site_permissions).put()
     SiteUser(email=u'awieder@ztech-group.com'.lower(), site_permissions=all_site_permissions).put()
     # SiteUser(email=u'MHanderhan@meesha.net'.lower(), site_permissions=all_site_permissions).put()
-
-'''
-# TODO Correct obsolete project and template permissions is temporary until all published sites have had this done
-def append_permission(project_user, permission):
-    if project_user.permissions:
-        if permission not in project_user.permissions:
-            project_user.permissions.append(permission)
-    else:
-        project_user.permissions = [permission]
-
-# If any projects or templates with old permissions, correct them
-for project in Project.query(Project.project_type.IN([PROJECT, PRIVATE_TEMPLATE])).fetch():
-    for project_user in ProjectUser.query(ProjectUser.version != "1.0", ancestor=project.key):
-        if project.project_type == PROJECT:
-            if project_user.is_owner:
-                append_permission(project_user, PROJECT_OWN)
-            else:
-                append_permission(project_user, PROJECT_WRITE)
-                append_permission(project_user, PROJECT_REVIEW)
-        if project.project_type == PRIVATE_TEMPLATE:
-            if project_user.is_owner:
-                append_permission(project_user, TEMPLATE_OWN)
-            else:
-                append_permission(project_user, TEMPLATE_USE)
-        project_user.is_owner = None
-        project_user.version = "1.0"
-        project_user.put()
-'''

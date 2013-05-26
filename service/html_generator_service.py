@@ -191,10 +191,6 @@ class HtmlGeneratorService():
                                   assignment_name=assignment.name, parent=self.template.key)
         html = u'<h3>Review "{}"</h3>'.format(
             u'{{ assignment_name | e }}' if assignment.is_repeating else assignment.name)
-        html += u'''
-            <script type="text/javascript" src="https://www.dropbox.com/static/api/1/dropbox.js" id="dropboxjs"
-            data-app-key="dnerajsj9p29gc3"></script>
-            '''
         html += u'<p><blockquote style="width: 500px; font-style: italic; background-color: lightgray">'
         html += u'{}'.format(assignment.instructions_to_writer)
         html += u'</blockquote></p>'
@@ -232,10 +228,6 @@ class HtmlGeneratorService():
                                   assignment_name=assignment.name, parent=self.template.key)
         html = u'<h3>Write "{}"</h3>'.format(
             u'{{ assignment_name | e }}' if assignment.is_repeating else assignment.name)
-        html += u'''
-            <script type="text/javascript" src="https://www.dropbox.com/static/api/1/dropbox.js" id="dropboxjs"
-            data-app-key="dnerajsj9p29gc3"></script>
-            '''
         html += u'<p><blockquote style="width: 500px; font-style: italic; background-color: lightgray">'
         html += u'{}'.format(assignment.instructions_to_writer)
         html += u'</blockquote></p>'
@@ -275,31 +267,9 @@ class HtmlGeneratorService():
                 elif variable.input_field == dao.MEDIUM:
                     html += u'<td><input name="{}" style="width: 500px" value="{{{{ {} | e }}}}"></td>'.format(
                         variable.internal_name, variable.internal_name)
-                elif variable.input_field == dao.LARGE:
+                else:
                     html += u'<td><textarea name="{}" style="height: 200px; width: 500px">{{{{ {} | e }}}}</textarea></td>'.format(
                         variable.internal_name, variable.internal_name)
-                else:
-                    html += u'<td>'
-
-                    html += u'{{% if {}_filename %}}'.format(variable.internal_name)
-                    html += u'<a href="/project/download_file/{{{{ {}_blob_key }}}}?filename={{{{ {}_filename }}}}'.format(
-                        variable.internal_name, variable.internal_name)
-                    html += u'">Click here</a> to download "{{{{ {}_filename }}}}" for viewing and editing<br/><br/>'.format(
-                        variable.internal_name)
-                    html += u'{% endif %}'
-
-                    html += u'To upload into TurboWriter:<br/><br/>'
-
-                    html += u'<input type="submit"'
-                    html += u' style="background-color: #f8f8f8; border-color: #eeeeee; border-radius: 3px; border-width: 1px; color: #777777; font-weight: bold; height: 25px; width: 152px;"'
-                    html += u' value="Choose from Disk" name="'
-                    html += u'_choose_{}'.format(variable.internal_name)
-                    html += u'"><br/><br/>'
-
-                    html += u'<input type="dropbox-chooser" name="{}" style="visibility: hidden;" data-link-type="direct"/>'.format(
-                        variable.internal_name)
-
-                    html += u'</td>'
                 html += u'</tr>'
         html += u'</table></p>'
         return html

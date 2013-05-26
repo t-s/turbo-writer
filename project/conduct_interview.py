@@ -69,13 +69,7 @@ class RequestHandler(webapp2.RequestHandler):
     def generate_variable_value(self, inner_template_values, variable):
         match = indexed_name_pattern.match(variable.internal_name)
         internal_name = match.group(1) if match else variable.internal_name
-        if variable.input_field == dao.FILE:
-            blob_key = u'{}_blob_key'.format(internal_name)
-            inner_template_values[blob_key] = variable.blob_key
-            filename = u'{}_filename'.format(internal_name)
-            inner_template_values[filename] = variable.filename
-        else:
-            inner_template_values[internal_name] = self.fill(variable.content)
+        inner_template_values[internal_name] = self.fill(variable.content)
 
     def generate_variable_values(self, project, index, inner_template_values):
         indexed_variable_max_indices = dict()

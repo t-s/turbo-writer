@@ -2,13 +2,19 @@ import re
 import webapp2
 import dao
 import ui
-from service.html_generator_service import HtmlGeneratorService
-from service.document_service import DocumentService
 
 indexed_name_pattern = re.compile(r'(.*)\[(.*)\]')
+image_element_pattern = re.compile(r'\*\*\* INSERT "(.*?)" \(image/.*?\)(.*?)HERE \*\*\*')
 
 
 class RequestHandler(webapp2.RequestHandler):
+    def generate_html_document(self, project, document):
+        inner_template_values = dict()
+        inner_template_values[u'project'] = project
+        self.generate_variable_values(project, inner_template_values)
+        inner_template = ui.from_string(self, document.content)
+        return inner_template.render(inner_template_values)
+
     def generate_variable_values(self, project, inner_template_values):
         indexed_variable_max_indices = dict()
         for variable in dao.get_variables(project):
@@ -21,10 +27,7 @@ class RequestHandler(webapp2.RequestHandler):
                 if not old_max_index or int(variable_index) > old_max_index:
                     indexed_variable_max_indices[variable_name] = int(variable_index)
             else:
-                if variable.input_field == dao.FILE and variable.blob_key and variable.filename:
-                    content = u'\n<!--B-KEY:{}-->\n[Insert "{}" here]\n'.format(variable.blob_key, variable.filename)
-                else:
-                    content = variable.content if variable.content else u''
+                content = variable.content if variable.content else u''
                 inner_template_values[variable.internal_name] = content
         for variable_name in iter(indexed_variable_max_indices):
             count_name = u'{}_count'.format(variable_name)
@@ -38,20 +41,8 @@ class RequestHandler(webapp2.RequestHandler):
             webapp2.abort(401)
 
         document = dao.get_document_by_id(project, self.request.get(u'document_id'))
-
-        # Render HTML document
-        inner_template_values = dict()
-
-        inner_template_values[u'project'] = project
-
-        self.generate_variable_values(project, inner_template_values)
-
-        inner_template = ui.from_string(self, document.content)
-        html_document = inner_template.render(inner_template_values)
-
-        # Generate document
-        document_service = DocumentService()
-        document_service.generate_document(document, html_document)
+        html_document = self.generate_html_document(project, document)
+        html_document = self.replace_image_elements(project, html_document)
 
         # Deliver HTTP response
         jinja_template = ui.get_template(self, u'project/produce_document.html')
@@ -60,3 +51,19 @@ class RequestHandler(webapp2.RequestHandler):
         jinja_template_values[u'document'] = document
         jinja_template_values[u'html_document'] = html_document
         self.response.out.write(jinja_template.render(jinja_template_values))
+
+    def replace_image_elements(self, project, document):
+        while True:
+            match = image_element_pattern.search(document)
+            if match:
+                before = document[:match.start()]
+                after = document[match.end():]
+                attachment = dao.get_attachment_by_filename(project, match.group(1))
+                if attachment:
+                    document = u'{}<img src="/project_admin/attachment_download?project_id={}&attachment_id={}" {}>{}'.format(
+                        before, project.key.id(), attachment.key.id(), match.group(2), after)
+                else:
+                    document = u'{}<br/>***UNABLE TO FIND ATTACHMENT "{}"***<br/>{}'.format(before, match.group(1),
+                                                                                            after)
+            else:
+                return document

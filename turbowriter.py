@@ -42,11 +42,9 @@ app.router.add((u'/my_account/preferences', preferences.RequestHandler))
 
 app.router.add((u'/project', project.index.RequestHandler))
 app.router.add((u'/project/conduct_interview', project.conduct_interview.RequestHandler))
-app.router.add((u'/project/download_file/([^/]+)?', project.upload_file.DownloadHandler))
-app.router.add((u'/project/download_document/([^/]+)?', project.download_document.DownloadHandler))
+app.router.add((u'/project/download_attachments', project.download_attachments.DownloadHandler))
+app.router.add((u'/project/download_document', project.download_document.DownloadHandler))
 app.router.add((u'/project/produce_document', project.produce_document.RequestHandler))
-app.router.add((u'/project/upload_file', project.upload_file.RequestHandler))
-app.router.add((u'/project/upload_file_post', project.upload_file.UploadHandler))
 
 app.router.add((u'/project/assignment', project.assignment.index.RequestHandler))
 app.router.add((u'/project/assignment/add', project.assignment.add.RequestHandler))
