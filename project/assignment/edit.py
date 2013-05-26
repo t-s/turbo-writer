@@ -31,7 +31,7 @@ class RequestHandler(webapp2.RequestHandler):
                 # Delete associated generated interviews
                 for interview_entity in dao.get_interviews_by_assignment_name(project, assignment_entity.name):
                     interview_entity.key.delete()
-                self.redirect(u'/project/assignment?project_id={}'.format(project.key.id()))
+                self.redirect("/project/assignment?project_id={}".format(project.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Deleting assignment from project failed: {}'.format(e)
@@ -43,7 +43,7 @@ class RequestHandler(webapp2.RequestHandler):
                 assignment_entity.is_repeating = (self.request.get(u'type') == u'repeating')
                 assignment_entity.put()
                 dao.touch_project_assignments(project)
-                self.redirect(u'/project/assignment?project_id={}'.format(project.key.id()))
+                self.redirect("/project/assignment?project_id={}".format(project.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Updating assignment failed: {}'.format(e)

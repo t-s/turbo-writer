@@ -19,4 +19,4 @@ class RequestHandler(webapp2.RequestHandler):
         ui_parameter = self.request.get(u'ui')
         if ui_parameter:
             self.response.set_cookie(u'ui', ui_parameter)
-        self.redirect(u'/')
+        self.redirect("/")

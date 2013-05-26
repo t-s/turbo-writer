@@ -32,7 +32,7 @@ class RequestHandler(webapp2.RequestHandler):
             try:
                 self.require_owner(project, exclude_user=project_user)
                 project_user.key.delete()
-                self.redirect(u'/project_admin/project_user_admin?project_id={}'.format(project.key.id()))
+                self.redirect("/project_admin/project_user_admin?project_id={}".format(project.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Deleting project user failed: {}'.format(e)
@@ -52,7 +52,7 @@ class RequestHandler(webapp2.RequestHandler):
             try:
                 self.require_owner(project)
                 project_user.put()
-                self.redirect(u'/project_admin/project_user_admin?project_id={}'.format(project.key.id()))
+                self.redirect("/project_admin/project_user_admin?project_id={}".format(project.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Updating project user failed: {}'.format(e)

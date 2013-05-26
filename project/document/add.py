@@ -35,7 +35,7 @@ class RequestHandler(webapp2.RequestHandler):
                                                    parent=project.key)
                     document_entity.put()
                     dao.touch_project_documents(project)
-                    self.redirect(u'/project/document?project_id={}'.format(project.key.id()))
+                    self.redirect("/project/document?project_id={}".format(project.key.id()))
                     return
                 except Exception as e:
                     error_msg = u'Adding document failed: {}'.format(e)

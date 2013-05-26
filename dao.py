@@ -1,3 +1,4 @@
+import mimetypes
 import re
 import urllib2
 from google.appengine.api import users
@@ -34,6 +35,7 @@ PROJECT = u'J'
 PRIVATE_TEMPLATE = u'V'
 PUBLIC_TEMPLATE = u'U'
 
+
 # Project permissions
 PROJECT_OWN = u'OWN'
 PROJECT_MANAGE = u'MANAGE'
@@ -50,6 +52,10 @@ SITE_ADMIN = u'SITE_ADMIN'
 SITE_ADMIN_SETTINGS = u'SETTINGS'
 SITE_ADMIN_TEMPLATES = u'TEMPLATES'
 SITE_ADMIN_USERS = u'USERS'
+
+# Upload sources
+SOURCE_DISK = u'D'
+SOURCE_DROPBOX = u'DB'
 
 
 def get_all_site_permissions():
@@ -88,6 +94,21 @@ class Assignment(ndb.Model):
                           instructions_to_manager=self.instructions_to_manager,
                           instructions_to_writer=self.instructions_to_writer,
                           variable_names=self.variable_names, checklist_items=self.checklist_items, parent=project.key)
+
+
+class Attachment(ndb.Model):
+    """
+        The datastore contains one Attachment entity for each attachment within a project.
+
+        Parent must contain a Project key.
+    """
+    name = ndb.StringProperty(u'n', required=True)
+    description = ndb.TextProperty(u'd')
+    is_image = ndb.BooleanProperty(u'ii')
+    media_type = ndb.StringProperty(u'mt')
+    encoding = ndb.StringProperty(u'e')
+    blob_key = ndb.BlobKeyProperty(u'bk')
+    filename = ndb.StringProperty(u'f')
 
 
 class Document(ndb.Model):
@@ -285,7 +306,7 @@ def convert_name_to_internal_name(name):
     internal_name = re.sub(r'[\W]+', u'', internal_name)
     if internal_name[0].isdigit():
         internal_name = u'v{}'.format(internal_name)
-    internal_name = u'{}_{}'.format(internal_name, crc16pure.crc16xmodem(str(name)))
+    internal_name = u'{}_{}'.format(internal_name, crc16pure.crc16xmodem(name))
     return internal_name
 
 
@@ -351,6 +372,29 @@ def get_assignment_names(template):
 
 def get_assignments(template):
     return Assignment.query(ancestor=template.key).order(Assignment.name).fetch()
+
+
+def get_attachment_by_id(project, attachment_id):
+    return Attachment.get_by_id(int(attachment_id), parent=project.key)
+
+
+def get_attachment_by_name(project, attachment_name):
+    for attachment in Attachment.query(Attachment.name == attachment_name, ancestor=project.key).fetch():
+        return attachment
+
+
+def get_attachments_by_project(project):
+    attachments = list()
+    for attachment in Attachment.query(ancestor=project.key).order(Attachment.name).fetch():
+        try:
+            attachment.media_type, attachment.encoding = mimetypes.guess_type(attachment.filename, strict=False)
+            attachment.is_image = attachment.media_type.startswith("image/")
+        except:
+            attachment.media_type = u''
+            attachment.encoding = u''
+            attachment.is_image = False
+        attachments.append(attachment)
+    return attachments
 
 
 def get_current_site_user():
@@ -714,6 +758,14 @@ def parse_checklist_item(checklist_item):
             break
         checklist_item += u'[F][F]'
     return match
+
+
+def set_attachment_blob_key(attachment, blob_key, filename):
+    if attachment.blob_key:
+        blobstore.delete(attachment.blob_key)
+    attachment.blob_key = blob_key
+    attachment.filename = filename
+    attachment.put()
 
 
 def set_bookmark(root_interview, current_interview):

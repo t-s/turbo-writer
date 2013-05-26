@@ -39,7 +39,7 @@ class RequestHandler(webapp2.RequestHandler):
                                  is_repeating=(variable_type == u'repeating'), input_field=input_field, content=u'',
                                  parent=project.key).put()
                     dao.touch_project_assignments(project)
-                    self.redirect(u'/project/variable?project_id={}'.format(project.key.id()))
+                    self.redirect("/project/variable?project_id={}".format(project.key.id()))
                     return
                 except Exception as e:
                     error_msg = u'Adding variable failed: {}'.format(e)

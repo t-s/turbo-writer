@@ -28,7 +28,7 @@ class RequestHandler(webapp2.RequestHandler):
             try:
                 style_entity.key.delete()
                 dao.touch_project_documents(project)
-                self.redirect(u'/project/style?project_id={}'.format(project.key.id()))
+                self.redirect("/project/style?project_id={}".format(project.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Deleting style from project failed: {}'.format(e)
@@ -40,7 +40,7 @@ class RequestHandler(webapp2.RequestHandler):
                 style_entity.css = self.request.get(u'css')
                 style_entity.put()
                 dao.touch_project_documents(project)
-                self.redirect(u'/project/style?project_id={}'.format(project.key.id()))
+                self.redirect("/project/style?project_id={}".format(project.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Updating style failed: {}'.format(e)

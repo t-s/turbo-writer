@@ -210,10 +210,9 @@ class RequestHandler(webapp2.RequestHandler):
                     if index:
                         query_string_dict[u'_index'] = index
                     query_string = urllib.urlencode(query_string_dict)
-                    url = u'/project/upload_file?{}'.format(query_string)
-                    self.redirect(url)
+                    self.redirect("/project/upload_file?{}".format(query_string))
                     return
-        self.redirect(u'/project?project_id={}'.format(project.key.id()))
+        self.redirect("/project?project_id={}".format(project.key.id()))
 
     def render(self, project, interview_name, interview_service, index, error_msg=None):
         interview_service.set_bookmark(interview_name)

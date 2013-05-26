@@ -27,7 +27,7 @@ class RequestHandler(webapp2.RequestHandler):
         if variable_entity and self.request.get(u'delete'):
             try:
                 variable_entity.key.delete()
-                self.redirect(u'/template/variable?template_id={}'.format(template.key.id()))
+                self.redirect("/template/variable?template_id={}".format(template.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Deleting variable from template failed: {}'.format(e)
@@ -39,7 +39,7 @@ class RequestHandler(webapp2.RequestHandler):
                 variable_entity.is_repeating = (self.request.get(u'type') == u'repeating')
                 variable_entity.input_field = self.request.get(u'input_field')
                 variable_entity.put()
-                self.redirect(u'/template/variable?template_id={}'.format(template.key.id()))
+                self.redirect("/template/variable?template_id={}".format(template.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Updating variable failed: {}'.format(e)

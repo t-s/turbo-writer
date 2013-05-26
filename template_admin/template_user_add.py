@@ -44,7 +44,7 @@ class RequestHandler(webapp2.RequestHandler):
                         webapp2.abort(401)
                 try:
                     dao.ProjectUser(email=submitted_email.lower(), parent=template.key, permissions=permissions).put()
-                    self.redirect(u'/template_admin/template_user_admin?template_id={}'.format(template.key.id()))
+                    self.redirect("/template_admin/template_user_admin?template_id={}".format(template.key.id()))
                     return
                 except Exception as e:
                     error_msg = u'Adding user to template failed: {}'.format(e)

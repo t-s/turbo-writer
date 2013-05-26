@@ -150,7 +150,7 @@ class RequestHandler(webapp2.RequestHandler):
             assignment_entity.put()
 
         if self.request.get(u'update') and not error_msg:
-            self.redirect(u'/template/assignment?template_id={}'.format(template.key.id()))
+            self.redirect("/template/assignment?template_id={}".format(template.key.id()))
             return
 
         # Display the webpage

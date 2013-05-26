@@ -39,7 +39,7 @@ class RequestHandler(webapp2.RequestHandler):
                         permissions.append(permission)
                 try:
                     dao.SiteUser(email=submitted_email.lower(), site_permissions=permissions).put()
-                    self.redirect(u'/site_admin/site_user_admin')
+                    self.redirect("/site_admin/site_user_admin")
                     return
                 except Exception as e:
                     error_msg = u'Adding user to site failed: {}'.format(e)

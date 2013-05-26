@@ -1,6 +1,11 @@
 import console
 import new_project
 import new_project_based_on_template
+import attachment_admin
+import attachment_add
+import attachment_download
+import attachment_edit
+import attachment_upload
 import project_settings
 import project_user_add
 import project_user_admin

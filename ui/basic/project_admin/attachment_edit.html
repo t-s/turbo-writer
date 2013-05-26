@@ -1,0 +1,77 @@
+{% extends "project_base.html" %}
+
+{% block workspace %}
+
+<h3>Attachments: Edit Attachment</h3>
+
+{% if error_msg %}
+<p>
+    <span class="error">{{ error_msg | e }}</span>
+</p>
+{% endif %}
+
+<script type="text/javascript" src="https://www.dropbox.com/static/api/1/dropbox.js" id="dropboxjs"
+        data-app-key="dnerajsj9p29gc3"></script>
+
+<form method="post">
+    <input type="hidden" name="project_id" value="{{ project.key.id() }}">
+    <input type="hidden" name="attachment_id" value="{{ attachment_id }}">
+    <table>
+        <tr>
+            <th>Attachment Name: {{ name | e }}</th>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>Description:</th>
+            <td>
+                <textarea name="description">{{ description | e }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th>Content:</th>
+            <td>
+                <a href="/project_admin/attachment_download?project_id={{ project.key.id() }}&attachment_id={{ attachment_id }}">
+                    Click here
+                </a>
+                to download "{{ filename }}" for viewing and editing.
+                <br/>
+                To upload a replacement file into TurboWriter:
+                <br/>
+                <input type="submit"
+                       style="background-color: #f8f8f8; border-color: #eeeeee; border-radius: 3px; border-width:
+                        1px; color: #777777; font-weight: bold; height: 25px; width: 152px;"
+                       value="Choose from Disk" name="choose_from_disk">
+                <br/>
+                <input type="dropbox-chooser" name="choose_from_dropbox" style="visibility: hidden;"
+                       data-link-type="direct"/>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input type="submit" name="update" value="Update Attachment">
+            </td>
+            <td>
+                <input type="submit" name="delete" value="Delete Attachment from Project">
+            </td>
+            <td>
+                <input type="button" value="Cancel"
+                       onclick="document.location='/project_admin/attachment_admin?project_id={{ project.key.id() }}'">
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}

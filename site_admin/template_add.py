@@ -26,7 +26,7 @@ class RequestHandler(webapp2.RequestHandler):
             if dao.get_public_templates_by_name(name):
                 raise Exception(u'That template name is already taken')
             dao.Project(name=name, project_type=dao.PUBLIC_TEMPLATE, description=description).put()
-            self.redirect(u'/site_admin/template_admin')
+            self.redirect("/site_admin/template_admin")
             return
         except Exception as e:
             error_msg = u'Adding template to Template Gallery failed: {}'.format(e)

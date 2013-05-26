@@ -98,16 +98,19 @@
                             <a href="/project_admin/console?project_id={{ project.key.id() }}">Console</a>
                         </li>
                         <li>
+                            <a href="/project_admin/attachment_admin?project_id={{ project.key.id() }}">Attachments</a>
+                        </li>
+                        <li>
                             <a href="/project_admin/project_settings?project_id={{ project.key.id() }}">Settings</a>
                         </li>
-                        <li><a href="/project_admin/project_user_admin?project_id={{ project.key.id() }}"
-                                >Project Users</a>
+                        <li><a href="/project_admin/project_user_admin?project_id={{ project.key.id() }}">Project
+                            Users</a>
                         </li>
                     </ul>
                 </li>
                 {% else %}
-                <li class="toplast"><a href="/project_admin/project_user_admin?project_id={{ project.key.id() }}"
-                                       style="height:16px;line-height:16px;">Team Members</a>
+                <li class="toplast"><a href="/project_admin/attachment_admin?project_id={{ project.key.id() }}"
+                                       style="height:16px;line-height:16px;">Attachments</a>
                 </li>
                 {% endif %}
             </ul>

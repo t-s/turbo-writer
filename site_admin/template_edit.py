@@ -29,7 +29,7 @@ class RequestHandler(webapp2.RequestHandler):
         if template and self.request.get(u'delete'):
             try:
                 dao.delete_project(template)
-                self.redirect(u'/site_admin/template_admin')
+                self.redirect("/site_admin/template_admin")
                 return
             except Exception as e:
                 error_msg = u'Deleting template failed: {}'.format(e)
@@ -42,7 +42,7 @@ class RequestHandler(webapp2.RequestHandler):
                     raise Exception(u'You must provide a description for the template')
                 template.description = self.request.get(u'description')
                 template.put()
-                self.redirect(u'/site_admin/template_admin')
+                self.redirect("/site_admin/template_admin")
                 return
             except Exception as e:
                 error_msg = u'Updating template failed: {}'.format(e)

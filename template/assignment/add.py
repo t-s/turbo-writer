@@ -35,7 +35,7 @@ class RequestHandler(webapp2.RequestHandler):
                                                        is_repeating=(variable_type == u'repeating'),
                                                        parent=template.key)
                     assignment_entity.put()
-                    self.redirect(u'/template/assignment?template_id={}'.format(template.key.id()))
+                    self.redirect("/template/assignment?template_id={}".format(template.key.id()))
                     return
                 except Exception as e:
                     error_msg = u'Adding assignment failed: {}'.format(e)

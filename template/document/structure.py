@@ -100,7 +100,7 @@ class RequestHandler(webapp2.RequestHandler):
                     self.compute_positions(new_items)
 
         if self.request.get(u'update') and not error_msg:
-            self.redirect(u'/template/document?template_id={}'.format(template.key.id()))
+            self.redirect("/template/document?template_id={}".format(template.key.id()))
             return
 
         # Display the webpage

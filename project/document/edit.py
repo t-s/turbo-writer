@@ -29,7 +29,7 @@ class RequestHandler(webapp2.RequestHandler):
             try:
                 document_entity.key.delete()
                 dao.touch_project_documents(project)
-                self.redirect(u'/project/document?project_id={}'.format(project.key.id()))
+                self.redirect("/project/document?project_id={}".format(project.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Deleting document from project failed: {}'.format(e)
@@ -41,7 +41,7 @@ class RequestHandler(webapp2.RequestHandler):
                 document_entity.style_name = self.request.get(u'doc_style')
                 document_entity.put()
                 dao.touch_project_documents(project)
-                self.redirect(u'/project/document?project_id={}'.format(project.key.id()))
+                self.redirect("/project/document?project_id={}".format(project.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Updating document failed: {}'.format(e)

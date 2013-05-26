@@ -24,7 +24,7 @@ class RequestHandler(webapp2.RequestHandler):
                 webapp2.abort(401)
             try:
                 dao.delete_project(project)
-                self.redirect(u'/')
+                self.redirect("/")
                 return
             except Exception as e:
                 error_msg = u'Deleting project failed: {}'.format(e)
@@ -34,7 +34,7 @@ class RequestHandler(webapp2.RequestHandler):
             try:
                 project.description = self.request.get(u'description')
                 project.put()
-                self.redirect(u'/project?project_id={}'.format(project.key.id()))
+                self.redirect("/project?project_id={}".format(project.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Updating project failed: {}'.format(e)

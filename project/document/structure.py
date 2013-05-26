@@ -103,7 +103,7 @@ class RequestHandler(webapp2.RequestHandler):
                     self.compute_positions(project, new_items)
 
         if self.request.get(u'update') and not error_msg:
-            self.redirect(u'/project/document?project_id={}'.format(project.key.id()))
+            self.redirect("/project/document?project_id={}".format(project.key.id()))
             return
 
         # Display the webpage

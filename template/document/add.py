@@ -33,7 +33,7 @@ class RequestHandler(webapp2.RequestHandler):
                                                    description=description, style_name=doc_style,
                                                    parent=template.key)
                     document_entity.put()
-                    self.redirect(u'/template/document?template_id={}'.format(template.key.id()))
+                    self.redirect("/template/document?template_id={}".format(template.key.id()))
                     return
                 except Exception as e:
                     error_msg = u'Adding document failed: {}'.format(e)

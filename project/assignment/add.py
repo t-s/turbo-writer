@@ -36,7 +36,7 @@ class RequestHandler(webapp2.RequestHandler):
                                                        parent=project.key)
                     assignment_entity.put()
                     dao.touch_project_assignments(project)
-                    self.redirect(u'/project/assignment?project_id={}'.format(project.key.id()))
+                    self.redirect("/project/assignment?project_id={}".format(project.key.id()))
                     return
                 except Exception as e:
                     error_msg = u'Adding assignment failed: {}'.format(e)

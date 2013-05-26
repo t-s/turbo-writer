@@ -28,7 +28,7 @@ class RequestHandler(webapp2.RequestHandler):
             try:
                 variable_entity.key.delete()
                 dao.touch_project_assignments(project)
-                self.redirect(u'/project/variable?project_id={}'.format(project.key.id()))
+                self.redirect("/project/variable?project_id={}".format(project.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Deleting variable from project failed: {}'.format(e)
@@ -41,7 +41,7 @@ class RequestHandler(webapp2.RequestHandler):
                 variable_entity.input_field = self.request.get(u'input_field')
                 variable_entity.put()
                 dao.touch_project_assignments(project)
-                self.redirect(u'/project/variable?project_id={}'.format(project.key.id()))
+                self.redirect("/project/variable?project_id={}".format(project.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Updating variable failed: {}'.format(e)

@@ -31,7 +31,7 @@ class RequestHandler(webapp2.RequestHandler):
                 try:
                     dao.Style(name=name, description=description, css=css, parent=project.key).put()
                     dao.touch_project_documents(project)
-                    self.redirect(u'/project/style?project_id={}'.format(project.key.id()))
+                    self.redirect("/project/style?project_id={}".format(project.key.id()))
                     return
                 except Exception as e:
                     error_msg = u'Adding style failed: {}'.format(e)

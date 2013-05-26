@@ -16,7 +16,13 @@
                         <td>
                             <b><i>General</i></b>
                             <ul>
-                                <li><a href="/project?project_id={{ project.key.id() }}">Project Home</a></li>
+                                <li>
+                                    <a href="/project?project_id={{ project.key.id() }}">Project Home</a>
+                                </li>
+                                <li>
+                                    <a href="/project_admin/attachment_admin?project_id={{ project.key.id() }}">Attachments</a>
+                                </li>
+
                             </ul>
                         </td>
                     </tr>
@@ -102,22 +108,25 @@
                     <tr>
                         <td>
                             <b><i>Project Definition</i></b>
-                    <ul>
-                        {% if any_interviews %}
-                        <li class="disabled-anchor"><a style="color: grey;">Define Assignments</a>
-                        </li>
-                        {% else %}
-                        <li><a href="/project/assignment?project_id={{ project.key.id() }}">Define Assignments</a>
-                        </li>
-                        {% endif %}
-                        <li><a href="/project/document?project_id={{ project.key.id() }}">Define Documents</a></li>
-                        <li><a href="/project/style?project_id={{ project.key.id() }}">Define Styles</a></li>
-                        {% if any_interviews %}
-                        <li class="disabled-anchor"><a style="color: grey;">Define Variables</a>
-                        {% else %}
-                        <li><a href="/project/variable?project_id={{ project.key.id() }}">Define Variables</a></li>
-                        {% endif %}
-                    </ul>
+                            <ul>
+                                {% if any_interviews %}
+                                <li class="disabled-anchor"><a style="color: grey;">Define Assignments</a>
+                                </li>
+                                {% else %}
+                                <li><a href="/project/assignment?project_id={{ project.key.id() }}">Define
+                                    Assignments</a>
+                                </li>
+                                {% endif %}
+                                <li><a href="/project/document?project_id={{ project.key.id() }}">Define Documents</a>
+                                </li>
+                                <li><a href="/project/style?project_id={{ project.key.id() }}">Define Styles</a></li>
+                                {% if any_interviews %}
+                                <li class="disabled-anchor"><a style="color: grey;">Define Variables</a>
+                                    {% else %}
+                                <li><a href="/project/variable?project_id={{ project.key.id() }}">Define Variables</a>
+                                </li>
+                                {% endif %}
+                            </ul>
                         </td>
                     </tr>
 
@@ -131,8 +140,8 @@
                                 <li>
                                     <a href="/project_admin/project_settings?project_id={{ project.key.id() }}">Settings</a>
                                 </li>
-                                <li><a href="/project_admin/project_user_admin?project_id={{ project.key.id() }}"
-                                        >Project Users</a>
+                                <li><a href="/project_admin/project_user_admin?project_id={{ project.key.id() }}">Project
+                                    Users</a>
                                 </li>
                             </ul>
                         </td>

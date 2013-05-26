@@ -38,7 +38,7 @@ class RequestHandler(webapp2.RequestHandler):
                     dao.Variable(name=name, internal_name=internal_name, description=description,
                                  is_repeating=(variable_type == u'repeating'), input_field=input_field, content=u'',
                                  parent=template.key).put()
-                    self.redirect(u'/template/variable?template_id={}'.format(template.key.id()))
+                    self.redirect("/template/variable?template_id={}".format(template.key.id()))
                     return
                 except Exception as e:
                     error_msg = u'Adding variable failed: {}'.format(e)

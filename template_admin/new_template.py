@@ -38,7 +38,7 @@ class RequestHandler(webapp2.RequestHandler):
             dao.ProjectUser(email=dao.get_current_site_user().email, permissions=[dao.TEMPLATE_OWN],
                             parent=template_key).put()
 
-            self.redirect(u'/template?template_id={}'.format(template_key.id()))
+            self.redirect("/template?template_id={}".format(template_key.id()))
             return
         except Exception as e:
             error_msg = u'Creating template failed: {}'.format(e)

@@ -44,7 +44,7 @@ class RequestHandler(webapp2.RequestHandler):
                         webapp2.abort(401)
                 try:
                     dao.ProjectUser(email=submitted_email.lower(), parent=project.key, permissions=permissions).put()
-                    self.redirect(u'/project_admin/project_user_admin?project_id={}'.format(project.key.id()))
+                    self.redirect("/project_admin/project_user_admin?project_id={}".format(project.key.id()))
                     return
                 except Exception as e:
                     error_msg = u'Adding user to project failed: {}'.format(e)

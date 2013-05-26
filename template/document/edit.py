@@ -27,7 +27,7 @@ class RequestHandler(webapp2.RequestHandler):
         if document_entity and self.request.get(u'delete'):
             try:
                 document_entity.key.delete()
-                self.redirect(u'/template/document?template_id={}'.format(template.key.id()))
+                self.redirect("/template/document?template_id={}".format(template.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Deleting document from template failed: {}'.format(e)
@@ -38,7 +38,7 @@ class RequestHandler(webapp2.RequestHandler):
                 document_entity.description = self.request.get(u'description')
                 document_entity.style_name = self.request.get(u'doc_style')
                 document_entity.put()
-                self.redirect(u'/template/document?template_id={}'.format(template.key.id()))
+                self.redirect("/template/document?template_id={}".format(template.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Updating document failed: {}'.format(e)

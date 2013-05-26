@@ -20,6 +20,11 @@ indexes:
   properties:
   - name: p
 
+- kind: Attachment
+  ancestor: yes
+  properties:
+  - name: n
+
 - kind: Document
   ancestor: yes
   properties:

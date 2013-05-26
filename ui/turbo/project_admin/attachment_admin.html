@@ -1,0 +1,55 @@
+{% extends "project_base.html" %}
+
+{% block workspace %}
+
+<h3>Attachments</h3>
+
+<table class="bordered_table">
+    <input type="hidden" name="project_id" value="{{ project.key.id() }}">
+    <tr>
+        <th class="bordered_cell">Name</th>
+        <th class="bordered_cell">Description</th>
+        <th class="bordered_cell">Filename</th>
+        <th class="bordered_cell">Image</th>
+        <th class="bordered_cell">Preview URL</th>
+    </tr>
+    {% for attachment in attachments %}
+    <tr>
+        <td class="bordered_cell">
+            <a href='/project_admin/attachment_edit?project_id={{ project.key.id() }}&attachment_id={{ attachment.key.id() }}'>{{
+                attachment["name"] | e }}</a>
+        </td>
+        <td class="bordered_cell">
+            {{ attachment["description"] | e }}
+        </td>
+        <td class="bordered_cell">
+            {{ attachment["filename"] | e}}
+        </td>
+        {% if attachment["is_image"] %}
+        <td class="bordered_cell" style="text-align: center;">
+            <img height="32px;"
+                 src="/project_admin/attachment_download?project_id={{ project.key.id() }}&attachment_id={{ attachment.key.id() }}">
+        </td>
+        <td class="bordered_cell">
+            &lt;img src="/project_admin/attachment_download?project_id={{ project.key.id() }}&attachment_id={{
+            attachment.key.id() }}"&gt;
+        </td>
+        {% else %}
+        <td class="bordered_cell"></td>
+        <td class="bordered_cell"></td>
+        {% endif %}
+
+    </tr>
+    {% endfor %}
+    <tr>
+        <td class="bordered_cell">
+            <a href="/project_admin/attachment_add?project_id={{ project.key.id() }}">+</a>
+        </td>
+        <td class="bordered_cell"></td>
+        <td class="bordered_cell"></td>
+        <td class="bordered_cell"></td>
+        <td class="bordered_cell"></td>
+    </tr>
+</table>
+
+{% endblock %}

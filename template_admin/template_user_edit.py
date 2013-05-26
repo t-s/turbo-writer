@@ -32,7 +32,7 @@ class RequestHandler(webapp2.RequestHandler):
             try:
                 self.require_owner(template, exclude_user=template_user)
                 template_user.key.delete()
-                self.redirect(u'/template_admin/template_user_admin?template_id={}'.format(template.key.id()))
+                self.redirect("/template_admin/template_user_admin?template_id={}".format(template.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Deleting template user failed: {}'.format(e)
@@ -52,7 +52,7 @@ class RequestHandler(webapp2.RequestHandler):
             try:
                 self.require_owner(template)
                 template_user.put()
-                self.redirect(u'/template_admin/template_user_admin?template_id={}'.format(template.key.id()))
+                self.redirect("/template_admin/template_user_admin?template_id={}".format(template.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Updating template user failed: {}'.format(e)

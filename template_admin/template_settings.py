@@ -24,7 +24,7 @@ class RequestHandler(webapp2.RequestHandler):
                 webapp2.abort(401)
             try:
                 dao.delete_template(template)
-                self.redirect(u'/')
+                self.redirect("/")
                 return
             except Exception as e:
                 error_msg = u'Deleting template failed: {}'.format(e)
@@ -34,7 +34,7 @@ class RequestHandler(webapp2.RequestHandler):
             try:
                 template.description = self.request.get(u'description')
                 template.put()
-                self.redirect(u'/template?template_id={}'.format(template.key.id()))
+                self.redirect("/template?template_id={}".format(template.key.id()))
                 return
             except Exception as e:
                 error_msg = u'Updating template failed: {}'.format(e)

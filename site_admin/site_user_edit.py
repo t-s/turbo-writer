@@ -29,7 +29,7 @@ class RequestHandler(webapp2.RequestHandler):
         if site_user and self.request.get(u'delete'):
             try:
                 site_user.key.delete()
-                self.redirect(u'/site_admin/site_user_admin')
+                self.redirect("/site_admin/site_user_admin")
                 return
             except Exception as e:
                 error_msg = u'Deleting site user failed: {}'.format(e)
@@ -44,7 +44,7 @@ class RequestHandler(webapp2.RequestHandler):
             site_user.site_permissions = permissions
             try:
                 site_user.put()
-                self.redirect(u'/site_admin/site_user_admin')
+                self.redirect("/site_admin/site_user_admin")
                 return
             except Exception as e:
                 error_msg = u'Updating site user failed: {}'.format(e)

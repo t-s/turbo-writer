@@ -151,7 +151,7 @@ class RequestHandler(webapp2.RequestHandler):
             dao.touch_project_assignments(project)
 
         if self.request.get(u'update') and not error_msg:
-            self.redirect(u'/project/assignment?project_id={}'.format(project.key.id()))
+            self.redirect("/project/assignment?project_id={}".format(project.key.id()))
             return
 
         # Display the webpage

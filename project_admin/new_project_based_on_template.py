@@ -69,7 +69,7 @@ class RequestHandler(webapp2.RequestHandler):
                 for variable_entity in dao.get_variables(template_entity):
                     variable_entity.clone(project).put()
 
-            self.redirect(u'/project?project_id={}'.format(project_key.id()))
+            self.redirect("/project?project_id={}".format(project_key.id()))
             return
         except Exception as e:
             error_msg = u'Creating project failed: {}'.format(e)

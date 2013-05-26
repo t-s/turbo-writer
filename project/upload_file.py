@@ -62,8 +62,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         if index:
             query_string_dict[u'_index'] = index
         query_string = urllib.urlencode(query_string_dict)
-        url = u'/project/conduct_interview?{}'.format(query_string)
-        self.redirect(url)
+        self.redirect("/project/conduct_interview?{}".format(query_string))
 
 
 class DownloadHandler(blobstore_handlers.BlobstoreDownloadHandler):

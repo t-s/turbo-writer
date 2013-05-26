@@ -30,7 +30,7 @@ class RequestHandler(webapp2.RequestHandler):
             else:
                 try:
                     dao.Style(name=name, description=description, css=css, parent=template.key).put()
-                    self.redirect(u'/template/style?template_id={}'.format(template.key.id()))
+                    self.redirect("/template/style?template_id={}".format(template.key.id()))
                     return
                 except Exception as e:
                     error_msg = u'Adding style failed: {}'.format(e)
