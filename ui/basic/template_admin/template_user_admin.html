@@ -13,7 +13,7 @@
     {% for user in users %}
     <tr>
         <td class="bordered_cell">
-            <a href='/template_admin/template_user_edit?template_id={{ template.key.id() }}&template_user_id={{ user.key.id() }}'>{{ user["email"] | e }}</a>
+            <a href='/template_admin/template_user_edit?template_id={{ template.key.id() }}&template_user_id={{ user.key.id() }}'>{{ user.email | e }}</a>
         </td>
         <td class="bordered_cell">
             {% set first = True %}

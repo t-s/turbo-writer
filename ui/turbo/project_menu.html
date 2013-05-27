@@ -19,7 +19,6 @@
                     </ul>
                 </li>
                 {% endif %}
-
                 {% if assign_writer_interviews %}
                 <li><a href="#" style="height:16px;line-height:16px;">Assign Writers</a>
                     <ul>
@@ -91,20 +90,19 @@
                         {% endif %}
                     </ul>
                 </li>
-
                 <li class="toplast"><a href="#" style="height:16px;line-height:16px;">Project Administration</a>
                     <ul>
-                        <li>
-                            <a href="/project_admin/console?project_id={{ project.key.id() }}">Console</a>
-                        </li>
                         <li>
                             <a href="/project_admin/attachment_admin?project_id={{ project.key.id() }}">Attachments</a>
                         </li>
                         <li>
-                            <a href="/project_admin/project_settings?project_id={{ project.key.id() }}">Settings</a>
+                            <a href="/project_admin/console?project_id={{ project.key.id() }}">Console</a>
                         </li>
                         <li><a href="/project_admin/project_user_admin?project_id={{ project.key.id() }}">Project
                             Users</a>
+                        </li>
+                        <li>
+                            <a href="/project_admin/project_settings?project_id={{ project.key.id() }}">Settings</a>
                         </li>
                     </ul>
                 </li>

@@ -17,15 +17,15 @@
     <tr>
         <td class="bordered_cell">
             <a href='/project_admin/attachment_edit?project_id={{ project.key.id() }}&attachment_id={{ attachment.key.id() }}'>{{
-                attachment["name"] | e }}</a>
+                attachment.name | e }}</a>
         </td>
         <td class="bordered_cell">
-            {{ attachment["description"] | e }}
+            {{ attachment.description | e }}
         </td>
         <td class="bordered_cell">
-            {{ attachment["filename"] | e}}
+            {{ attachment.filename | e}}
         </td>
-        {% if attachment["is_image"] %}
+        {% if attachment.is_image %}
         <td class="bordered_cell" style="text-align: center;">
             <img height="32px;"
                  src="/project_admin/attachment_download?project_id={{ project.key.id() }}&attachment_id={{ attachment.key.id() }}">

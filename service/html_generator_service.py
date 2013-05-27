@@ -100,14 +100,11 @@ class HtmlGeneratorService():
         html += u'{% if error_msg %}<p>'
         html += u'<span class="error">{{ error_msg | e }}</span>'
         html += u'</p>{% endif %}'
-        html += u'{% if assigned_email %}<p>Assignment completed:</p>'
-        html += u'<blockquote><div style="width: 500px; background-color: lightgray">'
-        html += u'{{ assigned_email | e }}</div></blockquote>'
-        html += u'{% else %}<table width="100%">'
+        html += u'<table width="100%">'
         html += u'<tr><th>Team Member:</th>'
         html += u'<td><select name="_email"><option value="">(Select team member)</option>'
-        html += u'{% for email in emails %}<option value="{{ email | e }}">{{ email | e }}</option>{% endfor %}'
-        html += u'</select></td></tr></table>{% endif %}'
+        html += u'{% for email in emails %}<option value="{{ email | e }}"{% if email == _email %} selected{% endif %}>{{ email | e }}</option>{% endfor %}'
+        html += u'</select></td></tr></table>'
         interview.content = html
         if assignment.is_repeating:
             interview.generate_after = u'assign_writer_{}'.format(assignment.name)
@@ -125,10 +122,6 @@ class HtmlGeneratorService():
         html += u'{% if error_msg %}<p>'
         html += u'<span class="error">{{ error_msg | e }}</span>'
         html += u'</p>{% endif %}'
-        html += u'{% if assigned_email %}<p>Assignment completed:</p>'
-        html += u'<blockquote><div style="width: 500px; background-color: lightgray">'
-        html += u'{{ assigned_email | e }}</div></blockquote>'
-        html += u'{% else %}'
         html += u'<p><blockquote style="width: 500px; font-style: italic; background-color: lightgray">'
         html += u'{}'.format(assignment.instructions_to_manager)
         html += u'</blockquote></p>'
@@ -138,7 +131,7 @@ class HtmlGeneratorService():
             html += u'<td><input name="_assignment_name" value="{{ assignment_name | e }}"></td></tr>'
         html += u'<tr><th>Team Member:</th>'
         html += u'<td><select name="_email"><option value="">(Select team member)</option>'
-        html += u'{% for email in emails %}<option value="{{ email | e }}">{{ email | e }}</option>{% endfor %}'
+        html += u'{% for email in emails %}<option value="{{ email | e }}"{% if email == _email %} selected{% endif %}>{{ email | e }}</option>{% endfor %}'
         html += u'</select></td></tr>'
         html += u'<tr><th>Instructions:</th>'
         html += u'<td>{}</td></tr>'.format(assignment.instructions_to_writer)
@@ -150,7 +143,7 @@ class HtmlGeneratorService():
         for checklist_item in assignment.checklist_items:
             html += u'<li>{}</li>'.format(checklist_item)
         html += u'</td></tr>'
-        html += u'</table>{% endif %}'
+        html += u'</table>'
         interview.content = html
         if assignment.is_repeating:
             interview.root_interview_name = u'assign_writer_parent_{}'.format(assignment.name)

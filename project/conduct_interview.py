@@ -54,17 +54,12 @@ class RequestHandler(webapp2.RequestHandler):
         return s if s else u''
 
     def generate_email_assignment(self, project, interview, interview_service, inner_template_values):
-        assignment_needed = False
         if interview.assign_button:
-            if interview.assigned_interview_id:
-                assigned_interview = interview_service.get_interview_by_id(
-                    interview.assigned_interview_id)
-                inner_template_values[u'assigned_email'] = assigned_interview.assigned_email
-            else:
-                assignment_needed = True
-                inner_template_values[u'emails'] = [project_user.email for project_user in
-                                                    dao.get_project_users(project)]
-        return assignment_needed
+            inner_template_values[u'emails'] = [project_user.email for project_user in
+                                                dao.get_project_users(project)]
+            assigned_interview = interview_service.get_interview_by_name(interview.assign_interview_name)
+            if assigned_interview:
+                inner_template_values[u'_email'] = assigned_interview.assigned_email
 
     def generate_variable_value(self, inner_template_values, variable):
         match = indexed_name_pattern.match(variable.internal_name)
@@ -115,12 +110,28 @@ class RequestHandler(webapp2.RequestHandler):
 
         self.render(project, interview_name, interview_service, index)
 
+    def merge_checklists(self, writer_interview, reviewer_interview):
+        any_change = False
+        for index in range(len(writer_interview.checklist_items)):
+            writer_match = dao.parse_checklist_item(writer_interview.checklist_items[index])
+            reviewer_match = dao.parse_checklist_item(reviewer_interview.checklist_items[index])
+            if writer_match and reviewer_match:
+                if writer_match.group(2) != reviewer_match.group(2):
+                    any_change = True
+                    reviewer_interview.checklist_items[index] = re.sub(r'\[[TF]\]',
+                                                                       u'[{}]'.format(writer_match.group(2)),
+                                                                       reviewer_interview.checklist_items[index],
+                                                                       count=1)
+        if any_change:
+            reviewer_interview.put()
+
     def post(self):
         project = dao.get_project_by_id(self.request.get(u'_project_id'))
         if not dao.test_project_permissions(project, []):
             webapp2.abort(401)
 
         index = self.request.get(u'_index')
+        from_console = self.request.get(u'_from_console')
 
         self.store_variables(project, index)
 
@@ -130,6 +141,9 @@ class RequestHandler(webapp2.RequestHandler):
         interview = interview_service.get_interview_by_name(interview_name)
 
         self.update_checklists(interview)
+        if interview.name.startswith(u'write_') and interview.completed:
+            reviewer_interview = interview_service.get_interview_by_name(u'review_{}'.format(interview.name[6:]))
+            self.merge_checklists(interview, reviewer_interview)
 
         assignment_name = self.request.get(u'_assignment_name')
         if assignment_name:
@@ -206,7 +220,10 @@ class RequestHandler(webapp2.RequestHandler):
                     query_string = urllib.urlencode(query_string_dict)
                     self.redirect("/project/upload_file?{}".format(query_string))
                     return
-        self.redirect("/project?project_id={}".format(project.key.id()))
+        if from_console:
+            self.redirect("/project_admin/console?project_id={}".format(project.key.id()))
+        else:
+            self.redirect("/project?project_id={}".format(project.key.id()))
 
     def render(self, project, interview_name, interview_service, index, error_msg=None):
         interview_service.set_bookmark(interview_name)
@@ -223,8 +240,8 @@ class RequestHandler(webapp2.RequestHandler):
 
         self.generate_variable_values(project, index, inner_template_values)
 
-        assignment_needed = self.generate_email_assignment(project, interview, interview_service,
-                                                           inner_template_values)
+        self.generate_email_assignment(project, interview, interview_service,
+                                       inner_template_values)
 
         inner_template_values[u'assignment_name'] = self.fill(interview.assignment_name)
         inner_template_values[u'writer'] = interview.is_writer_interview
@@ -262,7 +279,7 @@ class RequestHandler(webapp2.RequestHandler):
 
         if interview_service.get_next_name(interview_name):
             jinja_template_values[
-                u'next_button'] = interview.next_button if interview.next_button else u'Skip Assign' if assignment_needed else u'Next'
+                u'next_button'] = interview.next_button if interview.next_button else u'Skip Assign'
 
         if interview.parent_button:
             jinja_template_values[u'parent_button'] = interview.parent_button
@@ -270,14 +287,16 @@ class RequestHandler(webapp2.RequestHandler):
         if interview.child_interview_names:
             jinja_template_values[u'child_button'] = interview.child_button if interview.child_button else u'Add'
 
-        if assignment_needed:
-            jinja_template_values[u'assign_button'] = interview.assign_button
+        jinja_template_values[u'assign_button'] = interview.assign_button
 
         if interview.not_needed_button:
             jinja_template_values[u'not_needed_button'] = interview.not_needed_button
 
         if interview.completed_button:
             jinja_template_values[u'completed_button'] = interview.completed_button
+
+        if self.request.get(u'_from_console'):
+            jinja_template_values[u'from_console'] = True
 
         self.response.out.write(jinja_template.render(jinja_template_values))
 

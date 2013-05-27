@@ -8,6 +8,9 @@
     {% if show_index %}
     <input type="hidden" name="_index" value="{{ index }}">
     {% endif %}
+    {% if from_console %}
+    <input type="hidden" name="_from_console" value="yes">
+    {% endif %}
 
     {{ html_document }}
 
@@ -32,7 +35,7 @@
         {% if assign_button %}
         <input type="submit" name="_assign" value="{{ assign_button | e }}">
         {% endif %}
-        
+
         {% if not_needed_button %}
         <input type="submit" name="_not_needed" value="{{ not_needed_button | e }}">
         {% endif %}
@@ -41,7 +44,12 @@
         <input type="submit" name="_completed" value="{{ completed_button | e }}">
         {% endif %}
 
+        {% if from_console %}
+        <input type="button" value="Cancel"
+               onclick="document.location='/project_admin/console?project_id={{ project.key.id() }}'">
+        {% else %}
         <input type="button" value="Cancel" onclick="document.location='/project?project_id={{ project.key.id() }}'">
+        {% endif %}
 
     </p>
 </form>

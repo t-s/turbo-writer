@@ -1,15 +1,12 @@
 import mimetypes
 import re
-import urllib2
 from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext import blobstore
-from google.appengine.ext.blobstore import BlobInfo
 
 from lib import crc16pure
 from service.html_generator_service import HtmlGeneratorService
 from service.interview_service import InterviewService
-from service.dropbox_service import DropboxService
 
 # DATA ACCESS OBJECT
 
@@ -442,10 +439,7 @@ def get_indexed_variable(project, variable_name, index):
     indexed_variable_name = u'{}[{}]'.format(variable_name, index)
     variables = Variable.query(Variable.name == indexed_variable_name, ancestor=project.key).fetch()
     for variable in variables:
-        if variable.input_field == FILE and variable.blob_key and variable.filename:
-            return u'\n<!--B-KEY:{}-->\n[Insert "{}" here]\n'.format(variable.blob_key, variable.filename)
-        else:
-            return variable.content if variable.content else u''
+        return variable.content if variable.content else u''
     return u''
 
 
@@ -800,33 +794,6 @@ def set_variable(project, internal_name, value):
         variable.put()
     else:
         raise Exception(u'Unexpected call to set_variable #3: internal_name={}'.format(internal_name))
-
-
-def set_variable_blob_key(project, internal_name, blob_key):
-    for variable in Variable.query(Variable.internal_name == internal_name, ancestor=project.key):
-        if variable.blob_key:
-            blobstore.delete(variable.blob_key)
-        variable.blob_key = blob_key
-        variable.filename = BlobInfo.get(blob_key).filename
-        variable.put()
-        return
-    match = optionally_indexed_name_pattern.match(internal_name)
-    if match:
-        base_name = match.group(1)
-        if not base_name:
-            raise Exception(u'Unexpected call to set_variable_blob_key #1: internal_name={}'.format(internal_name))
-        base_variable = get_variable_by_name(project, base_name)
-        if not base_variable:
-            raise Exception(u'Unexpected call to set_variable_blob_key #2: internal_name={}'.format(internal_name))
-        if base_variable.input_field != FILE:
-            raise Exception(u'Unexpected call to set_variable_blob_key #3: internal_name={}'.format(internal_name))
-        variable = Variable(name=internal_name, internal_name=internal_name, input_field=base_variable.input_field,
-                            parent=project.key)
-        variable.blob_key = blob_key
-        variable.filename = BlobInfo.get(blob_key).filename
-        variable.put()
-    else:
-        raise Exception(u'Unexpected call to set_variable_blob_key #4: internal_name={}'.format(internal_name))
 
 
 def set_variable_content(variable, value):

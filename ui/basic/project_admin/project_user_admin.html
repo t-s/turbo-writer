@@ -21,9 +21,9 @@
         <td class="bordered_cell">
             {% if is_manager %}
             <a href='/project_admin/project_user_edit?project_id={{ project.key.id() }}&project_user_id={{ user.key.id() }}'>{{
-                user["email"] | e }}</a>
+                user.email | e }}</a>
             {% else %}
-            {{ user["email"] | e }}
+            {{ user.email | e }}
             {% endif %}
         </td>
         {% if is_manager %}
