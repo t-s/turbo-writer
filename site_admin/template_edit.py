@@ -37,10 +37,10 @@ class RequestHandler(webapp2.RequestHandler):
         # Handle update request
         if template and self.request.get(u'update'):
             try:
-                description = self.request.get(u'description')
-                if not description:
-                    raise Exception(u'You must provide a description for the template')
                 template.description = self.request.get(u'description')
+                if not template.description:
+                    raise Exception(u'You must provide a description for the template')
+                template.status = self.request.get(u'status')
                 template.put()
                 self.redirect("/site_admin/template_admin")
                 return
@@ -59,5 +59,6 @@ class RequestHandler(webapp2.RequestHandler):
         jinja_template_values[u'error_msg'] = error_msg
         jinja_template_values[u'name'] = template_entity.name
         jinja_template_values[u'description'] = template_entity.description
+        jinja_template_values[u'status'] = template_entity.status
 
         self.response.out.write(jinja_template.render(jinja_template_values))

@@ -29,6 +29,19 @@
                 <textarea name="description" autofocus>{{ description | e }}</textarea>
             </td>
         </tr>
+        <tr>
+            <th>Status:</th>
+            <td>
+                <input type="radio" name="status" value="Pending"{% if status == "Pending" %} checked{% endif %}>
+                Pending
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="status" value="Active"{% if status == "Active" %} checked{% endif %}>
+                Active
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="status" value="Inactive"{% if status == "Inactive" %} checked{% endif %}>
+                Inactive
+            </td>
+        </tr>
     </table>
     <table>
         <tr>

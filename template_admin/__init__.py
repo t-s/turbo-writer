@@ -1,3 +1,4 @@
+import contribute
 import new_template
 import template_settings
 import template_user_add

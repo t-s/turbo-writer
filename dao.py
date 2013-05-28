@@ -66,6 +66,11 @@ TEMPLATE_USE = u'USE'
 def get_all_template_permissions():
     return [TEMPLATE_OWN, TEMPLATE_EDIT, TEMPLATE_USE]
 
+# Pubic template statuses
+STATUS_PENDING = u'Pending'
+STATUS_ACTIVE = u'Active'
+STATUS_INACTIVE = u'Inactive'
+
 
 # Entity classes
 
@@ -225,6 +230,7 @@ class Project(ndb.Model):
     """
     name = ndb.StringProperty(u'n', required=True)
     project_type = ndb.StringProperty(u't', required=True)  # PROJECT/PRIVATE_TEMPLATE/PUBLIC_TEMPLATE
+    status = ndb.StringProperty(u's')  # STATUS_PENDING/STATUS_ACTIVE/STATUS_INACTIVE
     description = ndb.TextProperty(u'd')
     has_assignment_definition_changed = ndb.BooleanProperty(u'hadc')
     has_document_definition_changed = ndb.BooleanProperty(u'hddc')
@@ -510,7 +516,7 @@ def get_public_templates():
     return Project.query(Project.project_type == PUBLIC_TEMPLATE).order(Project.name)
 
 
-def get_public_templates_by_name(template_name):
+def get_public_template_by_name(template_name):
     return Project.query(Project.name == template_name, Project.project_type == PUBLIC_TEMPLATE).fetch()
 
 

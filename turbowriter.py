@@ -80,7 +80,6 @@ app.router.add((u'/project_admin/project_user_edit', project_user_edit.RequestHa
 
 app.router.add((u'/site_admin/site_settings', site_settings.RequestHandler))
 app.router.add((u'/site_admin/template_admin', template_admin.RequestHandler))
-app.router.add((u'/site_admin/template_add', template_add.RequestHandler))
 app.router.add((u'/site_admin/template_edit', template_edit.RequestHandler))
 app.router.add((u'/site_admin/site_user_admin', site_user_admin.RequestHandler))
 app.router.add((u'/site_admin/site_user_add', site_user_add.RequestHandler))
@@ -106,6 +105,7 @@ app.router.add((u'/template/variable', template.variable.index.RequestHandler))
 app.router.add((u'/template/variable/add', template.variable.add.RequestHandler))
 app.router.add((u'/template/variable/edit', template.variable.edit.RequestHandler))
 
+app.router.add((u'/template_admin/contribute', contribute.RequestHandler))
 app.router.add((u'/template_admin/new_template', new_template.RequestHandler))
 app.router.add((u'/template_admin/template_settings', template_settings.RequestHandler))
 app.router.add((u'/template_admin/template_user_admin', template_user_admin.RequestHandler))
