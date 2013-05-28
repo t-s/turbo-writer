@@ -58,6 +58,11 @@ th {
     height: 16px;
 }
 
+.html-editor {
+    height: 200px;
+    width: 500px;
+}
+
 .menu-separator {
     color: dimgrey;
     margin: 20px 0 10px 0;

@@ -261,7 +261,7 @@ class HtmlGeneratorService():
                     html += u'<td><input name="{}" style="width: 500px" value="{{{{ {} | e }}}}"></td>'.format(
                         variable.internal_name, variable.internal_name)
                 else:
-                    html += u'<td><textarea name="{}" style="height: 200px; width: 500px">{{{{ {} | e }}}}</textarea></td>'.format(
+                    html += u'<td><textarea name="{}" class="html-editor">{{{{ {} | e }}}}</textarea></td>'.format(
                         variable.internal_name, variable.internal_name)
                 html += u'</tr>'
         html += u'</table></p>'

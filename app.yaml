@@ -15,6 +15,12 @@ handlers:
 - url: /ui/turbo/images
   static_dir: ui/turbo/images
 
+- url: /ui/basic/scripts
+  static_dir: ui/basic/scripts
+
+- url: /ui/turbo/scripts
+  static_dir: ui/turbo/scripts
+
 - url: /ui/basic/stylesheets
   static_dir: ui/basic/stylesheets
 
