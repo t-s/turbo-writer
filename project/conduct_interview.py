@@ -259,6 +259,10 @@ class RequestHandler(webapp2.RequestHandler):
 
         inner_template_values[u'has_been_reviewed'] = interview.has_been_reviewed
 
+        from_document_id = self.request.get(u'_from_document_id')
+        if from_document_id:
+            inner_template_values[u'from_document_id'] = from_document_id
+
         for checklist_index in range(len(interview.checklist_items)):
             checklist_item = interview.checklist_items[checklist_index]
             match = dao.parse_checklist_item(checklist_item)

@@ -10,6 +10,7 @@ image_element_pattern = re.compile(r'\*\*\* INSERT "(.*?)" \(image/.*?\)(.*?)HER
 class RequestHandler(webapp2.RequestHandler):
     def generate_html_document(self, project, document):
         inner_template_values = dict()
+        inner_template_values[u'project'] = project
         inner_template_values[u'is_manager'] = dao.test_is_manager(project)
         inner_template_values[u'document'] = document
         self.generate_variable_values(project, inner_template_values)

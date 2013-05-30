@@ -33,7 +33,7 @@ class HtmlGeneratorService():
             document_item = document_items[index]
             item_type = document_item.item_type
             if item_type != dao.TEXT and not document_item.variable_name:
-                continue;
+                continue
             flow_control = document_item.flow_control
             # Set begin/within/end repeating group and index_variable_name
             if within_repeating_group:
@@ -70,8 +70,8 @@ class HtmlGeneratorService():
             else:
                 assignment = dao.get_assignment_for_variable_name(self.template, document_item.variable_name)
                 html += u'{% if is_manager %}'
-                html += u'<div class="hover-highlight" ondblclick="document.location=\'/project/conduct_interview?_project_id={}&_interview_name=write_{}&_from_document_id={{{{ document.key.id() }}}}\'">'.format(
-                    self.template.key.id(), assignment.name)
+                html += u'<div class="hover-highlight" ondblclick="document.location=\'/project/conduct_interview?_project_id={{{{ project.key.id() }}}}&_interview_name=write_{}&_from_document_id={{{{ document.key.id() }}}}\'">'.format(
+                    assignment.name)
                 html += u'{% else %}<div>{% endif %}'
                 internal_variable_name = dao.convert_name_to_internal_name(document_item.variable_name)
                 if item_type == dao.SINGLE_VARIABLE:
@@ -227,6 +227,7 @@ class HtmlGeneratorService():
                                   assignment_name=assignment.name, parent=self.template.key)
         html = u'<h3>Write "{}"</h3>'.format(
             u'{{ assignment_name | e }}' if assignment.is_repeating else assignment.name)
+        html += u'{% if not from_document_id %}'
         html += u'<p><blockquote style="width: 500px; font-style: italic; background-color: lightgray">'
         html += u'{}'.format(assignment.instructions_to_writer)
         html += u'</blockquote></p>'
@@ -249,6 +250,7 @@ class HtmlGeneratorService():
                 html += u'<td>{}</td>'.format(assignment.checklist_items[index])
                 html += u'</tr>'
             html += u'</table></p>'
+        html += u'{% endif %}'
         html += self.get_html_for_variables(assignment)
         interview.content = html
         interview.put()
