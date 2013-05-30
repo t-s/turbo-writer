@@ -47,7 +47,6 @@ class RequestHandler(webapp2.RequestHandler):
         jinja_template = ui.get_template(self, u'project_admin/project_settings.html')
 
         jinja_template_values = dao.get_standard_project_values(project)
-        jinja_template_values[u'project'] = project
         jinja_template_values[u'error_msg'] = error_msg
 
         self.response.out.write(jinja_template.render(jinja_template_values))

@@ -58,6 +58,10 @@ th {
     height: 16px;
 }
 
+.hover-highlight:hover {
+    background-color: #f9f9f9;
+}
+
 .html-editor {
     height: 200px;
     width: 500px;

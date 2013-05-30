@@ -2,6 +2,16 @@
 
 {% block workspace %}
 
+<script type="text/javascript" src="/ui/{{ ui }}/scripts/jquery-1.3.2.min.js"></script>
+<link rel="Stylesheet" type="text/css" href="/ui/{{ ui }}/stylesheets/jHtmlArea.css" />
+<script type="text/javascript" src="/ui/{{ ui }}/scripts/jHtmlArea-0.7.5.js"></script>
+
+<script>
+    $(function() {
+        $("textarea").htmlarea({});
+    })
+</script>
+
 <form method="post">
     <input type="hidden" name="_project_id" value="{{ project.key.id() }}">
     <input type="hidden" name="_post_interview_name" value="{{ post_interview_name | e }}">
@@ -28,7 +38,7 @@
         <input type="submit" name="_next" value="{{ next_button | e }}">
         {% endif %}
 
-        {% if parent_button %}
+        {% if parent_button and not from_document_id %}
         <input type="submit" name="_parent" value="{{ parent_button | e }}">
         {% endif %}
 
@@ -40,13 +50,20 @@
         <input type="submit" name="_not_needed" value="{{ not_needed_button | e }}">
         {% endif %}
 
-        {% if completed_button %}
+        {% if completed_button and not from_document_id %}
         <input type="submit" name="_completed" value="{{ completed_button | e }}">
+        {% endif %}
+
+        {% if from_document_id %}
+        <input type="submit" name="_save" value="Save">
         {% endif %}
 
         {% if from_console %}
         <input type="button" value="Cancel"
                onclick="document.location='/project_admin/console?project_id={{ project.key.id() }}'">
+        {% elif from_document_id %}
+        <input type="button" value="Cancel"
+               onclick="document.location='/project/produce_document?project_id={{ project.key.id() }}&document_id={{ from_document_id }}'">
         {% else %}
         <input type="button" value="Cancel" onclick="document.location='/project?project_id={{ project.key.id() }}'">
         {% endif %}

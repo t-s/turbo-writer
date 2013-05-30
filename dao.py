@@ -370,6 +370,11 @@ def get_assignment_by_name(template, assignment_name):
         return assignment
 
 
+def get_assignment_for_variable_name(project, variable_name):
+    for assignment in Assignment.query(Assignment.variable_names == variable_name, ancestor=project.key).fetch():
+        return assignment
+
+
 def get_assignment_names(template):
     return [assignment.name for assignment in
             Assignment.query(ancestor=template.key).order(Assignment.name)]
@@ -831,6 +836,14 @@ def test_email_is_template_owner(template, email):
 
 def test_email_registered(email):
     return SiteUser.query(SiteUser.email == email.lower()).count()
+
+
+def test_is_manager(project):
+    current_user = users.get_current_user()
+    current_email = current_user.email().lower()
+    project_user = get_project_user_by_email(project, current_email)
+    if project_user:
+        return PROJECT_OWN in project_user.permissions or PROJECT_MANAGE in project_user.permissions
 
 
 def test_project_permissions(project, permission_list):

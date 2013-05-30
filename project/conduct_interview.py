@@ -132,6 +132,7 @@ class RequestHandler(webapp2.RequestHandler):
 
         index = self.request.get(u'_index')
         from_console = self.request.get(u'_from_console')
+        from_document_id = self.request.get(u'_from_document_id')
 
         self.store_variables(project, index)
 
@@ -201,6 +202,9 @@ class RequestHandler(webapp2.RequestHandler):
             self.render(project, child_interview.name, interview_service, index=cloned_interview.assigned_index)
             return
         elif self.request.get(u'_parent'):
+            root_interview = interview_service.get_interview_by_name(interview.root_interview_name)
+            root_interview.completed = False
+            root_interview.put()
             parent = interview_service.get_closest_ancestor_interview_with_content(interview.name)
             if parent:
                 name = parent.name
@@ -222,6 +226,9 @@ class RequestHandler(webapp2.RequestHandler):
                     return
         if from_console:
             self.redirect("/project_admin/console?project_id={}".format(project.key.id()))
+        elif from_document_id:
+            self.redirect("/project/produce_document?project_id={}&document_id={}".format(project.key.id(),
+                          from_document_id))
         else:
             self.redirect("/project?project_id={}".format(project.key.id()))
 
@@ -266,7 +273,6 @@ class RequestHandler(webapp2.RequestHandler):
 
         jinja_template_values = dao.get_standard_project_values(project)
 
-        jinja_template_values[u'project'] = project
         jinja_template_values[u'post_interview_name'] = interview_name
         if index:
             jinja_template_values[u'show_index'] = True
@@ -297,6 +303,10 @@ class RequestHandler(webapp2.RequestHandler):
 
         if self.request.get(u'_from_console'):
             jinja_template_values[u'from_console'] = True
+
+        from_document_id = self.request.get(u'_from_document_id')
+        if from_document_id:
+            jinja_template_values[u'from_document_id'] = from_document_id
 
         self.response.out.write(jinja_template.render(jinja_template_values))
 

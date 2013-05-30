@@ -10,7 +10,8 @@ image_element_pattern = re.compile(r'\*\*\* INSERT "(.*?)" \(image/.*?\)(.*?)HER
 class RequestHandler(webapp2.RequestHandler):
     def generate_html_document(self, project, document):
         inner_template_values = dict()
-        inner_template_values[u'project'] = project
+        inner_template_values[u'is_manager'] = dao.test_is_manager(project)
+        inner_template_values[u'document'] = document
         self.generate_variable_values(project, inner_template_values)
         inner_template = ui.from_string(self, document.content)
         return inner_template.render(inner_template_values)
@@ -47,7 +48,6 @@ class RequestHandler(webapp2.RequestHandler):
         # Deliver HTTP response
         jinja_template = ui.get_template(self, u'project/produce_document.html')
         jinja_template_values = dao.get_standard_project_values(project)
-        jinja_template_values[u'project'] = project
         jinja_template_values[u'document'] = document
         jinja_template_values[u'html_document'] = html_document
         self.response.out.write(jinja_template.render(jinja_template_values))

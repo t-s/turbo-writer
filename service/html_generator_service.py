@@ -68,6 +68,11 @@ class HtmlGeneratorService():
                 html = self.update_html(html, document_item.text,
                                         style)  # TODO How do we guard against cross-site scripting?
             else:
+                assignment = dao.get_assignment_for_variable_name(self.template, document_item.variable_name)
+                html += u'{% if is_manager %}'
+                html += u'<div class="hover-highlight" ondblclick="document.location=\'/project/conduct_interview?_project_id={}&_interview_name=write_{}&_from_document_id={{{{ document.key.id() }}}}\'">'.format(
+                    self.template.key.id(), assignment.name)
+                html += u'{% else %}<div>{% endif %}'
                 internal_variable_name = dao.convert_name_to_internal_name(document_item.variable_name)
                 if item_type == dao.SINGLE_VARIABLE:
                     content = u'{{{{ {} }}}}'.format(
@@ -77,6 +82,7 @@ class HtmlGeneratorService():
                     content = u'{{{{ get_indexed_variable(project, "{}", index) }}}}'.format(
                         internal_variable_name)  # TODO How do we guard against cross-site scripting?
                     html = self.update_html(html, content, style)
+                html += u'</div>'
             if end_repeating_group:
                 html += u'{% endfor %}'
                 html += u'{% endif %}'
@@ -272,5 +278,6 @@ class HtmlGeneratorService():
             if style:
                 html += u'<p><span style="{}">{}</span></p>'.format(style.css, content)
             else:
-                html += u'<p>{}</p>'.format(content)
+                # html += u'<p>{}</p>'.format(content)
+                html += u'{}'.format(content)
         return html

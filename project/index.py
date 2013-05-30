@@ -11,5 +11,4 @@ class RequestHandler(webapp2.RequestHandler):
 
         jinja_template = ui.get_template(self, u'project/index.html')
         jinja_template_values = dao.get_standard_project_values(project)
-        jinja_template_values[u'project'] = project
         self.response.out.write(jinja_template.render(jinja_template_values))
