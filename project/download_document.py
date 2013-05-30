@@ -60,7 +60,7 @@ class DownloadHandler(blobstore_handlers.BlobstoreDownloadHandler):
         document.blob_key = files.blobstore.get_blob_key(blob_file_name)
         document.put()
 
-        filename = u'{}.html'.format(document.internal_name)
+        filename = u'{}.html'.format(document.name)
 
         # Set header so that we can write Unicode body; note that headers must be
         # byte strings, not unicode strings
