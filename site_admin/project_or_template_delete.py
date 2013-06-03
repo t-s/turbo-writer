@@ -18,16 +18,19 @@ class RequestHandler(webapp2.RequestHandler):
         # Get specified Project entity
         name = self.request.get(u'name')
         project_or_template_type = self.request.get(u'project_or_template_type')
+        email = self.request.get(u'email')
         selected_project = None
         error_msg = None
         for project in dao.get_projects_or_templates_by_name(name):
             if project.project_type == project_or_template_type:
-                if not selected_project:
-                    selected_project = project
-                else:
-                    error_msg = u'Name/type not unique; functionality not supported'
+                if dao.get_project_user_by_email(project, email):
+                    if not selected_project:
+                        selected_project = project
+                    else:
+                        error_msg = u'Multiple {} with specified name/email/type; don\'t know which one to delete'.format(
+                            u'projects' if project_or_template_type == dao.PROJECT else u'templates')
         if not selected_project:
-            error_msg = u'Name/type not found'
+            error_msg = u'Name/email/type combination not found'
 
         if not error_msg and self.request.get(u'delete'):
             # Handle delete request
@@ -48,6 +51,7 @@ class RequestHandler(webapp2.RequestHandler):
         jinja_template_values = dao.get_standard_site_values()
         jinja_template_values[u'error_msg'] = error_msg
         jinja_template_values[u'name'] = self.request.get(u'name')
+        jinja_template_values[u'email'] = self.request.get(u'email')
         jinja_template_values[u'project_or_template_type'] = self.request.get(u'project_or_template_type')
 
         self.response.out.write(jinja_template.render(jinja_template_values))

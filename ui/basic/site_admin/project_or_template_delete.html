@@ -19,6 +19,13 @@
             </td>
         </tr>
         <tr>
+            <th>Team Member Email Address</th>
+            <td>
+                <input name="email" value="{{ email }}" size="100">
+            </td>
+        </tr>
+
+        <tr>
             <th>Type</th>
             <td>
                 <input type="radio" name="project_or_template_type" value="J" {% if project_or_template_type == "J" %}
@@ -26,11 +33,9 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" name="project_or_template_type" value="V" {% if project_or_template_type == "V" %}
                 checked{% endif %} > Private Template
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" name="project_or_template_type" value="U" {% if project_or_template_type == "U" %}
-                checked{% endif %} > Public Template
             </td>
         </tr>
+
     </table>
     <table>
         <tr>
