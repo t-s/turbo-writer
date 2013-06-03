@@ -10,6 +10,8 @@
         <th class="bordered_cell">Description</th>
         <th class="bordered_cell" style="text-align: center">Type</th>
         <th class="bordered_cell">Input Field</th>
+        <th class="bordered_cell">Assignments</th>
+        <th class="bordered_cell">Documents</th>
     </tr>
     {% for variable in variables %}
     <tr>
@@ -38,12 +40,20 @@
                 (unknown)
             {% endif %}
         </td>
+        <td class="bordered_cell">
+            {{ variable.assignments }}
+        </td>
+        <td class="bordered_cell">
+            {{ variable.documents }}
+        </td>
     </tr>
     {% endfor %}
     <tr>
         <td class="bordered_cell">
             <a href="/template/variable/add?template_id={{ template.key.id() }}">+</a>
         </td>
+        <td class="bordered_cell"></td>
+        <td class="bordered_cell"></td>
         <td class="bordered_cell"></td>
         <td class="bordered_cell"></td>
         <td class="bordered_cell"></td>
