@@ -39,7 +39,8 @@ class RequestHandler(webapp2.RequestHandler):
                 assignment_count += 1
                 if len(assignments):
                     assignments += u', '
-                assignments += assignment.name
+                assignments += u'<a href="/template/assignment/structure?template_id={}&assignment_id={}">{}</a>'.format(
+                    template.key.id(), assignment.key.id(), assignment.name)
         if assignment_count > 1:
             assignments = u'<span style="color: red;">{}</span>'.format(assignments)
         return assignments
@@ -52,6 +53,7 @@ class RequestHandler(webapp2.RequestHandler):
                 if document_item.variable_name == variable_name:
                     if len(documents):
                         documents += u', '
-                    documents += document.name
+                    documents += u'<a href="/template/document/structure?template_id={}&document_id={}">{}</a>'.format(
+                        template.key.id(), document.key.id(), document.name)
         return documents
 

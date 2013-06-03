@@ -40,10 +40,11 @@ class RequestHandler(webapp2.RequestHandler):
                 assignment_count += 1
                 if len(assignments):
                     assignments += u', '
-                assignments += assignment.name
-        if assignment_count > 1:
-            assignments = u'<span style="color: red;">{}</span>'.format(assignments)
-        return assignments
+                assignments += u'<a href="/project/assignment/structure?project_id={}&assignment_id={}">{}</a>'.format(
+                    project.key.id(), assignment.key.id(), assignment.name)
+                if assignment_count > 1:
+                    assignments = u'<span style="color: red;">{}</span>'.format(assignments)
+            return assignments
 
     def get_documents(self, project, variable):
         documents = u''
@@ -53,5 +54,6 @@ class RequestHandler(webapp2.RequestHandler):
                 if document_item.variable_name == variable_name:
                     if len(documents):
                         documents += u', '
-                    documents += document.name
+                    documents += u'<a href="/project/document/structure?project_id={}&document_id={}">{}</a>'.format(
+                        project.key.id(), document.key.id(), document.name)
         return documents
