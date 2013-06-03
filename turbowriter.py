@@ -78,6 +78,7 @@ app.router.add((u'/project_admin/project_user_admin', project_user_admin.Request
 app.router.add((u'/project_admin/project_user_add', project_user_add.RequestHandler))
 app.router.add((u'/project_admin/project_user_edit', project_user_edit.RequestHandler))
 
+app.router.add((u'/site_admin/project_or_template_delete', project_or_template_delete.RequestHandler))
 app.router.add((u'/site_admin/site_settings', site_settings.RequestHandler))
 app.router.add((u'/site_admin/template_admin', template_admin.RequestHandler))
 app.router.add((u'/site_admin/template_edit', template_edit.RequestHandler))

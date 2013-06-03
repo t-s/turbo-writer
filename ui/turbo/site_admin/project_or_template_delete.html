@@ -1,0 +1,52 @@
+{% extends "site_base.html" %}
+
+{% block workspace %}
+
+<h3>Project or Template Delete</h3>
+
+{% if error_msg %}
+<p>
+    <span class="error">{{ error_msg }}</span>
+</p>
+{% endif %}
+
+<form method="post">
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>Project or Template Name</th>
+            <td>
+                <input name="name" value="{{ name }}" size="100">
+            </td>
+        </tr>
+        <tr>
+            <th>Type</th>
+            <td>
+                <input type="radio" name="project_or_template_type" value="J" {% if project_or_template_type == "J" %}
+                checked{% endif %}> Project
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="project_or_template_type" value="V" {% if project_or_template_type == "V" %}
+                checked{% endif %} > Private Template
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="project_or_template_type" value="U" {% if project_or_template_type == "U" %}
+                checked{% endif %} > Public Template
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input type="submit" name="delete" value="Delete Project or Template">
+            </td>
+            <td>
+                <input type="button" value="Cancel" onclick="document.location='/'">
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}

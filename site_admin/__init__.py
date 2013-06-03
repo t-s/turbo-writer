@@ -1,3 +1,4 @@
+import project_or_template_delete
 import site_settings
 import site_user_add
 import site_user_admin

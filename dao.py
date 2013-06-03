@@ -230,7 +230,7 @@ class Project(ndb.Model):
     """
     name = ndb.StringProperty(u'n', required=True)
     project_type = ndb.StringProperty(u't', required=True)  # PROJECT/PRIVATE_TEMPLATE/PUBLIC_TEMPLATE
-    status = ndb.StringProperty(u's')  # STATUS_PENDING/STATUS_ACTIVE/STATUS_INACTIVE
+    status = ndb.StringProperty(u's')  # For PUBLIC_TEMPLATE: STATUS_PENDING/STATUS_ACTIVE/STATUS_INACTIVE
     description = ndb.TextProperty(u'd')
     has_assignment_definition_changed = ndb.BooleanProperty(u'hadc')
     has_document_definition_changed = ndb.BooleanProperty(u'hddc')
@@ -515,6 +515,10 @@ def get_project_users(project):
 
 def get_projects_by_name(project_name):
     return Project.query(Project.name == project_name, Project.project_type == PROJECT).fetch()
+
+
+def get_projects_or_templates_by_name(project__or_template_name):
+    return Project.query(Project.name == project__or_template_name).fetch()
 
 
 def get_public_templates():
