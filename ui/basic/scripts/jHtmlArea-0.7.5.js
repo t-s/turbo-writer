@@ -261,14 +261,15 @@
 
     jHtmlArea.defaultOptions = {
         toolbar: [
-        ["html"], ["bold", "italic", "underline", "strikethrough", "|", "subscript", "superscript"],
+        ["bold", "italic", "underline", "strikethrough", "|", "subscript", "superscript"],
         ["increasefontsize", "decreasefontsize"],
         ["orderedlist", "unorderedlist"],
         ["indent", "outdent"],
         ["justifyleft", "justifycenter", "justifyright"],
         ["link", "unlink", "image", "horizontalrule"],
-        ["p", "h1", "h2", "h3", "h4", "h5", "h6"]
-    ],
+        ["p", "h1", "h2", "h3", "h4", "h5", "h6"],
+        ["html"]
+        ],
         css: null,
         toolbarText: {
             bold: "Bold", italic: "Italic", underline: "Underline", strikethrough: "Strike-Through",
