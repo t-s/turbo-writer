@@ -123,15 +123,6 @@
             r.collapse(false);
             r.select();
         },
-        cut: function () {
-            this.ec("cut");
-        },
-        copy: function () {
-            this.ec("copy");
-        },
-        paste: function () {
-            this.ec("paste");
-        },
         bold: function () { this.ec("bold"); },
         italic: function () { this.ec("italic"); },
         underline: function () { this.ec("underline"); },
@@ -276,13 +267,11 @@
         ["indent", "outdent"],
         ["justifyleft", "justifycenter", "justifyright"],
         ["link", "unlink", "image", "horizontalrule"],
-        ["p", "h1", "h2", "h3", "h4", "h5", "h6"],
-        ["cut", "copy", "paste"]
+        ["p", "h1", "h2", "h3", "h4", "h5", "h6"]
     ],
         css: null,
         toolbarText: {
             bold: "Bold", italic: "Italic", underline: "Underline", strikethrough: "Strike-Through",
-            cut: "Cut", copy: "Copy", paste: "Paste",
             h1: "Heading 1", h2: "Heading 2", h3: "Heading 3", h4: "Heading 4", h5: "Heading 5", h6: "Heading 6", p: "Paragraph",
             indent: "Indent", outdent: "Outdent", horizontalrule: "Insert Horizontal Rule",
             justifyleft: "Left Justify", justifycenter: "Center Justify", justifyright: "Right Justify",
