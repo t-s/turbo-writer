@@ -67,6 +67,11 @@ th {
     background-color: #f9f9f9;
 }
 
+.html-editor {
+    height: 200px;
+    width: 620px;
+}
+
 .progress-cell-checklist {
     border-left-color: white;
     border-left-style: solid;
