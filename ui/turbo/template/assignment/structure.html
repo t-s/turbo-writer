@@ -2,6 +2,9 @@
 
 {% block workspace %}
 
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/ui/{{ ui }}/scripts/ckeditor/ckeditor.js"></script>
+
 <h3>Define Assignment Structure</h3>
 
 {% if error_msg %}
@@ -35,12 +38,14 @@
                     <option value="">(select)</option>
                     {% for assignment_name in assignment_names %}
                     <option value="{{ assignment_name | e }}"
-                    {% if prereq_assignment_name == assignment_name %} selected{% endif %}>{{ assignment_name | e }}</option>
+                    {% if prereq_assignment_name == assignment_name %} selected{% endif %}>{{ assignment_name | e
+                    }}</option>
                     {% endfor %}
                 </select>
             </td>
             <td class="bordered_cell" style="text-align: center">
-                <input name="prereq_assignment_name_position.{{ loop.index }}" style="width: 30px" value="{{ loop.index }}"/>
+                <input name="prereq_assignment_name_position.{{ loop.index }}" style="width: 30px"
+                       value="{{ loop.index }}"/>
                 <input type="submit" name="change_prereq_assignment_name_position.{{ loop.index }}" value="Change"/>
                 <input type="submit" name="remove_prereq_assignment_name_position.{{ loop.index }}" value="Remove"/>
             </td>
@@ -135,14 +140,14 @@
         <tr>
             <th>Instructions to Manager:</th>
             <td>
-                <textarea name="instructions_to_manager" class="html-editor">{{ instructions_to_manager
+                <textarea name="instructions_to_manager" class="ckeditor">{{ instructions_to_manager
                     | e }}</textarea>
             </td>
         </tr>
         <tr>
             <th>Instructions to Writer:</th>
             <td>
-                <textarea name="instructions_to_writer" class="html-editor">{{ instructions_to_writer |
+                <textarea name="instructions_to_writer" class="ckeditor">{{ instructions_to_writer |
                     e }}</textarea>
             </td>
         </tr>

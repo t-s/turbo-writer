@@ -144,7 +144,7 @@ class HtmlGeneratorService():
         html += u'<tr><th>Instructions:</th>'
         html += u'<td>{}</td></tr>'.format(assignment.instructions_to_writer)
         html += u'<tr><th>Additional instructions:</th><td>'
-        html += u'<textarea name="_manager_instructions_to_writer" style="height: 200px; width: 500px">'
+        html += u'<textarea name="_manager_instructions_to_writer" class="ckeditor" style="height: 200px; width: 500px">'
         html += u'{{ manager_instructions_to_writer | e }}</textarea></td></tr>'
         html += u'<tr><th>Checklist:</th>'
         html += u'<td>'
@@ -212,7 +212,7 @@ class HtmlGeneratorService():
                 html += u'</tr>'
             html += u'</table></p>'
         html += u'<h4><i>Reviewer Comments</i></h4>'
-        html += u'<textarea name="_reviewer_comment" style="height: 100px; width: 700px">{{ reviewer_comment | e }}</textarea>'
+        html += u'<textarea name="_reviewer_comment" class="ckeditor" style="height: 100px; width: 700px">{{ reviewer_comment | e }}</textarea>'
         html += self.get_html_for_variables(assignment)
         interview.content = html
         interview.put()
@@ -271,7 +271,7 @@ class HtmlGeneratorService():
                     html += u'<td><input name="{}" style="width: 500px" value="{{{{ {} | e }}}}"></td>'.format(
                         variable.internal_name, variable.internal_name)
                 else:
-                    html += u'<td><textarea name="{}" class="html-editor">{{{{ {} | e }}}}</textarea></td>'.format(
+                    html += u'<td><textarea name="{}" class="ckeditor">{{{{ {} | e }}}}</textarea></td>'.format(
                         variable.internal_name, variable.internal_name)
                 html += u'</tr>'
         html += u'</table></p>'
