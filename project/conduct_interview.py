@@ -278,9 +278,13 @@ class RequestHandler(webapp2.RequestHandler):
         jinja_template_values = dao.get_standard_project_values(project)
 
         jinja_template_values[u'post_interview_name'] = interview_name
+
         if index:
             jinja_template_values[u'show_index'] = True
             jinja_template_values[u'index'] = index
+
+        jinja_template_values[u'attachments'] = dao.get_attachments_by_project(project)
+
         jinja_template_values[u'html_document'] = html_document
 
         if interview_service.get_previous_name(interview_name):

@@ -5,6 +5,75 @@
 * Licensed under the Microsoft Reciprocal License (Ms-RL)
 * http://jhtmlarea.codeplex.com/license
 */
+
+var modal = (function () {
+    var
+        method = {},
+        $overlay,
+        $modal,
+        $content,
+        $close;
+
+    $overlay = $("#overlay");
+    $modal = $("#modal");
+    $content = $("#content");
+    $close = $("#close");
+
+    $modal.hide();
+    $overlay.hide();
+
+    var htmlarea;
+
+    method.center = function () {
+        var top, left;
+
+        top = Math.max($(window).height() - $modal.outerHeight(), 0) / 2;
+        left = Math.max($(window).width() - $modal.outerWidth(), 0) / 2;
+
+        $modal.css({
+            top: top + $(window).scrollTop(),
+            left: left + $(window).scrollLeft()
+        });
+    };
+
+    method.open = function (arg) {
+        htmlarea = arg;
+
+//        $content.empty().append(settings.content);
+
+//        $modal.css({
+//            width: settings.width || 'auto',
+//            height: settings.height || 'auto'
+//        })
+
+        method.center();
+
+        $(window).bind('resize.modal', method.center);
+
+        $modal.show();
+//        $overlay.show();
+    };
+
+    method.insertAttachment = function (text) {
+        htmlarea.attachInsert(text);
+        method.close();
+    };
+
+    method.close = function () {
+        $modal.hide();
+        $overlay.hide();
+//        $content.empty();
+        $(window).unbind('resize.modal');
+    };
+
+    $close.click(function (e) {
+        e.preventDefault();
+        method.close();
+    });
+
+    return method;
+}());
+
 (function ($) {
     $.fn.htmlarea = function (opts) {
         if (opts && typeof (opts) === "string") {
@@ -138,6 +207,12 @@
             this.ec("removeFormat", false, []);
             this.unlink();
         },
+        attach: function() {
+            modal.open(this);
+        },
+        attachInsert: function(text) {
+            this.ec("insertText", false, text);
+        },
         link: function () {
             if ($.browser.msie) {
                 this.ec("createLink", true);
@@ -266,7 +341,7 @@
         ["orderedlist", "unorderedlist"],
         ["indent", "outdent"],
         ["justifyleft", "justifycenter", "justifyright"],
-        ["link", "unlink", "image", "horizontalrule"],
+        ["attach", "link", "unlink", "image", "horizontalrule"],
         ["p", "h1", "h2", "h3", "h4", "h5", "h6"],
         ["html"]
         ],
@@ -277,7 +352,7 @@
             indent: "Indent", outdent: "Outdent", horizontalrule: "Insert Horizontal Rule",
             justifyleft: "Left Justify", justifycenter: "Center Justify", justifyright: "Right Justify",
             increasefontsize: "Increase Font Size", decreasefontsize: "Decrease Font Size", forecolor: "Text Color",
-            link: "Insert Link", unlink: "Remove Link", image: "Insert Image",
+            attach: "Insert Attachment", link: "Insert Link", unlink: "Remove Link", image: "Insert Image",
             orderedlist: "Insert Ordered List", unorderedlist: "Insert Unordered List",
             subscript: "Subscript", superscript: "Superscript",
             html: "Show/Hide HTML Source View"
@@ -391,4 +466,5 @@
             return v && typeof v === 'object' && typeof v.length === 'number' && typeof v.splice === 'function' && !(v.propertyIsEnumerable('length'));
         }
     };
+
 })(jQuery);

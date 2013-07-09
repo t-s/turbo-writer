@@ -23,8 +23,10 @@ div.jHtmlArea .ToolBar ul li a.cut { background-position: -144px 0; }
 div.jHtmlArea .ToolBar ul li a.copy { background-position: -160px 0; }
 div.jHtmlArea .ToolBar ul li a.paste { background-position: -176px 0; }
 
-div.jHtmlArea .ToolBar ul li a.html { background-position: -192px 0; opacity:0.6; filter:alpha(opacity=60);}
-div.jHtmlArea .ToolBar ul li a.html.highlighted { opacity:1.0; filter:alpha(opacity=100);}
+/*div.jHtmlArea .ToolBar ul li a.html { background-position: -192px 0; opacity:0.6; filter:alpha(opacity=60);}*/
+/*div.jHtmlArea .ToolBar ul li a.html.highlighted { opacity:1.0; filter:alpha(opacity=100);}*/
+
+div.jHtmlArea .ToolBar ul li a.html { background-position: -192px 0; }
 
 div.jHtmlArea .ToolBar ul li a.h1 { background-position: 0 -16px;}
 div.jHtmlArea .ToolBar ul li a.h2 { background-position: -16px -16px;}
@@ -46,3 +48,4 @@ div.jHtmlArea .ToolBar ul li a.justifyright { background-position: -32px -32px;}
 div.jHtmlArea .ToolBar ul li a.increasefontsize { background-position: -48px -32px;}
 div.jHtmlArea .ToolBar ul li a.decreasefontsize { background-position: -64px -32px;}
 div.jHtmlArea .ToolBar ul li a.forecolor { background-position: -80px -32px;}
+div.jHtmlArea .ToolBar ul li a.attach { background-position: -96px -32px;}
