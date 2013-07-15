@@ -44,7 +44,15 @@
 
 <div id='modal'>
     <div id='content'>
-        <table class="bordered_table">
+        <table style="width: 100%">
+            <tr>
+                <td style="height: 30px; vertical-align: top;">Insert Attachment</td>
+                <td style="text-align: right;">
+                    <span onclick="modal.close()" style="cursor: pointer;">x</span>
+                </td>
+            </tr>
+        </table>
+        <table class="bordered_table" style="background-color: #fff;">
             <input type="hidden" name="project_id" value="{{ project.key.id() }}">
             <tr>
                 <th class="bordered_cell">Name</th>

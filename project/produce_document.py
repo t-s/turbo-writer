@@ -4,8 +4,7 @@ import dao
 import ui
 
 indexed_name_pattern = re.compile(r'(.*)\[(.*)\]')
-image_element_pattern = re.compile(r'\*\*\* INSERT "(.*?)" \(image/.*?\)(.*?)HERE \*\*\*')
-
+image_element_pattern = re.compile(r'\*\*\* INSERT ("|&quot;)(.*?)("|&quot;) \(image/.*?\)(.*?)HERE \*\*\*')
 
 class RequestHandler(webapp2.RequestHandler):
     def generate_html_document(self, project, document):
@@ -59,10 +58,10 @@ class RequestHandler(webapp2.RequestHandler):
             if match:
                 before = document[:match.start()]
                 after = document[match.end():]
-                attachment = dao.get_attachment_by_filename(project, match.group(1))
+                attachment = dao.get_attachment_by_filename(project, match.group(2))
                 if attachment:
                     document = u'{}<img src="/project_admin/attachment_download?project_id={}&attachment_id={}" {}>{}'.format(
-                        before, project.key.id(), attachment.key.id(), match.group(2), after)
+                        before, project.key.id(), attachment.key.id(), match.group(4), after)
                 else:
                     document = u'{}<br/>***UNABLE TO FIND ATTACHMENT "{}"***<br/>{}'.format(before, match.group(1),
                                                                                             after)
