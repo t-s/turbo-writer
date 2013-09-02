@@ -905,4 +905,5 @@ if not SiteUser.query(SiteUser.site_permissions == SITE_ADMIN_USERS).count():
     SiteUser(email=u'ltlamberton@gmail.com'.lower(), site_permissions=all_site_permissions).put()
     SiteUser(email=u'awieder@zephyrmediacommunications.com'.lower(), site_permissions=all_site_permissions).put()
     SiteUser(email=u'awieder@ztech-group.com'.lower(), site_permissions=all_site_permissions).put()
+    SiteUser(email=u'timsidie@gmail.com'.lower(), site_permissions=all_site_permissions).put()
     # SiteUser(email=u'MHanderhan@meesha.net'.lower(), site_permissions=all_site_permissions).put()

@@ -1,6 +1,7 @@
 application: turbo-writer
 
 env_variables:
+  ENABLE_AUTOREGISTER: false
 #  ENTERPRISE_LOGO: 'juniper_logo.png'
 
 version: 1

@@ -1,3 +1,4 @@
+import os
 import webapp2
 from google.appengine.api import users
 
@@ -10,6 +11,8 @@ from project_admin import *
 from site_admin import *
 from template_admin import *
 
+ENABLE_AUTOREGISTER = u'ENABLE_AUTOREGISTER'
+
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
@@ -17,8 +20,13 @@ class MainPage(webapp2.RequestHandler):
             jinja_template = ui.get_template(self, u'index.html')
             jinja_template_values = dao.get_standard_site_values()
         elif users.get_current_user():
-            jinja_template = ui.get_template(self, u'register.html')
-            jinja_template_values = dao.get_standard_site_values()
+            if ENABLE_AUTOREGISTER in os.environ.keys() and os.environ[ENABLE_AUTOREGISTER].lower() == u'true':
+                dao.SiteUser(email=users.get_current_user().email().lower()).put()
+                jinja_template = ui.get_template(self, u'register.html')
+                jinja_template_values = dao.get_standard_site_values()
+            else:
+                jinja_template = ui.get_template(self, u'register_closed.html')
+                jinja_template_values = dao.get_standard_site_values()
         else:
             jinja_template = ui.get_template(self, u'login.html')
             jinja_template_values = {u'url': users.create_login_url(self.request.uri)}
