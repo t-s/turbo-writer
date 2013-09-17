@@ -517,8 +517,8 @@ def get_projects_by_name(project_name):
     return Project.query(Project.name == project_name, Project.project_type == PROJECT).fetch()
 
 
-def get_projects_or_templates_by_name(project__or_template_name):
-    return Project.query(Project.name == project__or_template_name).fetch()
+def get_projects_or_templates_by_name(project_or_template_name):
+    return Project.query(Project.name == project_or_template_name).fetch()
 
 
 def get_public_templates():

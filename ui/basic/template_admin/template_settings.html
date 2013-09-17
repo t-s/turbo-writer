@@ -14,9 +14,13 @@
     <input type="hidden" name="template_id" value="{{ template.key.id() }}">
     <table>
         <tr>
+            <th>Template Name:</th>
+            <td><input name="name" value="{{ template.name | e }}" style="width: 600px" autofocus></td>
+        </tr>
+        <tr>
             <th>Description:</th>
             <td>
-                <textarea name="description" autofocus>{{ template.description | e }}</textarea>
+                <textarea name="description">{{ template.description | e }}</textarea>
             </td>
         </tr>
     </table>

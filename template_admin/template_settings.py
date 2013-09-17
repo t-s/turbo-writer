@@ -1,4 +1,6 @@
 import webapp2
+from google.appengine.api import users
+
 import dao
 import ui
 
@@ -31,7 +33,17 @@ class RequestHandler(webapp2.RequestHandler):
 
         # Handle update request
         if self.request.get(u'update'):
+            current_user = users.get_current_user()
+            current_email = current_user.email().lower()
             try:
+                name = self.request.get(u'name').strip()
+                if name != template.name:
+                    if not name:
+                        raise Exception(u'You must provide a name for your template')
+                    for test_template in dao.get_private_template_by_name(name):
+                        if dao.test_email_is_template_owner(test_template, current_email):
+                            raise Exception(u'Sorry, you already own a different template named \"{}\"'.format(name))
+                    template.name = name
                 template.description = self.request.get(u'description')
                 template.put()
                 self.redirect("/template?template_id={}".format(template.key.id()))
