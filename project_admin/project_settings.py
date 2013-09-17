@@ -1,4 +1,6 @@
 import webapp2
+from google.appengine.api import users
+
 import dao
 import ui
 
@@ -31,7 +33,17 @@ class RequestHandler(webapp2.RequestHandler):
 
         # Handle update request
         if self.request.get(u'update'):
+            current_user = users.get_current_user()
+            current_email = current_user.email().lower()
             try:
+                name = self.request.get(u'name').strip()
+                if name != project.name:
+                    if not name:
+                        raise Exception(u'You must provide a name for your project')
+                    for test_project in dao.get_projects_by_name(name):
+                        if dao.test_email_is_project_owner(test_project, current_email):
+                            raise Exception(u'Sorry, you already own a different project named \"{}\"'.format(name))
+                    project.name = name
                 project.description = self.request.get(u'description')
                 project.put()
                 self.redirect("/project?project_id={}".format(project.key.id()))
