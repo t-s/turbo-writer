@@ -1,0 +1,9 @@
+function piResponse() {
+piSetCookie('visitor_id20002', '', 3650);
+/* Error, campaign was not found. */
+}
+piResponse();
+
+
+
+

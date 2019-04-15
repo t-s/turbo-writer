@@ -40,11 +40,39 @@ class Synopsis(webapp2.RequestHandler):
         jinja_template_values = dao.get_standard_site_values()
         self.response.out.write(jinja_template.render(jinja_template_values))
 
+class Home(webapp2.RequestHandler):
+    def get(self):
+        jinja_template = ui.get_template(self, u'login.html')
+        jinja_template_values = dao.get_standard_site_values()
+        self.response.out.write(jinja_template.render(jinja_template_values))
+
+class How_We_Work(webapp2.RequestHandler):
+    def get(self):
+        jinja_template = ui.get_template(self, u'how_we_work.html')
+        jinja_template_values = dao.get_standard_site_values()
+        self.response.out.write(jinja_template.render(jinja_template_values))
+
+class Privacy_Policy(webapp2.RequestHandler):
+    def get(self):
+        jinja_template = ui.get_template(self, u'privacy_policy.html')
+        jinja_template_values = dao.get_standard_site_values()
+        self.response.out.write(jinja_template.render(jinja_template_values))
+
+class Terms(webapp2.RequestHandler):
+    def get(self):
+        jinja_template = ui.get_template(self, u'terms.html')
+        jinja_template_values = dao.get_standard_site_values()
+        self.response.out.write(jinja_template.render(jinja_template_values))
+
 # Start the application
 
 app = webapp2.WSGIApplication([('/', MainPage)], debug=True)
 
 app.router.add((u'/synopsis', Synopsis))
+app.router.add((u'/how_we_work', How_We_Work))
+app.router.add((u'/privacy', Privacy_Policy))
+app.router.add((u'/terms', Terms))
+app.router.add((u'/home', Home))
 
 app.router.add((u'/my_account/preferences', preferences.RequestHandler))
 

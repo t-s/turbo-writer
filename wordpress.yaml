@@ -1,0 +1,33 @@
+application: turbo-writer-tim
+module: wordpress
+version: wp
+runtime: php
+api_version: 1
+handlers:
+- url: /admin/(.*\.(htm$|html$|css$|js$))
+  static_files: wordpress/\1
+  upload: wordpress/(.*\.(htm$|html$|css$|js$))
+  application_readable: true
+- url: /admin/wp-content/(.*\.(ico$|jpg$|png$|gif$))
+  static_files: wordpress/wp-content/\1
+  upload: wordpress/wp-content/(.*\.(ico$|jpg$|png$|gif$))
+  application_readable: true
+- url: /admin/(.*\.(ico$|jpg$|png$|gif$))
+  static_files: wordpress/\1
+  upload: wordpress/(.*\.(ico$|jpg$|png$|gif$))
+- url: /admin/wp-admin/(.+)
+  script: wordpress/wp-admin/\1
+  secure: always
+- url: /admin/wp-admin/
+  script: wordpress/wp-admin/index.php
+  secure: always
+- url: /admin/wp-login.php
+  script: wordpress/wp-login.php
+  secure: always
+- url: /admin/wp-cron.php
+  script: wordpress/wp-cron.php
+  login: admin
+- url: /admin/xmlrpc.php
+  script: wordpress/xmlrpc.php
+- url: /admin(.+)?/?
+  script: wordpress/index.php

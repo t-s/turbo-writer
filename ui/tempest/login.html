@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+        <title>TurboWriter</title>
+
+        <!-- CSS -->
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet'>
+        <link href="css/layouts.css" rel="stylesheet" type="text/css" />
+        <link href="css/blue.css" rel="stylesheet" type="text/css" />
+        <link href="css/font.css" rel="stylesheet" type="text/css" />
+        <link href="css/lightBackground.css" rel="stylesheet" type="text/css" />
+        <!-- / CSS -->
+
+        </head>
+
+        <body class="gallery front not-logged-in no-sidebars page-node" onload>
+            {% include "topbar.html" %}
+            <!-- start of logo -->
+            <div id="logo">
+                <img alt="logo" height="30" src="images/logo2.png" width="390"/>
+            </div>
+            <!-- end of logo -->
+
+            <!-- start of banner [row #1] -->
+            <div class="bannerContainer">
+                <div class="bannerImage2" style="margin-left:55px; margin-bottom:-19px; background-image:url('images/header.jpg');">
+                    <img class="arrow2" alt="" src="images/topArrow.png"/>
+                </div>
+                <div class="bannerText2">
+                    <h1 class="mediumHeader">Welcome to <span class="highlighted">TurboWriter</span>, a powerful collaborative web-based authoring workbench.</h1>
+                    <span style="font-size:150%">
+                        TurboWriter is a real-time, web-based document creation and assembly application with a variety of unique features.<br><br>
+                        Please click "Sign In" to sign into your Google account. You'll be signing into TurboWriter at the same time.
+                        Note: If you don't have a Google account, please click "Sign In" to go to the Google Accounts page. You'll be able to sign up for a free Google account first, and then you'll be able to sign in.
+                    </span>
+                </div>
+            </div>
+            <!-- end of banner [row #1] -->
+            <br>
+            <!-- start of block [row #3] -->
+            <div class="block">
+                <div class="rowContainer3">
+                    <br>
+                    <div class="oneFromTwo">
+                        <h2>TurboWriter will improve your productivity and lower your costs, guaranteed.</h2>
+                        <!--<img src="images/benefits.jpg">-->
+                        <br>
+                        <ul style="font-size:170%;margin-top:-12px;margin-left:40px;">
+                            <li style="padding:0 0 6px;">&#10004;&nbsp; Increased speed of deployment</li>
+                            <li style="padding:0 0 6px;">&#10004;&nbsp; Improved compliance</li>
+                            <li style="padding:0 0 6px;">&#10004;&nbsp; Increased user adoption</li>
+                            <li style="padding:0 0 6px;">&#10004;&nbsp; Reduced support requirements</li>
+                            <li style="padding:0 0 6px;">&#10004;&nbsp; Low implementation and upgrade cost</li>
+                            <li style="padding:0 0 6px;">&#10004;&nbsp; Shared user communities</li>
+                        </ul>
+                        <br>
+                        <p style="font-size:14px;margin-top:14px;">
+                        Templates can be created to fit a variety of business needs in a collaborative and efficient manner, allowing you to quickly construct the documents your business needs to succeed. 
+                        </p>
+                    </div>
+                    <div class="oneFromTwoRightSide">
+                        <div class="halfRow">
+                            <div class="oneFromFour marginBottom">
+                                <i style="font-size:64px;color:#7A9EC5" class="columnIcon icon-calendar"></i>
+                                <!--<img class="columnIcon" alt="icon" src="images/Calendar.png" height="64" width="64"/>-->
+                                <h3>Achieve deadlines easily</h3>
+                                <p class="columnText">With task assignment and progress tracking, never miss a deadline again.</p>
+                            </div>
+                            <div class="oneFromFour marginBottom">
+                                <i style="font-size:64px;color:#FDC600" class="columnIcon icon-upload-cloud-1"></i>
+                                <!--<img class="columnIcon" alt="icon" src="images/Folder.png" height="64" width="64"/>-->
+                                <h3>Store your documents in the cloud</h3>
+                                <p class="columnText">Everything you create in TurboWriter is stored in Google's reliable data servers.</p>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="halfRow">
+                            <div class="oneFromFour">
+                                <i style="font-size:64px;color:#000000" class="columnIcon icon-tools"></i>
+                                <!--<img class="columnIcon" alt="icon" src="images/compass.png" height="64" width="64"/>-->
+                                <h3>Flexibility and versatile functionality</h3>
+                                <p class="columnText">From magazine articles to financial reports, create any type of document template needed.</p>
+                            </div>
+                            <div class="oneFromFour">
+                                <i style="font-size:64px;color:#FF1000" class="columnIcon icon-picture"></i>
+                                <!--<img class="columnIcon" alt="icon" src="images/Image_capture.png" height="64" width="64"/>-->
+                                <h3>Multimedia import capability</h3>
+                                <p class="columnText">Import graphics to visually enhance templates and easily convey information.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <!-- end of block [row #3] -->
+            <!-- start of block [row #4] -->
+            <div class="productWithFeatures">
+                {% include "gallery.html" %}
+            </div>
+            <!-- end of block [row #4] -->
+        </div>
+        <br>
+        <!-- start of footer [row #5] -->
+        <div>
+            {% include "footer.html" %}
+        </div>
+
+        </body>
+
+    </html>

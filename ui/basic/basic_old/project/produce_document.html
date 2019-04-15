@@ -1,0 +1,24 @@
+{% extends "project_base.html" %}
+
+{% block workspace %}
+
+<h3>View "{{ document.name }}"</h3>
+
+<p>
+    <a href="/project/download_document?project_id={{ project.key.id() }}&document_id={{ document.key.id() }}">Click
+        here</a> to download "{{ document.filename }}"
+</p>
+<p>
+    <a href="/project/download_attachments?project_id={{ project.key.id() }}">Click here</a> to download a zip file containing all attachments for this project.
+</p>
+
+<p>
+    Preview{% if is_manager %} (double-click to edit){% endif %}:
+</p>
+<p>
+<div style="border: 2px solid orange; ">
+    {{ html_document }}
+</div>
+</p>
+
+{% endblock %}

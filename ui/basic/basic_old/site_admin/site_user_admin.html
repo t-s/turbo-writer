@@ -1,0 +1,31 @@
+{% extends "site_base.html" %}
+
+{% block workspace %}
+
+<h3>Site Users</h3>
+
+<table class="bordered_table">
+    <tr>
+        <th class="bordered_cell">Email</th>
+        <th class="bordered_cell">Site Permissions</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+        <td class="bordered_cell">
+            <a href='/site_admin/site_user_edit?site_user_id={{ user.key.id() }}'>{{ user.email | e }}</a>
+        </td>
+        <td class="bordered_cell">
+            {% set first = True %}
+            {% for permission in user.site_permissions %}{% if not first %}, {% endif %}{{ permission }}{% set first = False %}{% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td class="bordered_cell">
+            <a href="/site_admin/site_user_add">+</a>
+        </td>
+        <td class="bordered_cell"></td>
+    </tr>
+</table>
+
+{% endblock %}

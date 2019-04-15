@@ -1,38 +1,79 @@
-application: turbo-writer
-
-env_variables:
-  ENABLE_AUTOREGISTER: false
-#  ENTERPRISE_LOGO: 'juniper_logo.png'
-
+application: turbo-writer-tim
 version: 1
 runtime: python27
 api_version: 1
 threadsafe: yes
 
+builtins:
+- remote_api: on
+
 handlers:
-- url: /ui/basic/images
-  static_dir: ui/basic/images
 
-- url: /ui/turbo/images
-  static_dir: ui/turbo/images
+- url: /favicon.ico
+  static_files: favicon.ico
+  upload: favicon.ico
 
-- url: /ui/basic/scripts
-  static_dir: ui/basic/scripts
+- url: /css
+  static_dir: css
 
-- url: /ui/turbo/scripts
-  static_dir: ui/turbo/scripts
+- url: /assets
+  static_dir: assets
 
-- url: /ui/basic/stylesheets
-  static_dir: ui/basic/stylesheets
+- url: /img
+  static_dir: img
 
-- url: /ui/turbo/stylesheets
-  static_dir: ui/turbo/stylesheets
+- url: /font
+  static_dir: font
+
+- url: /my_account/assets
+  static_dir: assets
+
+- url: /template_admin/assets
+  static_dir: assets
+
+- url: /project_admin/assets
+  static_dir: assets
+
+- url: /template/assets
+  static_dir: assets
+
+- url: /project/assets
+  static_dir: assets
+
+- url: /template/assignment/assets
+  static_dir: assets
+
+- url: /template/variable/assets
+  static_dir: assets
+
+- url: /template/document/assets
+  static_dir: assets
+
+- url: /template/style/assets
+  static_dir: assets
+
+- url: /template/css
+  static_dir: css
+
+- url: /template/font/
+  static_dir: font
+
+- url: /gallery/
+  static_dir: gallery
+
+- url: /images/
+  static_dir: images
+
+- url: /how_we_work.html
+  static_files: /ui/tempest/how_we_work.html
+  upload: /ui/tempest/
+
+- url: /privacy_policy.html
+  static_files: /ui/tempest/privacy_policy.html
+  upload: /ui/tempest/
 
 - url: /.*
   script: turbowriter.app
-
-builtins:
-- remote_api: on
 
 libraries:
 - name: jinja2

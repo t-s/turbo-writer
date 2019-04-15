@@ -1,0 +1,66 @@
+{% extends "template_base.html" %}
+
+{% block workspace %}
+
+<h3>Define Variables: Add New Variable</h3>
+
+<p>
+    Use this page to specify a variable that will hold text to appear in one or more of the documents
+    to be produced by this template.
+</p>
+
+{% if error_msg %}
+<p>
+    <span class="error">{{ error_msg | e }}</span>
+</p>
+{% endif %}
+
+<form method="post">
+    <input type="hidden" name="template_id" value="{{ template.key.id() }}">
+    <table>
+        <tr>
+            <th>Variable Name:</th>
+            <td><input name="name" value="{{ name | e }}" size="30" autofocus></td>
+        </tr>
+        <tr>
+            <th>Description:</th>
+            <td>
+                <textarea name="description">{{ description | e }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th>Type:</th>
+            <td>
+                <input type="radio" name="type" value="single"{% if type == "single" %} checked{% endif %}> Single
+                <input type="radio" name="type" value="repeating"{% if type == "repeating" %} checked{% endif %}> Repeating
+            </td>
+        </tr>
+        <tr>
+            <th>Input Field:</th>
+            <td>
+                <input type="radio" name="input_field" value="S"{% if input_field == "S" %} checked{% endif %}> Short Field
+                <input type="radio" name="input_field" value="M"{% if input_field == "M" %} checked{% endif %}> Full Line
+                <input type="radio" name="input_field" value="L"{% if input_field == "L" %} checked{% endif %}> Edit Box
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input type="submit" value="Add Variable">
+            </td>
+            <td>
+                <input type="button" value="Cancel"
+                       onclick="document.location='/template/variable?template_id={{ template.key.id() }}'">
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}
+

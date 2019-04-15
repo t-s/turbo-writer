@@ -1,47 +1,83 @@
-<!DOCTYPE html>
+<link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="/assets/bootstrap/css/bootstrap-responsive.min.css"/>
+<link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.css"/>
+<link rel="stylesheet" href="/css/style.css"/>
+<link rel="stylesheet" href="/css/style_responsive.css"/>
+<link rel="stylesheet" href="/css/style_default.css" id="style_color">
+<link rel="stylesheet" href="/assets/fancybox/source/jquery.fancybox.css"/>
+<link rel="stylesheet" href="/assets/uniform/css/uniform.default.css" />
+<link rel="stylesheet" href="/assets/fullcalendar/fullcalendar/bootstrap-fullcalendar.css" />
+<link rel="stylesheet" href="/assets/jqvmap/jqvmap/jqvmap.css" type="text/css" media="screen"/>
+
 <html>
-<head>
-    <title>TurboWriter</title>
-    <link type="text/css" rel="stylesheet" href="/ui/{{ ui }}/stylesheets/main.css"/>
-    <!--<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>-->
-</head>
-<body>
-<div id="header-top">
-    {% if enterprise_logo %}
-    <img id="enterprise-logo" src="/ui/{{ ui }}/images/{{ enterprise_logo }}">
-    {% endif %}
-    <a href="/"><img id="header-logo" src="/ui/{{ ui }}/images/turbowriter_logo.png"/></a>
-  <span id="header-menu">
-    <a href="/my_account/preferences">{{ email | e }} <span style="color: grey; text-decoration: none;">▼</span></a>
-    &nbsp;&nbsp;
-    &nbsp;&nbsp;
-    <a href="/synopsis">Help</a>
-    &nbsp;&nbsp;
-    &nbsp;&nbsp;
-    <a href="{{ url }}">Sign out</a>
-  </span>
-</div>
-<div id="header-byline">
-    <span style="font-size: 16pt; font-style: italic;">workbench</span> for expert-guided collaborative authoring
-</div>
-<div id="header-band"></div>
-<div style="height: 10px;"></div>
+    <head>
+        <title>TurboWriter</title>
+        <!--<link type="text/css" rel="stylesheet" href="/ui/{{ ui }}/stylesheets/main.css"/>-->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    </head>
+    <body class="fixed-top">
 
-<table>
-    <tr>
-        <td style="vertical-align: top; width: 300px;">
-            {% include "site_menu.html" %}
-        </td>
-        <td style="width: 20px"></td>
-        <td style="vertical-align: top">
+        <div id="header" class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <a class="brand" href="./"><img src="assets/logo.gif" width="175" height="180" alt="TurboWriter"/></a>
+                    <div id="top_menu" class="nav notify-row">
+                        <span style="font-size: 12px; vertical-align:-45px">&nbsp;by Zephyr Media and Communications</span>
+                    </div>
+                    <ul class="nav pull-right top-menu">
+                        {{ email | e }}
+                        |
+                        <a href="{{ url }}">Sign Out</a>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="container" class="row-fluid">
+
+            <div id="sidebar" class="nav-collapse collapse">
+                <div class="sidebar-toggler hidden-phone"></div>
+                <div class="navbar-inverse">
+                    <form class="navbar-search visible-phone">
+                        <input type="text" class="search-query" placeholder="Search">
+                    </form>
+                </div> <!-- end div class navbar-inverse -->
+                <ul class="sidebar-menu">
+                    {% include "site_menu.html" %}
+                </ul>
+            </div> <!-- end div id sidebar -->
             {% block workspace %}{% endblock %}
-        </td>
-    </tr>
-</table>
+        </div> <!-- end div id container -->
 
-<hr style="margin: 30px 0 0 0;"/>
-<div id="footer-copyright">&copy; Copyright 2013 by Zephyr Media & Communications, Inc. All rights
-    reserved.
-</div>
-</body>
+        <div id="footer">
+            <i>&copy; Copyright 2013 by Zephyr Media and Communications, Inc. All rights reserved.</i>
+            <div class= "span pull-right">
+                <span class="go-top"><i class="icon-arrow-up"></i></span>
+            </div> <!-- end div class span pull-right -->
+        </div> <!-- end div footer -->
+    </body>
+
+    <!-- BEGIN JAVASCRIPTS -->
+    <!-- Load javascripts at bottom, this will reduce page load time -->
+    <script src="assets/js/jquery-1.8.3.min.js"></script>
+    <script src="assets/jquery-slimscroll/jquery-ui-1.9.2.custom.min.js"></script>
+    <script src="assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="assets/fullcalendar/fullcalendar/fullcalendar.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/jquery.blockui.js"></script>
+    <script src="assets/js/jquery.cookie.js"></script>
+    <!-- ie8 fixes -->
+    <!--[if lt IE 9]>
+    <script src="js/excanvas.js"></script>
+    <script src="js/respond.js"></script>
+    <![endif]-->
+    <script src="./assets/js/scripts.js"></script>
+    <script>
+        jQuery(document).ready(function() {
+            // initiate layout and plugins
+            App.setMainPage(true);
+            App.init();
+        });
+    </script>
+    <!-- END JAVASCRIPTS -->
 </html>

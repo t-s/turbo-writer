@@ -1,0 +1,61 @@
+<table style="width: 350px; background-color: #eeeeee">
+    <tr>
+        <td>
+            <b><a href="/">Home</a></b>
+        </td>
+    </tr>
+    <tr>
+        <td class="gap"></td>
+    </tr>
+    <tr>
+        <td>
+            <b>Projects</b>
+            <ul>
+                {% for project in user_projects %}
+                <li><a href="/project?project_id={{ project.project_id }}">{{ project.name }}</a></li>
+                {% endfor %}
+                <li><a href="/project_admin/new_project">Create a New Project</a></li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Templates</b>
+            <ul>
+                {% for template in user_templates %}
+                <li><a href="/template?template_id={{ template.template_id }}">{{ template.name }}</a></li>
+                {% endfor %}
+                <li><a href="/template_admin/new_template">Create a New Template</a></li>
+            </ul>
+        </td>
+    </tr>
+    {% if SITE_ADMIN %}
+        <tr>
+            <td>
+                <b>Site Administration</b>
+                <ul>
+                    {% if SITE_ADMIN_SETTINGS %}
+                    <li><a href="/site_admin/project_or_template_delete">Delete Project or Template</a></li>
+                    <li><a href="/site_admin/site_settings">Site Settings</a></li>
+                    {% endif %}
+
+                    {% if SITE_ADMIN_USERS %}
+                    <li><a href="/site_admin/site_user_admin">Site Users</a></li>
+                    {% endif %}
+
+                    {% if SITE_ADMIN_TEMPLATES %}
+                    <li><a href="/site_admin/template_admin">Template Gallery Administration</a></li>
+                    {% endif %}
+                </ul>
+            </td>
+        </tr>
+    {% endif %}
+    <tr>
+        <td>
+            <b>TurboWriter</b>
+            <ul>
+                <li><a href="/synopsis">About TurboWriter</a></li>
+            </ul>
+        </td>
+    </tr>
+</table>

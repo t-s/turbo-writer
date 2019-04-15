@@ -1,0 +1,49 @@
+.content-wrapper {
+	width:1000px;
+	margin:auto;
+}
+hr {
+	clear:both;
+	margin:25px 0;
+	display:block;
+	height:1px;
+	border:0;
+	border-top:1px solid #CCC;
+	padding:0;
+}
+.v2_grid_item {
+	margin-bottom:6px;
+	position:relative;
+	height:350px;
+	width:215px;
+	float:left;
+    margin-left:10px;
+	margin-right:22px;
+	color:#AAA;
+	font-size:13.5pt;
+}
+.v2_grid_item .v2_ig_title,.viewmode-hack .item .v2_ig_title {
+	font-size-adjust:0.48;
+	font-size:12pt;
+	background-color:#292929;
+	height:50px;
+	font-weight:normal;
+}
+.v2_grid_item .v2_ig_title a,.viewmode-hack .item .v2_ig_title a {
+	color:#EEE;
+	text-decoration:none;
+	display:block;
+	padding:5px 10px;
+	line-height:21px;
+	height:40px;
+}
+.v2_ig_author {
+    margin-top:5px;
+}
+.view-mode hr {
+	margin:0;
+}
+.v2-design .view-mode-wrapper {
+	width:1000px;
+	float:left;
+}

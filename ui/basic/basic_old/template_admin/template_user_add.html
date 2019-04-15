@@ -1,0 +1,62 @@
+{% extends "template_base.html" %}
+
+{% block workspace %}
+
+<h3>Template Users: Add New Template User</h3>
+
+{% if error_msg %}
+<p>
+    <span class="error">{{ error_msg | e }}</span>
+</p>
+{% endif %}
+
+<form method="post">
+    <input type="hidden" name="template_id" value="{{ template.key.id() }}">
+    <input type="hidden" name="template_user_id" value="{{ template_user_id }}">
+    <table>
+        <tr>
+            <th>Email:</th>
+            <td><input name="email" value="{{ email | e }}" size="100" autofocus></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table class="bordered_table">
+        <tr>
+            <th class="bordered_cell">Template Permissions</th>
+        </tr>
+        {% for permission in permissions %}
+        <tr>
+            <td class="bordered_cell">
+                <input type="checkbox" name="{{ permission.name }}" {% if permission.checked %} checked {% endif %}
+                {% if permission.name == "OWN" and not is_owner %}
+                disabled="disabled"
+                {% endif %}
+                >
+                {{ permission.name | e }}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input type="submit" value="Add Template User">
+            </td>
+            <td>
+                <input type="button" value="Cancel"
+                       onclick="document.location='/template_admin/template_user_admin?template_id={{ template.key.id() }}'">
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}

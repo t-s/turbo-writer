@@ -1,0 +1,39 @@
+application: turbo-writer-tim
+
+env_variables:
+  ENABLE_AUTOREGISTER: false
+#  ENTERPRISE_LOGO: 'juniper_logo.png'
+
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /ui/basic/images
+  static_dir: ui/basic/images
+
+- url: /ui/turbo/images
+  static_dir: ui/turbo/images
+
+- url: /ui/basic/scripts
+  static_dir: ui/basic/scripts
+
+- url: /ui/turbo/scripts
+  static_dir: ui/turbo/scripts
+
+- url: /ui/basic/stylesheets
+  static_dir: ui/basic/stylesheets
+
+- url: /ui/turbo/stylesheets
+  static_dir: ui/turbo/stylesheets
+
+- url: /.*
+  script: turbowriter.app
+
+builtins:
+- remote_api: on
+
+libraries:
+- name: jinja2
+  version: latest

@@ -1,0 +1,66 @@
+{% extends "site_base.html" %}
+
+{% block workspace %}
+
+<h3>Template Gallery Administration: Edit Template</h3>
+
+{% if error_msg %}
+<p>
+    <span class="error">{{ error_msg | e }}</span>
+</p>
+{% endif %}
+
+<form method="post">
+    <input type="hidden" name="template_id" value="{{ template_id }}">
+    <table>
+        <tr>
+            <th>Name: {{ name | e }}</th>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>Description:</th>
+            <td>
+                <textarea name="description" autofocus>{{ description | e }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th>Status:</th>
+            <td>
+                <input type="radio" name="status" value="Pending"{% if status == "Pending" %} checked{% endif %}>
+                Pending
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="status" value="Active"{% if status == "Active" %} checked{% endif %}>
+                Active
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="status" value="Inactive"{% if status == "Inactive" %} checked{% endif %}>
+                Inactive
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="gap"></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input type="submit" name="update" value="Update Template">
+            </td>
+            <td>
+                <input type="submit" name="delete" value="Delete Template">
+            </td>
+            <td>
+                <input type="button" value="Cancel" onclick="document.location='/site_admin/template_admin'">
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}

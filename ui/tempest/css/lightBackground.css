@@ -1,0 +1,31 @@
+﻿/* Page background and text color */
+html, body {
+	background-color: #eeeeee;
+	color: #777777;
+}
+/* / Page background and text color */
+
+/* Shadow under blocks */
+.shadow {
+	width:940px;
+	height:20px;
+	margin: 0 auto 10px auto;
+	background-image:url('../images/shadow.png');
+	background-position:center top;
+	background-repeat:no-repeat;
+}
+/* / Shadow under blocks */
+
+/* Layout1 quote container */
+.quoteContainer {
+	background-color:#ffffff;
+	border-top:1px #dddddd dashed;
+}
+/* / Layout1 quote container */
+
+/* Layout1 footer background */
+#footerContainer {
+	border-top:1px #ddd dashed;
+	background-color:#444444;
+}
+/* / Layout1 footer background */

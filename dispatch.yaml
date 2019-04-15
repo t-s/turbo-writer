@@ -1,0 +1,6 @@
+application: turbo-writer-tim
+dispatch:
+- url: "*/"
+  module: default
+- url: "*/admin*"
+  module: wordpress

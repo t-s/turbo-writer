@@ -664,7 +664,11 @@ def get_standard_project_values(project):
 
 def get_standard_site_values():
     current_user = users.get_current_user()
-    jinja_template_values = {u'url': users.create_logout_url(u'/'), u'email': current_user.email()}
+    try:
+        jinja_template_values = {u'url': users.create_logout_url(u'/'), u'email': current_user.email()}
+    except:
+        jinja_template_values = {u'url': users.create_login_url()}
+
     if current_user:
         for site_user in SiteUser.query(SiteUser.email == current_user.email().lower()):
             if SITE_ADMIN_SETTINGS in site_user.site_permissions:

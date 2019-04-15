@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TurboWriter</title>
+    <link type="text/css" rel="stylesheet" href="/ui/{{ ui }}/stylesheets/main.css"/>
+    <!--<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>-->
+</head>
+<body>
+<div id="header-top">
+    {% if enterprise_logo %}
+    <img id="enterprise-logo" src="/ui/{{ ui }}/images/{{ enterprise_logo }}">
+    {% endif %}
+    <a href="/"><img id="header-logo" src="/ui/{{ ui }}/images/turbowriter_logo.png"/></a>
+  <span id="header-menu">
+    <a href="/my_account/preferences">{{ email | e }} <span style="color: grey; text-decoration: none;">▼</span></a>
+    &nbsp;&nbsp;
+    &nbsp;&nbsp;
+    <a href="/synopsis">Help</a>
+    &nbsp;&nbsp;
+    &nbsp;&nbsp;
+    <a href="{{ url }}">Sign out</a>
+  </span>
+</div>
+<div id="header-byline">
+    <span style="font-size: 16pt; font-style: italic;">workbench</span> for expert-guided collaborative authoring
+</div>
+<div id="header-band"></div>
+<div style="height: 10px;"></div>
+
+<table width=100%>
+    <tr>
+        <td style="vertical-align: top; width: 300px;">
+            {% include "project_menu.html" %}
+        </td>
+        <td style="width: 20px"></td>
+        <td style="vertical-align: top">
+            <span style="font-size: 10pt; font-style: italic; text-decoration: underline">Project</span>
+
+            <div style="font-size: 14pt; font-weight: bold; margin-left: 20px">{{ project.name | e}}</div>
+            {% block workspace %}{% endblock %}
+        </td>
+        <td style="vertical-align: top">
+            <table class="progress-table">
+                <tr>
+                    <td class="progress-title" colspan="2">
+                        PROGRESS
+                    </td>
+                </tr>
+                <tr>
+                    <td class="progress-cell-interview">
+                        INTERVIEWS
+                        <br/>
+                        {{ interview_complete }} of {{ interview_count }}
+                        <br/>
+                        <span class="progress-percent">{{ interview_percent }}</span>
+                    </td>
+                    <td class="progress-cell-checklist">
+                        CHECKMARKS
+                        <br/>
+                        {{ checklist_complete }} of {{ checklist_count }}
+                        <br/>
+                        <span class="progress-percent">{{ checklist_percent }}</span>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<hr style="margin: 30px 0 0 0;"/>
+<div id="footer-copyright">&copy; Copyright 2013 by Zephyr Media & Communications, Inc. All rights
+    reserved.
+</div>
+</body>
+</html>

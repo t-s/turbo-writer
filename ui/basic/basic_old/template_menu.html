@@ -1,0 +1,59 @@
+<table style="width: 350px; background-color: #eeeeee">
+    <tr>
+        <td>
+            <b><a href="/">Home</a></b>
+        </td>
+    </tr>
+    <tr>
+        <td class="gap"></td>
+    </tr>
+    <tr>
+        <td>
+            <b>Template "{{ template.name | e }}"</b>
+            <blockquote>
+                <table>
+                    <tr>
+                        <td>
+                            <b><i>General</i></b>
+                            <ul>
+                                <li><a href="/template?template_id={{ template.key.id() }}">Template Home</a></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b><i>Template Definition</i></b>
+                            <ul>
+                                <li><a href="/template/assignment?template_id={{ template.key.id() }}">Define
+                                    Assignments</a></li>
+                                <li><a href="/template/document?template_id={{ template.key.id() }}">Define
+                                    Documents</a></li>
+                                <li><a href="/template/style?template_id={{ template.key.id() }}">Define Styles</a></li>
+                                <li><a href="/template/variable?template_id={{ template.key.id() }}">Define
+                                    Variables</a></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b><i>Template Administration</i></b>
+                            <ul>
+                                <li>
+                                    <a href="/template_admin/contribute?template_id={{ template.key.id() }}">Contribute
+                                    to Template Gallery</a>
+                                </li>
+                                <li>
+                                    <a href="/template_admin/template_settings?template_id={{ template.key.id() }}">Settings</a>
+                                </li>
+                                <li>
+                                    <a href="/template_admin/template_user_admin?template_id={{ template.key.id() }}">Template
+                                    Users</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </blockquote>
+        </td>
+    </tr>
+</table>

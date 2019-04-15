@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<?php 
+/* Short and sweet */
+define('WP_USE_THEMES', false);
+require('./wp-blog-header.php');
+?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+        <title>TurboWriter</title>
+
+        <!-- CSS -->
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+        <link href="css/layouts.css" rel="stylesheet" type="text/css" />
+        <link href="css/blue.css" rel="stylesheet" type="text/css" />
+        <link href="css/lightBackground.css" rel="stylesheet" type="text/css" />
+        <!-- / CSS -->
+
+        </head>
+
+        <body class="gallery front not-logged-in no-sidebars page-node" onload>
+            {% include "topbar.html" %}
+            <!-- start of logo -->
+            <div id="logo">
+                <img alt="logo" height="30" src="images/logo2.png" width="390"/>
+            </div>
+            <!-- end of logo -->
+
+            <!-- start of banner [row #1] -->
+            <div class="bannerContainer">
+                <br>
+                <div class="bannerText2" style="font-size:125%">
+                    <div style="text-align: center;font-size:320%;color:#2a8fbd;font-family: 'Open Sans', sans-serif;" color="#000000">
+                        How We Work
+                    </div>
+                    <br>
+                    <br>
+                    <p align=center style='text-align:center; font-size:110%; color:black'>A templating platform that
+                    makes it easy to produce expert guided, shareable content for writing projects
+                    for you, companies and organizations of any size.</p>
+                    <hr>
+                    <p >&nbsp;</p>
+
+
+                    <p style="color:black"><b>It starts with a “Beautiful Mind”</b></p>
+
+                    <p >With thousands of design experts in journalism, education,
+                    technology, and business, we have what you need to create any kind of writing
+                    template. Use of a TurboWriter template automatically connects your team and
+                    guides you in development of your writing project.&nbsp; </p>
+
+                    <p style="color:black;" ><b>Find the Template, Executing a Writing Project</b></p>
+
+                    <p >Whether you've got a single threaded writing project or a
+                    complex writing requirement that requires project management, multiple authors
+                    and review, start with a well-designed template from our community of experts.
+                    They’ve done the research, set up guidance, and are happy to brainstorm with
+                    you until the project is completed. </p>
+
+                    <p style="color:black;"><b>Get it together</b></p>
+
+                    <p >We've taken everything you love about social sharing; a
+                    constant stream of feedback and applied it to project management.&nbsp; All
+                    communication takes place within our project center and all milestones are
+                    clearly organized so you can execute your project and know where it stands at
+                    all times.</p>
+
+                    <p style="color:black;"><b>Provide feedback</b></p>
+
+                    <p >Your project is only done when you say it is. And after it's
+                    complete, you'll have the opportunity to rate the template and leave comments
+                    that help us to continually improve our service.</p>
+
+                    <p style="color:black;"><b>Launch and promote</b></p>
+
+                    <p >So, launch a template and we will add it to the gallery or
+                    create a proprietary template for use by your enterprise.&nbsp; 
+
+                    The Template Marketplace lets you take your ideas and reputation to new
+                    heights of communication. </p>
+
+                    <p >&nbsp;</p>
+
+                    <p  align=center style='text-align:center;font-size:200%'><b><a href="{{ url }}">Start a project now!</a></b></p>
+                </div>
+            </div>
+            <!-- end of banner [row #1] -->
+            <br>
+                {% include "footer.html" %}
+            <!-- end of footer [row #5] -->
+        </body>
+    </html>

@@ -1,0 +1,150 @@
+﻿/* Content 	*********************************/
+/*  	 									*/
+/*		1- Headers and links 				*/
+/*		2- Banners 							*/
+/*		3- Colored text elements 			*/
+/*		4- Read More button 				*/
+/*		5- Buy Now button					*/
+/*		6- Quote 							*/
+/*		7- List arrow 						*/
+/*		8- Label 							*/
+/*  	 									*/
+/* / Content ********************************/
+
+
+/* Headers and links */
+h1, h1.mediumHeader, h2, h3, h4 {
+	color: #39434D;
+	text-shadow:0px 1px 1px #fff;
+}
+a, a:link, a:visited {
+	color:#2a8fbd;
+	text-decoration:none;
+	border-bottom:1px #2a8fbd dotted;
+}
+a:hover, a:active {
+	color:#0c658e;
+	border-bottom:1px #0c658e dotted;
+}
+/* / Headers and links */
+
+/* Banners */
+.bannerBackground {
+	background: #2a8fbd;
+	background: -webkit-gradient(linear, left top, left bottom, from(#2a8fbd), to(#0f79aa));
+	background: -moz-linear-gradient(top, #2a8fbd, #0f79aa);
+	background: -ms-linear-gradient(top, #2a8fbd, #0f79aa); /* IE10 */
+	background: -o-linear-gradient(top, #2a8fbd, #0f79aa); /* Opera 11.10+ */
+	background: linear-gradient(top, #2a8fbd, #0f79aa);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2a8fbd', endColorstr='#0f79aa');
+}
+.bannerBackground2 {
+	background: #2a8fbd;
+	background: -webkit-gradient(linear, left top, left bottom, from(#2a8fbd), to(#0f79aa));
+	background: -moz-linear-gradient(top, #2a8fbd, #0f79aa);
+	background: -ms-linear-gradient(top, #2a8fbd, #0f79aa); /* IE10 */
+	background: -o-linear-gradient(top, #2a8fbd, #0f79aa); /* Opera 11.10+ */
+	background: linear-gradient(top, #2a8fbd, #0f79aa);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2a8fbd', endColorstr='#0f79aa');
+}
+/* / Banners */
+
+/* Colored text elements */
+.price p, .phoneNumber, blockquote, .highlighted, .whiteLabel {
+	color:#2a8fbd;
+}
+/* / Colored text elements */
+
+/* Read More button */
+.readMore {
+	color: #777777 !important;
+	text-shadow: 0 0px 1px #ffffff;
+	border: solid 1px #e0e0e0 !important;
+	background: #d0d0d0;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#d0d0d0));
+	background: -moz-linear-gradient(top, #f2f2f2, #d0d0d0);
+	background: -ms-linear-gradient(top, #f2f2f2, #d0d0d0); /* IE10 */
+	background: -o-linear-gradient(top, #f2f2f2, #d0d0d0); /* Opera 11.10+ */
+	background: linear-gradient(top, #f2f2f2, #d0d0d0);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f2f2f2', endColorstr='#d0d0d0');
+}
+.readMore:hover {
+	background: #eeeeee;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#dddddd));
+	background: -moz-linear-gradient(top, #fff, #dddddd);
+	background: -ms-linear-gradient(top, #ffffff, #dddddd); /* IE10 */
+	background: -o-linear-gradient(top, #ffffff, #dddddd); /* Opera 11.10+ */
+	background: linear-gradient(top, #ffffff, #dddddd);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dddddd');
+}
+.readMore:active {
+	color: #444444 !important;
+	background: -webkit-gradient(linear, left top, left bottom, from(#d0d0d0), to(#fff));
+	background: -moz-linear-gradient(top, #d0d0d0, #f2f2f2);
+	background: -ms-linear-gradient(top, #d0d0d0, #f2f2f2); /* IE10 */
+	background: -o-linear-gradient(top, #d0d0d0, #f2f2f2); /* Opera 11.10+ */
+	background: linear-gradient(top, #d0d0d0, #f2f2f2);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d0d0d0', endColorstr='#ffffff');
+}
+/* / Read More button */
+
+/* Buy Now button */
+.buyNow {
+	text-shadow: 0 1px 1px #444;
+	color: #ffffff !important;
+	border: solid 1px #0c668f !important;
+	background: #2a8fbd;
+	background: -webkit-gradient(linear, left top, left bottom, from(#2a8fbd), to(#0f79aa));
+	background: -moz-linear-gradient(top, #2a8fbd, #0f79aa);
+	background: -ms-linear-gradient(top, #2a8fbd, #0f79aa); /* IE10 */
+	background: -o-linear-gradient(top, #2a8fbd, #0f79aa); /* Opera 11.10+ */
+	background: linear-gradient(top, #2a8fbd, #0f79aa);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2a8fbd', endColorstr='#0f79aa');
+}
+.buyNow:hover {
+	background: #56b2dc;
+	background: -webkit-gradient(linear, left top, left bottom, from(#56b2dc), to(#4894b7));
+	background: -moz-linear-gradient(top, #56b2dc, #4894b7);
+	background: -ms-linear-gradient(top, #56b2dc, #4894b7); /* IE10 */
+	background: -o-linear-gradient(top, #56b2dc, #4894b7); /* Opera 11.10+ */
+	background: linear-gradient(top, #56b2dca, #4894b7);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#56b2dc', endColorstr='#4894b7');
+}
+.buyNow:active {
+	color: #000000 !important;
+	background: -webkit-gradient(linear, left top, left bottom, from(#0f79aa), to(#2a8fbd));
+	background: -moz-linear-gradient(top, #0f79aa, #2a8fbd);
+	background: -ms-linear-gradient(top, #0f79aa, #2a8fbd); /* IE10 */
+	background: -o-linear-gradient(top, #0f79aa, #2a8fbd); /* Opera 11.10+ */
+	background: linear-gradient(top, #0f79aa, #2a8fbd);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0f79aa', endColorstr='#2a8fbd');
+}
+/* / Buy Now button */
+
+/* Quote [ Quote color located in 'Colored text elements' ] */
+.circleIcon, .circleIcon2 {
+	color:#2a8fbd;
+	background-color:#f4f4f4;
+}
+blockquote {
+	text-shadow:0 1px 0 #ccc;
+}
+/* / Quote */
+
+/* List arrow */
+ul.pricingTableReadMore li, ul.productFeatures li {
+	background-image:url('../images/arrow.png');
+}
+/* / List arrow */
+
+/* Label */
+.label {
+	background: #2a8fbd;
+	background: -webkit-gradient(linear, left top, left bottom, from(#2a8fbd), to(#0f79aa));
+	background: -moz-linear-gradient(top, #2a8fbd, #0f79aa);
+	background: -ms-linear-gradient(top, #2a8fbd, #0f79aa); /* IE10 */
+	background: -o-linear-gradient(top, #2a8fbd, #0f79aa); /* Opera 11.10+ */
+	background: linear-gradient(top, #2a8fbd, #0f79aa);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2a8fbd', endColorstr='#0f79aa');
+}
+/* / Label */
